@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SICF" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <URL>/sap/opu/odata/ptloms/soms_v2_srv/</URL>
+   <ICFSERVICE>
+    <ICF_NAME>SOMS_V2_SRV</ICF_NAME>
+    <ICF_LANGU>P</ICF_LANGU>
+    <KIND401>Y</KIND401>
+    <SYSLOG401>X</SYSLOG401>
+    <APPLCUSTFLAG>3</APPLCUSTFLAG>
+    <ORIG_NAME>soms_v2_srv</ORIG_NAME>
+    <ICFALTNME>SOMS_V2_SRV</ICFALTNME>
+    <ICFALTNME_ORIG>soms_v2_srv</ICFALTNME_ORIG>
+   </ICFSERVICE>
+   <ICFHANDLER_TABLE>
+    <ICFHANDLER>
+     <ICF_NAME>SOMS_V2_SRV</ICF_NAME>
+     <ICFORDER>01</ICFORDER>
+     <ICFTYP>A</ICFTYP>
+     <ICFHANDLER>/IWFND/CL_SODATA_HTTP_HANDLER</ICFHANDLER>
+    </ICFHANDLER>
+   </ICFHANDLER_TABLE>
+  </asx:values>
+ </asx:abap>
+</abapGit>
