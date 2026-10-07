@@ -639,6 +639,10 @@ TT_OUT_CONFIRMACAO type standard table of TS_OUT_CONFIRMACAO .
      TS_IN_NOTA_ORDEM type /PTLOMS/ET076 .
   types:
 TT_IN_NOTA_ORDEM type standard table of TS_IN_NOTA_ORDEM .
+  types:
+     TS_ALTERAR_SENHA_OMS type /PTLOMS/ET209 .
+  types:
+TT_ALTERAR_SENHA_OMS type standard table of TS_ALTERAR_SENHA_OMS .
 
   constants GC_OUT_PROGRAMACAO_OPERACOES_D type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'out_programacao_operacoes_detail'. "#EC NOTEXT
   constants GC_OUT_PROGRAMACAO_LISTA_OPER type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'out_programacao_lista_oper'. "#EC NOTEXT
@@ -716,7 +720,7 @@ TT_IN_NOTA_ORDEM type standard table of TS_IN_NOTA_ORDEM .
   constants GC_OUT_SALDO_MATERIAL type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'out_saldo_material'. "#EC NOTEXT
   constants GC_OUT_PROGRAMACAO_USUARIOS type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'out_programacao_usuarios'. "#EC NOTEXT
   constants GC_OUT_PROGRAMACAO_TRANSFERIR type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'out_programacao_transferir'. "#EC NOTEXT
-  constants GC_OUT_AUTORIZACAO_COMPLETO type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'out_autorizacao_completo'. "#EC NOTEXT
+  constants GC_OUT_FILTRO_OP_OPERACAO type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'out_filtro_op_operacao'. "#EC NOTEXT
   constants GC_OUT_AUTORIZACAO type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'out_autorizacao'. "#EC NOTEXT
   constants GC_OUT_ATIVIDADES_NOTA type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'out_atividades_nota'. "#EC NOTEXT
   constants GC_OUT_ASSOCIACOES type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'out_associacoes'. "#EC NOTEXT
@@ -753,8 +757,8 @@ TT_IN_NOTA_ORDEM type standard table of TS_IN_NOTA_ORDEM .
   constants GC_IN_CONFIRMACAO type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'in_confirmacao'. "#EC NOTEXT
   constants GC_IN_COMPONENTE_ORDEM type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'in_componente_ordem'. "#EC NOTEXT
   constants GC_IN_ANEXO type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'in_anexo'. "#EC NOTEXT
-  constants GC_OUT_CATALOGO type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'out_catalogo'. "#EC NOTEXT
-  constants GC_OUT_FILTRO_OP_OPERACAO type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'out_filtro_op_operacao'. "#EC NOTEXT
+  constants GC_ALTERAR_SENHA_OMS type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'alterar_senha_oms'. "#EC NOTEXT
+  constants GC_OUT_AUTORIZACAO_COMPLETO type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'out_autorizacao_completo'. "#EC NOTEXT
   constants GC_OUT_FILTRO_OP_EMPREGADO type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'out_filtro_op_empregado'. "#EC NOTEXT
   constants GC_OUT_FILTRO_OP_CENTRO_TRAB type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'out_filtro_op_centro_trab'. "#EC NOTEXT
   constants GC_OUT_FILTRO_NOTA type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'out_filtro_nota'. "#EC NOTEXT
@@ -791,6 +795,7 @@ TT_IN_NOTA_ORDEM type standard table of TS_IN_NOTA_ORDEM .
   constants GC_OUT_CATEGORIA_LOC_INST type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'out_categoria_loc_inst'. "#EC NOTEXT
   constants GC_OUT_CATEGORIA_ITEM_MATERIAL type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'out_categoria_item_material'. "#EC NOTEXT
   constants GC_OUT_CATEGORIA_EQUIPAMENTO type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'out_categoria_equipamento'. "#EC NOTEXT
+  constants GC_OUT_CATALOGO type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'out_catalogo'. "#EC NOTEXT
 
   methods LOAD_TEXT_ELEMENTS
   final
@@ -1261,6 +1266,9 @@ private section.
   methods DEFINE_IN_NOTA_ORDEM
     raising
       /IWBEP/CX_MGW_MED_EXCEPTION .
+  methods DEFINE_ALTERAR_SENHA_OMS
+    raising
+      /IWBEP/CX_MGW_MED_EXCEPTION .
   methods DEFINE_ASSOCIATIONS
     raising
       /IWBEP/CX_MGW_MED_EXCEPTION .
@@ -1433,7 +1441,133 @@ define_out_filtro_op_empregado( ).
 define_out_filtro_op_centro_tr( ).
 define_out_confirmacao( ).
 define_in_nota_ordem( ).
+define_alterar_senha_oms( ).
 define_associations( ).
+  endmethod.
+
+
+  method DEFINE_ALTERAR_SENHA_OMS.
+*&---------------------------------------------------------------------*
+*&           Generated code for the MODEL PROVIDER BASE CLASS         &*
+*&                                                                     &*
+*&  !!!NEVER MODIFY THIS CLASS. IN CASE YOU WANT TO CHANGE THE MODEL  &*
+*&        DO THIS IN THE MODEL PROVIDER SUBCLASS!!!                   &*
+*&                                                                     &*
+*&---------------------------------------------------------------------*
+
+
+  data:
+        lo_annotation     type ref to /iwbep/if_mgw_odata_annotation,                "#EC NEEDED
+        lo_entity_type    type ref to /iwbep/if_mgw_odata_entity_typ,                "#EC NEEDED
+        lo_complex_type   type ref to /iwbep/if_mgw_odata_cmplx_type,                "#EC NEEDED
+        lo_property       type ref to /iwbep/if_mgw_odata_property,                  "#EC NEEDED
+        lo_entity_set     type ref to /iwbep/if_mgw_odata_entity_set.                "#EC NEEDED
+
+***********************************************************************************************************************************
+*   ENTITY - alterar_senha_oms
+***********************************************************************************************************************************
+
+lo_entity_type = model->create_entity_type( iv_entity_type_name = 'alterar_senha_oms' iv_def_entity_set = abap_false ). "#EC NOTEXT
+
+***********************************************************************************************************************************
+*Properties
+***********************************************************************************************************************************
+
+lo_property = lo_entity_type->create_property( iv_property_name = 'Usuario' iv_abap_fieldname = 'USUARIO' ). "#EC NOTEXT
+lo_property->set_is_key( ).
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'SenhaAtual' iv_abap_fieldname = 'SENHA_ATUAL' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 32 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'NovaSenha' iv_abap_fieldname = 'NOVA_SENHA' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 32 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'ConfSenha' iv_abap_fieldname = 'CONF_SENHA' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 32 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'SenhaAlterada' iv_abap_fieldname = 'SENHA_ALTERADA' ). "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Mensagem' iv_abap_fieldname = 'MENSAGEM' ). "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 220 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+
+lo_entity_type->bind_structure( iv_structure_name   = '/PTLOMS/ET209'
+                                iv_bind_conversions = 'X' ). "#EC NOTEXT
+
+
+***********************************************************************************************************************************
+*   ENTITY SETS
+***********************************************************************************************************************************
+lo_entity_set = lo_entity_type->create_entity_set( 'alterar_senha_omsSet' ). "#EC NOTEXT
+
+lo_entity_set->set_creatable( abap_false ).
+lo_entity_set->set_updatable( abap_false ).
+lo_entity_set->set_deletable( abap_false ).
+
+lo_entity_set->set_pageable( abap_false ).
+lo_entity_set->set_addressable( abap_true ).
+lo_entity_set->set_has_ftxt_search( abap_false ).
+lo_entity_set->set_subscribable( abap_false ).
+lo_entity_set->set_filter_required( abap_false ).
   endmethod.
 
 
@@ -4376,12 +4510,12 @@ lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  
                                                               iv_association_name = 'in_nota_ordem_t_texto_nota' ). "#EC NOTEXT
 * Navigation Properties for entity - in_item_nota
 lo_entity_type = model->get_entity_type( iv_entity_name = 'in_item_nota' ). "#EC NOTEXT
-lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'in_nota_ordem' "#EC NOTEXT
-                                                              iv_abap_fieldname = 'IN_NOTA_ORDEM' "#EC NOTEXT
-                                                              iv_association_name = 'in_nota_ordem_t_item_nota' ). "#EC NOTEXT
 lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'in_nota' "#EC NOTEXT
                                                               iv_abap_fieldname = 'IN_NOTA' "#EC NOTEXT
                                                               iv_association_name = 'in_nota_t_item_nota' ). "#EC NOTEXT
+lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'in_nota_ordem' "#EC NOTEXT
+                                                              iv_abap_fieldname = 'IN_NOTA_ORDEM' "#EC NOTEXT
+                                                              iv_association_name = 'in_nota_ordem_t_item_nota' ). "#EC NOTEXT
 * Navigation Properties for entity - in_item_causa
 lo_entity_type = model->get_entity_type( iv_entity_name = 'in_item_causa' ). "#EC NOTEXT
 lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'in_nota_ordem' "#EC NOTEXT
@@ -10768,7 +10902,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '846' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '847' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -10782,7 +10916,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'TaskText' iv_abap_fieldname = 'TASK_TEXT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '847' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '848' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1000 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -10795,7 +10929,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Status' iv_abap_fieldname = 'STATUS' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '848' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '849' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -10808,7 +10942,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'TaskQkatart' iv_abap_fieldname = 'TASK_QKATART' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '849' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '850' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -10832,7 +10966,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'TaskCodegrp' iv_abap_fieldname = 'TASK_CODEGRP' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '850' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '851' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 22 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -10845,19 +10979,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'ParteObjetoDescricao' iv_abap_fieldname = 'PARTEOBJETODESCRICAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '851' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 1000 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_false ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'TaskDescription' iv_abap_fieldname = 'TASK_DESCRIPTION' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '852' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1000 ). "#EC NOTEXT
@@ -10870,8 +10991,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'ParteObjetoCodeGroup' iv_abap_fieldname = 'PARTEOBJETOCODEGROUP' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'TaskDescription' iv_abap_fieldname = 'TASK_DESCRIPTION' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '853' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 1000 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'ParteObjetoCodeGroup' iv_abap_fieldname = 'PARTEOBJETOCODEGROUP' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '854' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 22 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -10884,7 +11018,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'TaskCode' iv_abap_fieldname = 'TASK_CODE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '854' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '855' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -10908,7 +11042,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Qmart' iv_abap_fieldname = 'QMART' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '855' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '856' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 2 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -10921,7 +11055,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'NotifNo' iv_abap_fieldname = 'NOTIFNO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '856' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '857' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -10934,7 +11068,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'ParteObjetoCode' iv_abap_fieldname = 'PARTEOBJETOCODE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '857' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '858' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -10947,7 +11081,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'ParteObjetoText' iv_abap_fieldname = 'PARTEOBJETOTEXT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '858' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '859' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 256 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -10960,7 +11094,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Qmtxt' iv_abap_fieldname = 'QMTXT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '859' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '860' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -10973,7 +11107,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'OrderType' iv_abap_fieldname = 'ORDERTYPE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '860' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '861' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -10986,7 +11120,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'SintomaDanoDescricao' iv_abap_fieldname = 'SINTOMADANODESCRICAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '861' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '862' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1000 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -10999,7 +11133,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Orderid' iv_abap_fieldname = 'ORDERID' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '862' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '863' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -11012,7 +11146,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'SintomaDanoCodeGroup' iv_abap_fieldname = 'SINTOMADANOCODEGROUP' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '863' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '864' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 22 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -11025,7 +11159,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'ShortText' iv_abap_fieldname = 'SHORTTEXT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '864' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '865' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -11038,19 +11172,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'SintomaDanoCode' iv_abap_fieldname = 'SINTOMADANOCODE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '865' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_false ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'FunctLoc' iv_abap_fieldname = 'FUNCTLOC' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '866' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
@@ -11063,8 +11184,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'SintomaDanoText' iv_abap_fieldname = 'SINTOMADANOTEXT' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'FunctLoc' iv_abap_fieldname = 'FUNCTLOC' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '867' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'SintomaDanoText' iv_abap_fieldname = 'SINTOMADANOTEXT' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '868' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 256 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -11077,7 +11211,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'CausaDescricao' iv_abap_fieldname = 'CAUSADESCRICAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '868' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '869' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1000 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -11090,7 +11224,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Pltxt' iv_abap_fieldname = 'PLTXT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '869' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '870' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -11103,7 +11237,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'CausaCodeGroup' iv_abap_fieldname = 'CAUSACODEGROUP' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '870' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '871' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -11116,7 +11250,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Equipment' iv_abap_fieldname = 'EQUIPMENT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '871' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '872' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 18 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -11129,7 +11263,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'CausaCode' iv_abap_fieldname = 'CAUSACODE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '872' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '873' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -11142,7 +11276,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Eqktx' iv_abap_fieldname = 'EQKTX' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '873' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '874' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -11155,7 +11289,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'CausaText' iv_abap_fieldname = 'CAUSATEXT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '874' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '875' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 256 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -11168,19 +11302,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'RbnrEquipment' iv_abap_fieldname = 'RBNREQUIPMENT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '875' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 9 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_false ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'RbnrFunctLoc' iv_abap_fieldname = 'RBNRFUNCTLOC' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '876' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 9 ). "#EC NOTEXT
@@ -11193,8 +11314,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'UsuarioApp' iv_abap_fieldname = 'USUARIO_APP' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'RbnrFunctLoc' iv_abap_fieldname = 'RBNRFUNCTLOC' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '877' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 9 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'UsuarioApp' iv_abap_fieldname = 'USUARIO_APP' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '878' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -11207,19 +11341,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'ParteObjetoQkatart' iv_abap_fieldname = 'PARTEOBJETOQKATART' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '878' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_false ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'SintomaDanoQkatart' iv_abap_fieldname = 'SINTOMADANOQKATART' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '879' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -11232,8 +11353,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'TextoItem' iv_abap_fieldname = 'TEXTOITEM' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'SintomaDanoQkatart' iv_abap_fieldname = 'SINTOMADANOQKATART' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '880' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'TextoItem' iv_abap_fieldname = 'TEXTOITEM' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '881' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -11246,7 +11380,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'CausaQkatart' iv_abap_fieldname = 'CAUSAQKATART' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '881' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '882' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -11259,7 +11393,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'TextoCausa' iv_abap_fieldname = 'TEXTOCAUSA' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '882' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '883' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -12037,7 +12171,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'in_reserva' i
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '934' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '935' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -12051,7 +12185,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Description' iv_abap_fieldname = 'DESCRIPTION' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '935' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '936' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -12064,7 +12198,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'TipoOrdem' iv_abap_fieldname = 'TIPO_ORDEM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '936' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '937' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -12077,7 +12211,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Equipment' iv_abap_fieldname = 'EQUIPMENT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '937' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '938' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 18 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -12090,7 +12224,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'EquipmentDescription' iv_abap_fieldname = 'EQUIPMENT_DESCRIPTION' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '938' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '939' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -12103,7 +12237,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'FunctLoc' iv_abap_fieldname = 'FUNCTLOC' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '939' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '940' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -12116,7 +12250,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'FunctLocDescription' iv_abap_fieldname = 'FUNCTLOCDESCRIPTION' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '940' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '941' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -12129,7 +12263,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Guid' iv_abap_fieldname = 'GUID' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '941' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '942' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 32 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -12142,7 +12276,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Orderid' iv_abap_fieldname = 'ORDERID' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '942' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '943' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -12155,7 +12289,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'TextoLongo' iv_abap_fieldname = 'TEXTO_LONGO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '943' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '944' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -12167,7 +12301,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'ReservNo' iv_abap_fieldname = 'RESERV_NO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '944' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '945' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -12180,7 +12314,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'ResItem' iv_abap_fieldname = 'RES_ITEM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '945' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '946' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -12193,7 +12327,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Material' iv_abap_fieldname = 'MATERIAL' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '946' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '947' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 18 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -12206,7 +12340,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Maktx' iv_abap_fieldname = 'MAKTX' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '947' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '948' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -12219,7 +12353,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Plant' iv_abap_fieldname = 'PLANT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '948' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '949' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -12232,7 +12366,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Name1' iv_abap_fieldname = 'NAME1' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '949' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '950' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -12245,7 +12379,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'StgeLoc' iv_abap_fieldname = 'STGE_LOC' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '950' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '951' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -12258,7 +12392,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Lgobe' iv_abap_fieldname = 'LGOBE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '951' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '952' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 16 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -12271,19 +12405,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Activity' iv_abap_fieldname = 'ACTIVITY' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '952' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_false ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'SubActivity' iv_abap_fieldname = 'SUB_ACTIVITY' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '953' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
@@ -12296,8 +12417,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'ItemCat' iv_abap_fieldname = 'ITEM_CAT' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'SubActivity' iv_abap_fieldname = 'SUB_ACTIVITY' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '954' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'ItemCat' iv_abap_fieldname = 'ITEM_CAT' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '955' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -12310,7 +12444,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'RequirementQuantity' iv_abap_fieldname = 'REQUIREMENT_QUANTITY' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '955' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '956' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_decimal( ).
 lo_property->set_precison( iv_precision = 3 ). "#EC NOTEXT
 lo_property->set_maxlength( iv_max_length = 13 ). "#EC NOTEXT
@@ -12324,7 +12458,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'RequirementQuantityUnit' iv_abap_fieldname = 'REQUIREMENT_QUANTITY_UNIT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '956' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '957' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 3 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -12337,7 +12471,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'CommitedQuan' iv_abap_fieldname = 'COMMITED_QUAN' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '957' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '958' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_decimal( ).
 lo_property->set_precison( iv_precision = 3 ). "#EC NOTEXT
 lo_property->set_maxlength( iv_max_length = 13 ). "#EC NOTEXT
@@ -12351,7 +12485,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'WithdQuan' iv_abap_fieldname = 'WITHD_QUAN' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '958' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '959' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_decimal( ).
 lo_property->set_precison( iv_precision = 3 ). "#EC NOTEXT
 lo_property->set_maxlength( iv_max_length = 13 ). "#EC NOTEXT
@@ -12398,7 +12532,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Labst' iv_abap_fieldname = 'LABST' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '959' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '960' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_decimal( ).
 lo_property->set_precison( iv_precision = 3 ). "#EC NOTEXT
 lo_property->set_maxlength( iv_max_length = 13 ). "#EC NOTEXT
@@ -12412,7 +12546,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'UsuarioApp' iv_abap_fieldname = 'USUARIO_APP' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '960' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '961' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -12436,7 +12570,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'StgeLocDescription' iv_abap_fieldname = 'STGE_LOC_DESCRIPTION' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '961' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '962' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 16 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -12449,7 +12583,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'ReservaItem' iv_abap_fieldname = 'RESERVA_ITEM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '962' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '963' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 15 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -12462,19 +12596,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Uuidordem' iv_abap_fieldname = 'UUIDORDEM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '963' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 37 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_false ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Uuidoperacao' iv_abap_fieldname = 'UUIDOPERACAO' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '964' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 37 ). "#EC NOTEXT
@@ -12487,8 +12608,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Status' iv_abap_fieldname = 'STATUS' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Uuidoperacao' iv_abap_fieldname = 'UUIDOPERACAO' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '965' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 37 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Status' iv_abap_fieldname = 'STATUS' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '966' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -14719,7 +14853,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'in_retorno_re
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '966' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '967' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -14901,7 +15035,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'TypeDesc' iv_abap_fieldname = 'TYPE_DESC' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '967' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '968' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 11 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -16026,7 +16160,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_autorizac
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Guid' iv_abap_fieldname = 'GUID' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '490' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '491' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 32 ). "#EC NOTEXT
@@ -16052,7 +16186,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Autorizacao' iv_abap_fieldname = 'AUTORIZACAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '491' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '492' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 2 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -16065,7 +16199,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'DescAutorizacao' iv_abap_fieldname = 'DESC_AUTORIZACAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '492' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '493' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 60 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -16917,7 +17051,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_centro_pl
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '836' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '837' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -16931,7 +17065,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Iwerk' iv_abap_fieldname = 'IWERK' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '837' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '838' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -16944,7 +17078,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Name1' iv_abap_fieldname = 'NAME1' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '838' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '839' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -17121,7 +17255,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_chave_mod
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '729' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '730' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -17135,7 +17269,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Vlsch' iv_abap_fieldname = 'VLSCH' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '730' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '731' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 7 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -17148,7 +17282,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'TextoBreve' iv_abap_fieldname = 'TEXTO_BREVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '731' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '732' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -17161,7 +17295,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'TextoLongo' iv_abap_fieldname = 'TEXTO_LONGO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '732' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '733' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -17821,18 +17955,6 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_configura
 *Properties
 ***********************************************************************************************************************************
 
-lo_property = lo_entity_type->create_property( iv_property_name = 'AnexoOrdem' iv_abap_fieldname = 'ANEXO_ORDEM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_boolean( ).
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_true ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Tracking' iv_abap_fieldname = 'TRACKING' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_int32( ).
@@ -17840,6 +17962,18 @@ lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
 lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'AnexoOrdem' iv_abap_fieldname = 'ANEXO_ORDEM' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_boolean( ).
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
 lo_property->set_filterable( abap_false ).
 lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
@@ -18203,7 +18337,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_config_pe
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Guid' iv_abap_fieldname = 'GUID' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '486' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '487' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 32 ). "#EC NOTEXT
@@ -18217,7 +18351,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Perfil' iv_abap_fieldname = 'PERFIL' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '487' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '488' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -18230,7 +18364,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Configuracao' iv_abap_fieldname = 'CONFIGURACAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '488' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '489' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 2 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -18243,7 +18377,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'DescConfiguracao' iv_abap_fieldname = 'DESC_CONFIGURACAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '489' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '490' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 60 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -18305,7 +18439,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_config_si
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'ApontManual' iv_abap_fieldname = 'APONT_MANUAL' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '493' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '494' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -18317,19 +18451,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Latitude' iv_abap_fieldname = 'LATITUDE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '494' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 20 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_true ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Longitude' iv_abap_fieldname = 'LONGITUDE' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '495' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 20 ). "#EC NOTEXT
@@ -18342,8 +18463,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Tracking' iv_abap_fieldname = 'TRACKING' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Longitude' iv_abap_fieldname = 'LONGITUDE' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '496' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 20 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Tracking' iv_abap_fieldname = 'TRACKING' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '497' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_int32( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -18355,7 +18489,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Cesto' iv_abap_fieldname = 'CESTO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '497' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '498' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -18367,7 +18501,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'VersaoApp' iv_abap_fieldname = 'VERSAO_APP' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '498' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '499' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -18380,7 +18514,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'ChaveModelo' iv_abap_fieldname = 'CHAVE_MODELO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '499' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '500' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -18392,7 +18526,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Guid' iv_abap_fieldname = 'GUID' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '500' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '501' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 32 ). "#EC NOTEXT
@@ -18406,7 +18540,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'TipoAtividade' iv_abap_fieldname = 'TIPO_ATIVIDADE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '501' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '502' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -18418,7 +18552,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'MotIntTrab' iv_abap_fieldname = 'MOT_INT_TRAB' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '502' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '503' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -18452,18 +18586,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'UsuarioSap' iv_abap_fieldname = 'USUARIO_SAP' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '503' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_boolean( ).
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_true ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'AnexoOrdem' iv_abap_fieldname = 'ANEXO_ORDEM' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '504' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
@@ -18475,7 +18597,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'AnexoLocl' iv_abap_fieldname = 'ANEXO_LOCL' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'AnexoOrdem' iv_abap_fieldname = 'ANEXO_ORDEM' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '505' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
@@ -18487,7 +18609,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'AnexoEqui' iv_abap_fieldname = 'ANEXO_EQUI' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'AnexoLocl' iv_abap_fieldname = 'ANEXO_LOCL' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '506' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
@@ -18499,7 +18621,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'AtribuirOper' iv_abap_fieldname = 'ATRIBUIR_OPER' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'AnexoEqui' iv_abap_fieldname = 'ANEXO_EQUI' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '507' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
@@ -18511,7 +18633,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'DespachoOrdem' iv_abap_fieldname = 'DESPACHO_ORDEM' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'AtribuirOper' iv_abap_fieldname = 'ATRIBUIR_OPER' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '508' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
@@ -18523,7 +18645,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'DespachoOper' iv_abap_fieldname = 'DESPACHO_OPER' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'DespachoOrdem' iv_abap_fieldname = 'DESPACHO_ORDEM' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '509' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
@@ -18535,7 +18657,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'CalcTrabReal' iv_abap_fieldname = 'CALC_TRAB_REAL' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'DespachoOper' iv_abap_fieldname = 'DESPACHO_OPER' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '510' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
@@ -18547,8 +18669,20 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Confirmacao' iv_abap_fieldname = 'CONFIRMACAO' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'CalcTrabReal' iv_abap_fieldname = 'CALC_TRAB_REAL' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '511' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_boolean( ).
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Confirmacao' iv_abap_fieldname = 'CONFIRMACAO' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '512' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 3 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -20222,7 +20356,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_filtro' i
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '724' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '725' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -20236,7 +20370,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Key' iv_abap_fieldname = 'KEY' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '725' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '726' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -20249,7 +20383,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Label' iv_abap_fieldname = 'LABEL' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '726' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '727' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -22331,7 +22465,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_filtro_va
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '727' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '728' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -22345,7 +22479,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Key' iv_abap_fieldname = 'KEY' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '728' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '729' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 100 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -22994,7 +23128,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_layout_ca
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '706' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '707' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -23008,7 +23142,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Padrao' iv_abap_fieldname = 'PADRAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '707' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '708' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -23020,7 +23154,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Tabela' iv_abap_fieldname = 'TABELA' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '708' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '709' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 50 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23033,7 +23167,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Id' iv_abap_fieldname = 'ID' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '709' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '710' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 32 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23046,19 +23180,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Usuario' iv_abap_fieldname = 'USUARIO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '710' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 50 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_true ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Descricao' iv_abap_fieldname = 'DESCRICAO' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '711' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 50 ). "#EC NOTEXT
@@ -23071,8 +23192,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'DataCriacao' iv_abap_fieldname = 'DATA_CRIACAO' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Descricao' iv_abap_fieldname = 'DESCRICAO' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '712' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 50 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'DataCriacao' iv_abap_fieldname = 'DATA_CRIACAO' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '713' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_datetime( ).
 lo_property->set_precison( iv_precision = 7 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23085,7 +23219,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'HoraCriacao' iv_abap_fieldname = 'HORA_CRIACAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '713' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '714' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_time( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -23097,7 +23231,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'UsuarioCriacao' iv_abap_fieldname = 'USUARIO_CRIACAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '714' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '715' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23110,7 +23244,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'DataAlteracao' iv_abap_fieldname = 'DATA_ALTERACAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '715' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '716' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_datetime( ).
 lo_property->set_precison( iv_precision = 7 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23123,7 +23257,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'HoraAlteracao' iv_abap_fieldname = 'HORA_ALTERACAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '716' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '717' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_time( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -23135,7 +23269,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'UsuarioAlteracao' iv_abap_fieldname = 'USUARIO_ALTERACAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '717' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '718' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23197,7 +23331,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_layout_it
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '718' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '719' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -23211,7 +23345,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'IdLayout' iv_abap_fieldname = 'ID_LAYOUT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '719' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '720' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 32 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23224,7 +23358,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Id' iv_abap_fieldname = 'ID' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '720' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '721' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 215 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23237,7 +23371,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Order' iv_abap_fieldname = 'ORDEM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '721' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '722' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_byte( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -23249,7 +23383,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Text' iv_abap_fieldname = 'TEXT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '722' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '723' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 50 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23262,7 +23396,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Visible' iv_abap_fieldname = 'VISIBLE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '723' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '724' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -23322,8 +23456,21 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_lista_tar
 *Properties
 ***********************************************************************************************************************************
 
+lo_property = lo_entity_type->create_property( iv_property_name = 'Ktext' iv_abap_fieldname = 'KTEXT' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '988' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 100 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '985' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '986' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -23337,7 +23484,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Nrseq' iv_abap_fieldname = 'NRSEQ' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '986' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '987' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_int32( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -23349,7 +23496,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Usuario' iv_abap_fieldname = 'USUARIO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '987' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '989' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23362,7 +23509,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Txt' iv_abap_fieldname = 'TXT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '988' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '990' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23375,7 +23522,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Perfil' iv_abap_fieldname = 'PERFIL' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '989' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '991' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23388,7 +23535,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Plnty' iv_abap_fieldname = 'PLNTY' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '990' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '992' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23401,32 +23548,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Plnnr' iv_abap_fieldname = 'PLNNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '991' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_false ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Plnal' iv_abap_fieldname = 'PLNAL' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '992' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 2 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_false ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Zaehl' iv_abap_fieldname = 'ZAEHL' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '993' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
@@ -23439,10 +23560,23 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Ktext' iv_abap_fieldname = 'KTEXT' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Plnal' iv_abap_fieldname = 'PLNAL' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '994' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 20 ). "#EC NOTEXT
+lo_property->set_maxlength( iv_max_length = 2 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Zaehl' iv_abap_fieldname = 'ZAEHL' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '995' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
 lo_property->set_sortable( abap_false ).
@@ -23453,7 +23587,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Statu' iv_abap_fieldname = 'STATU' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '995' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '996' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23466,7 +23600,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Loekz' iv_abap_fieldname = 'LOEKZ' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '996' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '997' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23479,7 +23613,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Werks' iv_abap_fieldname = 'WERKS' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '997' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '998' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23492,7 +23626,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Equnr' iv_abap_fieldname = 'EQUNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '998' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '999' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 18 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23505,7 +23639,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Eqktx' iv_abap_fieldname = 'EQKTX' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '999' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23813,7 +23947,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_lista_tec
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Descr' iv_abap_fieldname = 'DESCR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '924' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '925' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23826,7 +23960,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '925' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '926' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -23840,7 +23974,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Maktx' iv_abap_fieldname = 'MAKTX' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '926' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '927' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23853,7 +23987,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Tplnr' iv_abap_fieldname = 'TPLNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '927' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '928' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23866,7 +24000,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Stlnr' iv_abap_fieldname = 'STLNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '928' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '929' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23879,7 +24013,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Idnrk' iv_abap_fieldname = 'IDNRK' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '929' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '930' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 18 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23892,7 +24026,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Postp' iv_abap_fieldname = 'POSTP' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '930' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '931' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23905,7 +24039,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Posnr' iv_abap_fieldname = 'POSNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '931' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '932' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23918,7 +24052,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Meins' iv_abap_fieldname = 'MEINS' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '932' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '933' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 3 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -23931,7 +24065,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Menge' iv_abap_fieldname = 'MENGE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '933' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '934' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_decimal( ).
 lo_property->set_precison( iv_precision = 3 ). "#EC NOTEXT
 lo_property->set_maxlength( iv_max_length = 13 ). "#EC NOTEXT
@@ -24985,7 +25119,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_log_reser
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Rsnum' iv_abap_fieldname = 'RSNUM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '968' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '969' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
@@ -24999,7 +25133,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'VornrDescription' iv_abap_fieldname = 'VORNR_DESCRIPTION' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '969' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '970' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 200 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -25012,7 +25146,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'TextLong' iv_abap_fieldname = 'TEXT_LONG' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '970' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '971' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 200 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -25025,7 +25159,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'EquipmentDescription' iv_abap_fieldname = 'EQUIPMENT_DESCRIPTION' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '971' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '972' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 200 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -25038,7 +25172,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Rspos' iv_abap_fieldname = 'RSPOS' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '972' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '973' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
@@ -25052,7 +25186,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'FunctlocDescription' iv_abap_fieldname = 'FUNCTLOC_DESCRIPTION' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '973' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '974' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 200 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -25065,7 +25199,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Aufnr' iv_abap_fieldname = 'AUFNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '974' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '975' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
@@ -25079,7 +25213,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'MatnrDescription' iv_abap_fieldname = 'MATNR_DESCRIPTION' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '975' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '976' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 200 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -25092,7 +25226,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Vornr' iv_abap_fieldname = 'VORNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '976' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '977' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
@@ -25106,7 +25240,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Matnr' iv_abap_fieldname = 'MATNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '977' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '978' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 18 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -25119,7 +25253,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Datum' iv_abap_fieldname = 'DATUM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '978' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '979' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 19 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -25132,7 +25266,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Uzeit' iv_abap_fieldname = 'UZEIT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '979' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '980' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_time( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -25144,7 +25278,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'UsuarioApp' iv_abap_fieldname = 'USUARIO_APP' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '980' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '981' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -25157,7 +25291,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Equipament' iv_abap_fieldname = 'EQUIPAMENT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '981' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '982' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 18 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -25170,7 +25304,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Functloc' iv_abap_fieldname = 'FUNCTLOC' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '982' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '983' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -25183,7 +25317,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'RequirementQuantity' iv_abap_fieldname = 'REQUIREMENT_QUANTITY' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '983' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '984' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_decimal( ).
 lo_property->set_precison( iv_precision = 3 ). "#EC NOTEXT
 lo_property->set_maxlength( iv_max_length = 13 ). "#EC NOTEXT
@@ -25197,7 +25331,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'RequirementQuantityUnit' iv_abap_fieldname = 'REQUIREMENT_QUANTITY_UNIT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '984' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '985' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 3 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -25694,7 +25828,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_motivos_d
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '782' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '783' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -25708,7 +25842,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Codigo' iv_abap_fieldname = 'CODIGO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '783' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '784' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -25721,7 +25855,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Descricao' iv_abap_fieldname = 'DESCRICAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '784' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '785' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 60 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -26257,7 +26391,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_nota_perf
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Qmnum' iv_abap_fieldname = 'QMNUM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '834' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '835' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
@@ -26271,7 +26405,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'UsuarioApp' iv_abap_fieldname = 'USUARIO_APP' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '835' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '836' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -27746,7 +27880,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_ordem_cat
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '883' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '884' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -27760,7 +27894,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'TaskText' iv_abap_fieldname = 'TASK_TEXT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '884' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '885' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 256 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -27773,7 +27907,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Qmart' iv_abap_fieldname = 'QMART' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '885' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '886' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 2 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -27786,7 +27920,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'TaskCodegrp' iv_abap_fieldname = 'TASK_CODEGRP' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '886' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '887' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 22 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -27799,7 +27933,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Notifno' iv_abap_fieldname = 'NOTIFNO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '887' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '888' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -27812,7 +27946,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'TaskCode' iv_abap_fieldname = 'TASK_CODE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '888' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '889' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -27825,7 +27959,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Qmtxt' iv_abap_fieldname = 'QMTXT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '889' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '890' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -27838,7 +27972,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'TaskQkatart' iv_abap_fieldname = 'TASK_QKATART' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '890' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '891' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -27851,7 +27985,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Ordertype' iv_abap_fieldname = 'ORDERTYPE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '891' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '892' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -27864,7 +27998,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'TaskDescription' iv_abap_fieldname = 'TASK_DESCRIPTION' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '892' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '893' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1000 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -27877,7 +28011,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Orderid' iv_abap_fieldname = 'ORDERID' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '893' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '894' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -27890,7 +28024,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Shorttext' iv_abap_fieldname = 'SHORTTEXT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '894' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '895' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -27903,7 +28037,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Functloc' iv_abap_fieldname = 'FUNCTLOC' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '895' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '896' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -27916,7 +28050,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Pltxt' iv_abap_fieldname = 'PLTXT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '896' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '897' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -27929,7 +28063,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Equipment' iv_abap_fieldname = 'EQUIPMENT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '897' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '898' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 18 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -27942,7 +28076,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Eqktx' iv_abap_fieldname = 'EQKTX' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '898' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '899' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -27955,19 +28089,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Rbnrequipment' iv_abap_fieldname = 'RBNREQUIPMENT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '899' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 9 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_false ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Rbnrfunctloc' iv_abap_fieldname = 'RBNRFUNCTLOC' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '900' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 9 ). "#EC NOTEXT
@@ -27980,8 +28101,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Parteobjetodescricao' iv_abap_fieldname = 'PARTEOBJETODESCRICAO' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Rbnrfunctloc' iv_abap_fieldname = 'RBNRFUNCTLOC' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '901' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 9 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Parteobjetodescricao' iv_abap_fieldname = 'PARTEOBJETODESCRICAO' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '902' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1000 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -27994,7 +28128,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Parteobjetocodegroup' iv_abap_fieldname = 'PARTEOBJETOCODEGROUP' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '902' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '903' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 22 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28007,7 +28141,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Parteobjetoqkatart' iv_abap_fieldname = 'PARTEOBJETOQKATART' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '903' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '904' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28020,7 +28154,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Parteobjetocode' iv_abap_fieldname = 'PARTEOBJETOCODE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '904' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '905' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28033,7 +28167,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Parteobjetotext' iv_abap_fieldname = 'PARTEOBJETOTEXT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '905' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '906' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 256 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28046,7 +28180,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Sintomadanodescricao' iv_abap_fieldname = 'SINTOMADANODESCRICAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '906' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '907' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1000 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28059,7 +28193,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Sintomadanocodegroup' iv_abap_fieldname = 'SINTOMADANOCODEGROUP' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '907' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '908' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 22 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28072,7 +28206,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Sintomadanoqkatart' iv_abap_fieldname = 'SINTOMADANOQKATART' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '908' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '909' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28085,7 +28219,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Sintomadanocode' iv_abap_fieldname = 'SINTOMADANOCODE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '909' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '910' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28098,7 +28232,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Sintomadanotext' iv_abap_fieldname = 'SINTOMADANOTEXT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '910' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '911' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 256 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28111,7 +28245,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Textoitem' iv_abap_fieldname = 'TEXTOITEM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '911' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '912' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28124,7 +28258,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Causadescricao' iv_abap_fieldname = 'CAUSADESCRICAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '912' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '913' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1000 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28137,7 +28271,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Causacodegroup' iv_abap_fieldname = 'CAUSACODEGROUP' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '913' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '914' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28150,7 +28284,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Causaqkatart' iv_abap_fieldname = 'CAUSAQKATART' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '914' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '915' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28163,7 +28297,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Causacode' iv_abap_fieldname = 'CAUSACODE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '915' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '916' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28176,7 +28310,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Causatext' iv_abap_fieldname = 'CAUSATEXT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '916' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '917' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 256 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28189,7 +28323,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Textocausa' iv_abap_fieldname = 'TEXTOCAUSA' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '917' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '918' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28202,7 +28336,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'UsuarioApp' iv_abap_fieldname = 'USUARIO_APP' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '918' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '919' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28215,7 +28349,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Status' iv_abap_fieldname = 'STATUS' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '919' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '920' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28277,7 +28411,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_ordem_per
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Aufnr' iv_abap_fieldname = 'AUFNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '822' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '823' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
@@ -28291,7 +28425,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Iwerk' iv_abap_fieldname = 'IWERK' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '823' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '824' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28304,7 +28438,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Ktext' iv_abap_fieldname = 'KTEXT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '824' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '825' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28317,7 +28451,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Equipment' iv_abap_fieldname = 'EQUIPMENT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '825' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '826' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 18 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28330,7 +28464,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'UsuarioApp' iv_abap_fieldname = 'USUARIO_APP' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '826' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '827' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28343,7 +28477,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Equipmentdescription' iv_abap_fieldname = 'EQUIPMENTDESCRIPTION' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '827' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '828' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28356,7 +28490,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Auart' iv_abap_fieldname = 'AUART' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '828' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '829' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28369,7 +28503,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Functloc' iv_abap_fieldname = 'FUNCTLOC' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '829' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '830' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28382,7 +28516,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Functlocdescription' iv_abap_fieldname = 'FUNCTLOCDESCRIPTION' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '830' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '831' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28395,7 +28529,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Workcntr' iv_abap_fieldname = 'WORKCNTR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '831' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '832' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28408,7 +28542,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Workcntrplant' iv_abap_fieldname = 'WORKCNTRPLANT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '832' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '833' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28421,7 +28555,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Workcntrdescription' iv_abap_fieldname = 'WORKCNTRDESCRIPTION' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '833' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '834' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28934,7 +29068,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_prioridad
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '839' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '840' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -28948,7 +29082,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Priok' iv_abap_fieldname = 'PRIOK' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '840' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '841' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28961,7 +29095,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Priokx' iv_abap_fieldname = 'PRIOKX' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '841' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '842' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 20 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -28974,7 +29108,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Descricao' iv_abap_fieldname = 'DESCRICAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '842' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '843' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 25 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29036,7 +29170,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_programac
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Aufnr' iv_abap_fieldname = 'AUFNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '760' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '761' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29049,7 +29183,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Suboper' iv_abap_fieldname = 'SUBOPER' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '761' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '762' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29062,7 +29196,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'DataAssociacao' iv_abap_fieldname = 'DATA_ASSOCIACAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '762' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '763' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29075,7 +29209,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'UsuarioApp' iv_abap_fieldname = 'USUARIO_APP' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '763' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '764' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29088,7 +29222,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'MotivoAssociacao' iv_abap_fieldname = 'MOTIVO_ASSOCIACAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '764' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '765' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 2 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29101,7 +29235,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '765' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '766' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -29115,7 +29249,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'MotivoDesassociacao' iv_abap_fieldname = 'MOTIVO_DESASSOCIACAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '766' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '767' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 2 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29128,7 +29262,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'HoraAssociacao' iv_abap_fieldname = 'HORA_ASSOCIACAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '767' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '768' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 6 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29141,7 +29275,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Matricula' iv_abap_fieldname = 'MATRICULA' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '768' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '769' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29154,7 +29288,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'DescricaoAssociacao' iv_abap_fieldname = 'DESCRICAO_ASSOCIACAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '769' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '770' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29167,7 +29301,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Vornr' iv_abap_fieldname = 'VORNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '770' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '771' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29180,7 +29314,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'StatusSis' iv_abap_fieldname = 'STATUS_SIS' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '771' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '772' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29193,7 +29327,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Nome' iv_abap_fieldname = 'NOME' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '772' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '773' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 80 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29206,7 +29340,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'UsuarioOrigem' iv_abap_fieldname = 'USUARIO_ORIGEM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '773' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '774' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29219,7 +29353,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'StatusUsu' iv_abap_fieldname = 'STATUS_USU' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '774' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '775' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29232,7 +29366,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'UsuarioDestino' iv_abap_fieldname = 'USUARIO_DESTINO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '775' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '776' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29294,7 +29428,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_programac
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '776' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '777' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -29308,7 +29442,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'MotivoDesassociacao' iv_abap_fieldname = 'MOTIVO_DESASSOCIACAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '777' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '778' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 2 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29321,7 +29455,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Aufnr' iv_abap_fieldname = 'AUFNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '778' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '779' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29334,7 +29468,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Vornr' iv_abap_fieldname = 'VORNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '779' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '780' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29347,7 +29481,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'UsuarioOrigem' iv_abap_fieldname = 'USUARIO_ORIGEM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '780' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '781' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29360,7 +29494,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'UsuarioDestino' iv_abap_fieldname = 'USUARIO_DESTINO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '781' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '782' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29422,7 +29556,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_programac
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '803' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '804' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -29436,7 +29570,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Objnr' iv_abap_fieldname = 'OBJNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '804' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '805' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 22 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29449,7 +29583,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Aufnr' iv_abap_fieldname = 'AUFNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '805' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '806' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29511,7 +29645,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_programac
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Abckz' iv_abap_fieldname = 'ABCKZ' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '541' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '543' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29537,7 +29671,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Abctx' iv_abap_fieldname = 'ABCTX' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '543' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '544' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 20 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29550,7 +29684,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Anlnr' iv_abap_fieldname = 'ANLNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '544' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '545' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29563,7 +29697,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Anlun' iv_abap_fieldname = 'ANLUN' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '545' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '546' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29576,7 +29710,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Aplzl' iv_abap_fieldname = 'APLZL' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '546' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '547' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29589,7 +29723,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Arbei' iv_abap_fieldname = 'ARBEI' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '547' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '548' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_decimal( ).
 lo_property->set_precison( iv_precision = 1 ). "#EC NOTEXT
 lo_property->set_maxlength( iv_max_length = 7 ). "#EC NOTEXT
@@ -29603,19 +29737,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Arbid' iv_abap_fieldname = 'ARBID' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '548' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_true ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Arbpl' iv_abap_fieldname = 'ARBPL' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '549' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
@@ -29628,8 +29749,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Artpr' iv_abap_fieldname = 'ARTPR' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Arbpl' iv_abap_fieldname = 'ARBPL' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '550' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Artpr' iv_abap_fieldname = 'ARTPR' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '551' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 2 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29642,7 +29776,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Auart' iv_abap_fieldname = 'AUART' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '551' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '552' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29655,7 +29789,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Aufnr' iv_abap_fieldname = 'AUFNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '552' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '553' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29668,7 +29802,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Aufpl' iv_abap_fieldname = 'AUFPL' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '553' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '554' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29681,7 +29815,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '554' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '555' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -29695,7 +29829,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'CodigoAssociacaoOrdem' iv_abap_fieldname = 'CODIGO_ASSOCIACAO_ORDEM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '555' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '556' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 2 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29708,7 +29842,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'DataAssociacao' iv_abap_fieldname = 'DATA_ASSOCIACAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '556' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '557' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 20 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29721,7 +29855,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'DataAssociacaoStr' iv_abap_fieldname = 'DATA_ASSOCIACAO_STR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '557' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '558' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29734,7 +29868,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'DataHoraAssociacao' iv_abap_fieldname = 'DATA_HORA_ASSOCIACAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '558' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '559' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_datetime( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -29746,19 +29880,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'DataOperFimStr' iv_abap_fieldname = 'DATA_OPER_FIM_STR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '559' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_false ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'DataOperIniStr' iv_abap_fieldname = 'DATA_OPER_INI_STR' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '560' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
@@ -29771,8 +29892,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'DescricaoAssociacaoOrdem' iv_abap_fieldname = 'DESCRICAO_ASSOCIACAO_ORDEM' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'DataOperIniStr' iv_abap_fieldname = 'DATA_OPER_INI_STR' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '561' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'DescricaoAssociacaoOrdem' iv_abap_fieldname = 'DESCRICAO_ASSOCIACAO_ORDEM' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '562' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 60 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29785,7 +29919,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Eqfnr' iv_abap_fieldname = 'EQFNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '562' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '563' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29798,7 +29932,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Eqktx' iv_abap_fieldname = 'EQKTX' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '563' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '564' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29811,7 +29945,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Equnr' iv_abap_fieldname = 'EQUNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '564' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '565' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 18 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29824,19 +29958,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Fsavd' iv_abap_fieldname = 'FSAVD' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '565' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_datetime( ).
-lo_property->set_precison( iv_precision = 7 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_false ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Fsedd' iv_abap_fieldname = 'FSEDD' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '566' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_datetime( ).
 lo_property->set_precison( iv_precision = 7 ). "#EC NOTEXT
@@ -29849,8 +29970,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Gewrk' iv_abap_fieldname = 'GEWRK' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Fsedd' iv_abap_fieldname = 'FSEDD' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '567' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_datetime( ).
+lo_property->set_precison( iv_precision = 7 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Gewrk' iv_abap_fieldname = 'GEWRK' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '568' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29863,7 +29997,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Gltrp' iv_abap_fieldname = 'GLTRP' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '568' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '569' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_datetime( ).
 lo_property->set_precison( iv_precision = 7 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29876,7 +30010,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'GltrpStr' iv_abap_fieldname = 'GLTRP_STR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '569' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '570' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29889,7 +30023,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Gstrp' iv_abap_fieldname = 'GSTRP' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '570' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '571' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_datetime( ).
 lo_property->set_precison( iv_precision = 7 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29902,7 +30036,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'GstrpStr' iv_abap_fieldname = 'GSTRP_STR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '571' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '572' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29915,7 +30049,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'HoraAssociacao' iv_abap_fieldname = 'HORA_ASSOCIACAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '572' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '573' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 20 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29928,19 +30062,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'HorasTrabReal' iv_abap_fieldname = 'HORAS_TRAB_REAL' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '573' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 60 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_true ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'HorasTrabRealUsr' iv_abap_fieldname = 'HORAS_TRAB_REAL_USR' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '574' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 60 ). "#EC NOTEXT
@@ -29953,8 +30074,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'HouseNum1' iv_abap_fieldname = 'HOUSE_NUM1' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'HorasTrabRealUsr' iv_abap_fieldname = 'HORAS_TRAB_REAL_USR' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '575' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 60 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'HouseNum1' iv_abap_fieldname = 'HOUSE_NUM1' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '576' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 100 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29967,7 +30101,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Idat1' iv_abap_fieldname = 'IDAT1' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '576' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '577' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_datetime( ).
 lo_property->set_precison( iv_precision = 7 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29980,7 +30114,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Idat1Str' iv_abap_fieldname = 'IDAT1_STR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '577' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '578' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -29993,7 +30127,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Ilart' iv_abap_fieldname = 'ILART' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '578' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '579' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 3 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30006,7 +30140,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Ilatx' iv_abap_fieldname = 'ILATX' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '579' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '580' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30019,7 +30153,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Ingpr' iv_abap_fieldname = 'INGPR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '580' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '581' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 3 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30032,7 +30166,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Innam' iv_abap_fieldname = 'INNAM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '581' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '582' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 18 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30045,7 +30179,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Ismnw' iv_abap_fieldname = 'ISMNW' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '582' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '583' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_decimal( ).
 lo_property->set_precison( iv_precision = 1 ). "#EC NOTEXT
 lo_property->set_maxlength( iv_max_length = 13 ). "#EC NOTEXT
@@ -30059,7 +30193,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Iwerk' iv_abap_fieldname = 'IWERK' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '583' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '584' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30072,7 +30206,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Ktext' iv_abap_fieldname = 'KTEXT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '584' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '585' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30085,7 +30219,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Kunnr' iv_abap_fieldname = 'KUNNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '585' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '586' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30098,7 +30232,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Ltxa1' iv_abap_fieldname = 'LTXA1' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '586' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '587' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30111,7 +30245,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Maintitem' iv_abap_fieldname = 'MAINTITEM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '587' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '588' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 16 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30124,7 +30258,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Matricula' iv_abap_fieldname = 'MATRICULA' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '588' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '589' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30137,7 +30271,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'MnWkctrDescricao' iv_abap_fieldname = 'MN_WKCTR_DESCRICAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '589' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '590' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30150,7 +30284,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'MnWkctrPlant' iv_abap_fieldname = 'MN_WKCTR_PLANT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '590' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '591' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30163,19 +30297,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Name1' iv_abap_fieldname = 'NAME1' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '591' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 35 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_false ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Name2' iv_abap_fieldname = 'NAME2' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '592' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 35 ). "#EC NOTEXT
@@ -30188,8 +30309,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'NameCp' iv_abap_fieldname = 'NAME_CP' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Name2' iv_abap_fieldname = 'NAME2' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '593' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 35 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'NameCp' iv_abap_fieldname = 'NAME_CP' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '594' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30202,19 +30336,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Objnr' iv_abap_fieldname = 'OBJNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '594' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 22 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_true ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'ObjnrOperSub' iv_abap_fieldname = 'OBJNR_OPER_SUB' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '595' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 22 ). "#EC NOTEXT
@@ -30227,20 +30348,20 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Ort01' iv_abap_fieldname = 'ORT01' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'ObjnrOperSub' iv_abap_fieldname = 'OBJNR_OPER_SUB' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '596' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 35 ). "#EC NOTEXT
+lo_property->set_maxlength( iv_max_length = 22 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
 lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_false ).
+lo_property->set_nullable( abap_true ).
 lo_property->set_filterable( abap_false ).
 lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Ort02' iv_abap_fieldname = 'ORT02' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Ort01' iv_abap_fieldname = 'ORT01' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '597' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 35 ). "#EC NOTEXT
@@ -30253,8 +30374,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Pernr' iv_abap_fieldname = 'PERNR' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Ort02' iv_abap_fieldname = 'ORT02' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '598' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 35 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Pernr' iv_abap_fieldname = 'PERNR' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '599' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30267,7 +30401,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Pltxt' iv_abap_fieldname = 'PLTXT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '599' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '600' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30280,7 +30414,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Priok' iv_abap_fieldname = 'PRIOK' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '600' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '601' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30293,7 +30427,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Priokx' iv_abap_fieldname = 'PRIOKX' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '601' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '602' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 20 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30306,7 +30440,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Pstlz' iv_abap_fieldname = 'PSTLZ' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '602' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '603' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30319,7 +30453,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Qmnum' iv_abap_fieldname = 'QMNUM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '603' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '604' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30332,7 +30466,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Qmtxt' iv_abap_fieldname = 'QMTXT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '604' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '605' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30345,18 +30479,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'QtdOperacoes' iv_abap_fieldname = 'QTD_OPERACOES' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '605' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_byte( ).
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_false ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'QtdUsuarios' iv_abap_fieldname = 'QTD_USUARIOS' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '606' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_byte( ).
 lo_property->set_creatable( abap_false ).
@@ -30368,8 +30490,20 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Regio' iv_abap_fieldname = 'REGIO' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'QtdUsuarios' iv_abap_fieldname = 'QTD_USUARIOS' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '607' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_byte( ).
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Regio' iv_abap_fieldname = 'REGIO' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '608' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 3 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30382,7 +30516,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'SemaforoCor' iv_abap_fieldname = 'SEMAFORO_COR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '608' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '609' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 100 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30395,7 +30529,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'SemaforoDescricao' iv_abap_fieldname = 'SEMAFORO_DESCRICAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '609' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '610' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 100 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30408,7 +30542,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Sname' iv_abap_fieldname = 'SNAME' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '610' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '611' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30421,19 +30555,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'StatusSis' iv_abap_fieldname = 'STATUS_SIS' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '611' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_true ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'StatusUsu' iv_abap_fieldname = 'STATUS_USU' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '612' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
@@ -30446,8 +30567,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Stort' iv_abap_fieldname = 'STORT' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'StatusUsu' iv_abap_fieldname = 'STATUS_USU' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '613' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Stort' iv_abap_fieldname = 'STORT' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '614' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30460,7 +30594,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Stortdesc' iv_abap_fieldname = 'STORTDESC' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '614' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '615' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30473,7 +30607,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Stras' iv_abap_fieldname = 'STRAS' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '615' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '616' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 100 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30486,7 +30620,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Suboper' iv_abap_fieldname = 'SUBOPER' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '616' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '617' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30499,7 +30633,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Sumnr' iv_abap_fieldname = 'SUMNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '617' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '618' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30512,7 +30646,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Telf1' iv_abap_fieldname = 'TELF1' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '618' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '619' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 16 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30525,18 +30659,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'TextoBreveOrdem' iv_abap_fieldname = 'TEXTO_BREVE_ORDEM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '619' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_false ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'TextoLongoOperacao' iv_abap_fieldname = 'TEXTO_LONGO_OPERACAO' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '620' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_creatable( abap_false ).
@@ -30548,7 +30670,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'TextoLongoOrdem' iv_abap_fieldname = 'TEXTO_LONGO_ORDEM' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'TextoLongoOperacao' iv_abap_fieldname = 'TEXTO_LONGO_OPERACAO' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '621' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_creatable( abap_false ).
@@ -30560,8 +30682,20 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Tidnr' iv_abap_fieldname = 'TIDNR' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'TextoLongoOrdem' iv_abap_fieldname = 'TEXTO_LONGO_ORDEM' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '622' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Tidnr' iv_abap_fieldname = 'TIDNR' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '623' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 25 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30574,7 +30708,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Tplnr' iv_abap_fieldname = 'TPLNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '623' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '624' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30587,7 +30721,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Usuarioapp' iv_abap_fieldname = 'USUARIOAPP' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '624' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '625' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30600,7 +30734,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Vornr' iv_abap_fieldname = 'VORNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '625' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '626' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30613,7 +30747,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Warpl' iv_abap_fieldname = 'WARPL' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '626' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '627' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30626,7 +30760,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Wptxt' iv_abap_fieldname = 'WPTXT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '627' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '628' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30688,7 +30822,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_programac
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '733' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '734' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -30702,7 +30836,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'WorkActivity' iv_abap_fieldname = 'WORK_ACTIVITY' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '734' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '735' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_decimal( ).
 lo_property->set_precison( iv_precision = 2 ). "#EC NOTEXT
 lo_property->set_maxlength( iv_max_length = 7 ). "#EC NOTEXT
@@ -30716,7 +30850,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Orderid' iv_abap_fieldname = 'ORDERID' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '735' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '736' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30729,7 +30863,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'WorkActual' iv_abap_fieldname = 'WORK_ACTUAL' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '736' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '737' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_decimal( ).
 lo_property->set_precison( iv_precision = 2 ). "#EC NOTEXT
 lo_property->set_maxlength( iv_max_length = 13 ). "#EC NOTEXT
@@ -30743,19 +30877,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Activity' iv_abap_fieldname = 'ACTIVITY' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '737' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_false ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'SubActivity' iv_abap_fieldname = 'SUB_ACTIVITY' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '738' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
@@ -30768,7 +30889,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'ControlKey' iv_abap_fieldname = 'CONTROL_KEY' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'SubActivity' iv_abap_fieldname = 'SUB_ACTIVITY' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '739' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
@@ -30781,8 +30902,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'WorkCntr' iv_abap_fieldname = 'WORK_CNTR' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'ControlKey' iv_abap_fieldname = 'CONTROL_KEY' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '740' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'WorkCntr' iv_abap_fieldname = 'WORK_CNTR' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '741' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30795,7 +30929,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Plant' iv_abap_fieldname = 'PLANT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '741' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '742' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30808,7 +30942,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Name1' iv_abap_fieldname = 'NAME1' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '742' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '743' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30821,7 +30955,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Description' iv_abap_fieldname = 'DESCRIPTION' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '743' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '744' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30834,7 +30968,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'NumberOfCapacities' iv_abap_fieldname = 'NUMBER_OF_CAPACITIES' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '744' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '745' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_byte( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -30846,7 +30980,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Acttype' iv_abap_fieldname = 'ACTTYPE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '745' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '746' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 6 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30859,7 +30993,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'PersNo' iv_abap_fieldname = 'PERS_NO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '746' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '747' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30872,7 +31006,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Sname' iv_abap_fieldname = 'SNAME' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '747' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '748' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30885,7 +31019,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'UnWork' iv_abap_fieldname = 'UN_WORK' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '748' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '749' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 3 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30898,7 +31032,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'ConfNo' iv_abap_fieldname = 'CONF_NO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '749' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '750' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30911,7 +31045,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'EarlSchedStartDate' iv_abap_fieldname = 'EARL_SCHED_START_DATE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '750' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '751' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_datetime( ).
 lo_property->set_precison( iv_precision = 7 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30924,7 +31058,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'EarlSchedStartDateConv' iv_abap_fieldname = 'EARL_SCHED_START_DATE_CONV' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '751' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '752' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 19 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30937,7 +31071,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'EarlSchedStartTime' iv_abap_fieldname = 'EARL_SCHED_START_TIME' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '752' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '753' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_time( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -30949,7 +31083,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'LateSchedStartDate' iv_abap_fieldname = 'LATE_SCHED_START_DATE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '753' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '754' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_datetime( ).
 lo_property->set_precison( iv_precision = 7 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30962,7 +31096,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'LateSchedStartDateConv' iv_abap_fieldname = 'LATE_SCHED_START_DATE_CONV' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '754' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '755' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 19 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -30975,7 +31109,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'LateSchedStartTime' iv_abap_fieldname = 'LATE_SCHED_START_TIME' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '755' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '756' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_time( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -30987,7 +31121,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'SystemStatusText' iv_abap_fieldname = 'SYSTEM_STATUS_TEXT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '756' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '757' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31000,7 +31134,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'TextoLongo' iv_abap_fieldname = 'TEXTO_LONGO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '757' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '758' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -31023,7 +31157,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'CalcTrabReal' iv_abap_fieldname = 'CALC_TRAB_REAL' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '758' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '759' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -31035,7 +31169,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'StandardTextKey' iv_abap_fieldname = 'STANDARD_TEXT_KEY' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '759' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '760' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 7 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31097,7 +31231,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_programac
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '806' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '807' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -31111,7 +31245,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'DataAssociacao' iv_abap_fieldname = 'DATA_ASSOCIACAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '807' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '808' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31124,7 +31258,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'UsuarioApp' iv_abap_fieldname = 'USUARIO_APP' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '808' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '809' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31137,7 +31271,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'StatusSis' iv_abap_fieldname = 'STATUS_SIS' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '809' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '810' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31150,7 +31284,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'HoraAssociacao' iv_abap_fieldname = 'HORA_ASSOCIACAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '810' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '811' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 6 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31163,7 +31297,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Matricula' iv_abap_fieldname = 'MATRICULA' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '811' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '812' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31176,7 +31310,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Aufnr' iv_abap_fieldname = 'AUFNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '812' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '813' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31189,7 +31323,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Nome' iv_abap_fieldname = 'NOME' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '813' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '814' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 80 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31202,7 +31336,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'StatusUsu' iv_abap_fieldname = 'STATUS_USU' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '814' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '815' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31215,7 +31349,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'MotivoAssociacao' iv_abap_fieldname = 'MOTIVO_ASSOCIACAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '815' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '816' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 2 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31228,7 +31362,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Vornr' iv_abap_fieldname = 'VORNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '816' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '817' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31241,7 +31375,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'DescricaoAssociacao' iv_abap_fieldname = 'DESCRICAO_ASSOCIACAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '817' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '818' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31254,7 +31388,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Suboper' iv_abap_fieldname = 'SUBOPER' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '818' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '819' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31267,19 +31401,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'UsuarioOrigem' iv_abap_fieldname = 'USUARIO_ORIGEM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '819' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_false ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'UsuarioDestino' iv_abap_fieldname = 'USUARIO_DESTINO' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '820' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
@@ -31292,8 +31413,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'MotivoDesassociacao' iv_abap_fieldname = 'MOTIVO_DESASSOCIACAO' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'UsuarioDestino' iv_abap_fieldname = 'USUARIO_DESTINO' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '821' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'MotivoDesassociacao' iv_abap_fieldname = 'MOTIVO_DESASSOCIACAO' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '822' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 2 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31355,7 +31489,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_programac
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Arbei' iv_abap_fieldname = 'ARBEI' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '628' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '629' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_decimal( ).
 lo_property->set_precison( iv_precision = 2 ). "#EC NOTEXT
 lo_property->set_maxlength( iv_max_length = 7 ). "#EC NOTEXT
@@ -31369,19 +31503,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Aplzl' iv_abap_fieldname = 'APLZL' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '629' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_true ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Arbid' iv_abap_fieldname = 'ARBID' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '630' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
@@ -31394,7 +31515,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Arbpl' iv_abap_fieldname = 'ARBPL' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Arbid' iv_abap_fieldname = 'ARBID' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '631' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
@@ -31407,8 +31528,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Artpr' iv_abap_fieldname = 'ARTPR' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Arbpl' iv_abap_fieldname = 'ARBPL' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '632' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Artpr' iv_abap_fieldname = 'ARTPR' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '633' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 2 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31421,7 +31555,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Auart' iv_abap_fieldname = 'AUART' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '633' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '634' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31434,7 +31568,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Aufnr' iv_abap_fieldname = 'AUFNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '634' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '635' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31447,7 +31581,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Aufpl' iv_abap_fieldname = 'AUFPL' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '635' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '636' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31460,7 +31594,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '636' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '637' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -31474,7 +31608,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'DataAssociacao' iv_abap_fieldname = 'DATA_ASSOCIACAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '637' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '638' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 20 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31487,7 +31621,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Eqktx' iv_abap_fieldname = 'EQKTX' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '638' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '639' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31500,7 +31634,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Equnr' iv_abap_fieldname = 'EQUNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '639' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '640' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 18 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31513,7 +31647,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Gewrk' iv_abap_fieldname = 'GEWRK' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '640' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '641' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31526,19 +31660,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Gltrp' iv_abap_fieldname = 'GLTRP' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '641' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_datetime( ).
-lo_property->set_precison( iv_precision = 7 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_true ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Gstrp' iv_abap_fieldname = 'GSTRP' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '642' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_datetime( ).
 lo_property->set_precison( iv_precision = 7 ). "#EC NOTEXT
@@ -31551,8 +31672,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'HoraAssociacao' iv_abap_fieldname = 'HORA_ASSOCIACAO' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Gstrp' iv_abap_fieldname = 'GSTRP' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '643' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_datetime( ).
+lo_property->set_precison( iv_precision = 7 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'HoraAssociacao' iv_abap_fieldname = 'HORA_ASSOCIACAO' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '644' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 20 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31565,7 +31699,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Idat1' iv_abap_fieldname = 'IDAT1' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '644' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '645' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_datetime( ).
 lo_property->set_precison( iv_precision = 7 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31578,7 +31712,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Ingpr' iv_abap_fieldname = 'INGPR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '645' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '646' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 3 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31591,7 +31725,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Innam' iv_abap_fieldname = 'INNAM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '646' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '647' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 18 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31604,7 +31738,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Iwerk' iv_abap_fieldname = 'IWERK' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '647' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '648' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31617,19 +31751,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Ktext' iv_abap_fieldname = 'KTEXT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '648' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_true ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Ltxa1' iv_abap_fieldname = 'LTXA1' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '649' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
@@ -31642,8 +31763,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Nome' iv_abap_fieldname = 'NOME' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Ltxa1' iv_abap_fieldname = 'LTXA1' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '650' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Nome' iv_abap_fieldname = 'NOME' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '651' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 80 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31656,19 +31790,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Objnr' iv_abap_fieldname = 'OBJNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '651' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 22 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_true ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'ObjnrOperSub' iv_abap_fieldname = 'OBJNR_OPER_SUB' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '652' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 22 ). "#EC NOTEXT
@@ -31681,8 +31802,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Pernr' iv_abap_fieldname = 'PERNR' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'ObjnrOperSub' iv_abap_fieldname = 'OBJNR_OPER_SUB' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '653' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 22 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Pernr' iv_abap_fieldname = 'PERNR' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '654' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31695,7 +31829,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Pltxt' iv_abap_fieldname = 'PLTXT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '654' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '655' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31708,7 +31842,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Priok' iv_abap_fieldname = 'PRIOK' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '655' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '656' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31721,7 +31855,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Priokx' iv_abap_fieldname = 'PRIOKX' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '656' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '657' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 20 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31734,7 +31868,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Qmnum' iv_abap_fieldname = 'QMNUM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '657' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '658' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31747,19 +31881,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'StatusSis' iv_abap_fieldname = 'STATUS_SIS' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '658' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_true ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'StatusUsu' iv_abap_fieldname = 'STATUS_USU' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '659' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
@@ -31772,8 +31893,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Suboper' iv_abap_fieldname = 'SUBOPER' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'StatusUsu' iv_abap_fieldname = 'STATUS_USU' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '660' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Suboper' iv_abap_fieldname = 'SUBOPER' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '661' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31786,7 +31920,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Sumnr' iv_abap_fieldname = 'SUMNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '661' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '662' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31799,7 +31933,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Tplnr' iv_abap_fieldname = 'TPLNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '662' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '663' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31812,7 +31946,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Usuario' iv_abap_fieldname = 'USUARIO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '663' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '664' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -31825,7 +31959,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Vornr' iv_abap_fieldname = 'VORNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '664' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '665' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -32055,7 +32189,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_status_as
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '843' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '844' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -32069,7 +32203,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'CodigoAssociacaoOrdem' iv_abap_fieldname = 'CODIGO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '844' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '845' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 2 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -32082,7 +32216,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'DescricaoAssociacaoOrdem' iv_abap_fieldname = 'DESCRICAO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '845' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '846' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 25 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -33061,23 +33195,36 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_usuario' 
 *Properties
 ***********************************************************************************************************************************
 
-lo_property = lo_entity_type->create_property( iv_property_name = 'UnidadeTempo' iv_abap_fieldname = 'UNIDADE_TEMPO' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'ConfSenha' iv_abap_fieldname = 'CONF_SENHA' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 3 ). "#EC NOTEXT
+lo_property->set_maxlength( iv_max_length = 32 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
 lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_false ).
+lo_property->set_nullable( abap_true ).
 lo_property->set_filterable( abap_false ).
 lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'ConfSenha' iv_abap_fieldname = 'CONF_SENHA' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'NaoAlocarOp' iv_abap_fieldname = 'NAO_ALOCAR_OP' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 32 ). "#EC NOTEXT
+lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'UnidadeTempo' iv_abap_fieldname = 'UNIDADE_TEMPO' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 3 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
 lo_property->set_sortable( abap_false ).
@@ -33298,7 +33445,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_usuario_a
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Arbpl' iv_abap_fieldname = 'ARBPL' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '785' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '786' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -33311,7 +33458,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Usuario' iv_abap_fieldname = 'USUARIO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '786' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '787' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -33324,7 +33471,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Perfil' iv_abap_fieldname = 'PERFIL' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '787' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '788' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 10 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -33337,7 +33484,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Nome' iv_abap_fieldname = 'NOME' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '788' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '789' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 80 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -33350,19 +33497,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Matricula' iv_abap_fieldname = 'MATRICULA' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '789' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_false ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Objid' iv_abap_fieldname = 'OBJID' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '790' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
@@ -33375,8 +33509,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Sincroniza' iv_abap_fieldname = 'SINCRONIZA' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Objid' iv_abap_fieldname = 'OBJID' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '791' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Sincroniza' iv_abap_fieldname = 'SINCRONIZA' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '792' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_byte( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -33388,7 +33535,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Encerra' iv_abap_fieldname = 'ENCERRA' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '792' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '793' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -33400,7 +33547,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'LimiteConf' iv_abap_fieldname = 'LIMITE_CONF' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '793' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '794' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_int16( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -33412,19 +33559,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Senha' iv_abap_fieldname = 'SENHA' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '794' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 32 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_false ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'ConfSenha' iv_abap_fieldname = 'CONF_SENHA' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '795' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 32 ). "#EC NOTEXT
@@ -33437,9 +33571,10 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Associa' iv_abap_fieldname = 'ASSOCIA' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'ConfSenha' iv_abap_fieldname = 'CONF_SENHA' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '796' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_boolean( ).
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 32 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
 lo_property->set_sortable( abap_false ).
@@ -33449,7 +33584,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Bloqueado' iv_abap_fieldname = 'BLOQUEADO' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Associa' iv_abap_fieldname = 'ASSOCIA' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '797' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
@@ -33461,7 +33596,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'AtualizarSenha' iv_abap_fieldname = 'ATUALIZAR_SENHA' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Bloqueado' iv_abap_fieldname = 'BLOQUEADO' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '798' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
@@ -33473,8 +33608,20 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'MaterialSaldo' iv_abap_fieldname = 'MATERIAL_SALDO' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'AtualizarSenha' iv_abap_fieldname = 'ATUALIZAR_SENHA' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '799' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_boolean( ).
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'MaterialSaldo' iv_abap_fieldname = 'MATERIAL_SALDO' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '800' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -33498,18 +33645,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'DiasRetroativos' iv_abap_fieldname = 'DIAS_RETROATIVOS' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '800' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_byte( ).
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_false ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'DiasProgressivos' iv_abap_fieldname = 'DIAS_PROGRESSIVOS' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '801' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_byte( ).
 lo_property->set_creatable( abap_false ).
@@ -33521,8 +33656,20 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'DiasProgressivos' iv_abap_fieldname = 'DIAS_PROGRESSIVOS' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '802' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_byte( ).
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '803' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -33596,8 +33743,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Guid' iv_abap_fieldname = 'GUID' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'NaoAlocarOp' iv_abap_fieldname = 'NAO_ALOCAR_OP' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '474' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Guid' iv_abap_fieldname = 'GUID' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '475' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 32 ). "#EC NOTEXT
@@ -33611,7 +33771,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'UnidadeTempo' iv_abap_fieldname = 'UNIDADE_TEMPO' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '475' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '476' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 3 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -33684,19 +33844,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Matricula' iv_abap_fieldname = 'MATRICULA' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '476' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_true ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Objid' iv_abap_fieldname = 'OBJID' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '477' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
@@ -33709,8 +33856,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Sincroniza' iv_abap_fieldname = 'SINCRONIZA' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Objid' iv_abap_fieldname = 'OBJID' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '478' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Sincroniza' iv_abap_fieldname = 'SINCRONIZA' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '479' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_byte( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -33722,7 +33882,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Encerra' iv_abap_fieldname = 'ENCERRA' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '479' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '480' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -33734,7 +33894,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'LimiteConf' iv_abap_fieldname = 'LIMITE_CONF' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '480' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '481' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_int16( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -33746,19 +33906,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Senha' iv_abap_fieldname = 'SENHA' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '481' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 32 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_true ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'ConfSenha' iv_abap_fieldname = 'CONF_SENHA' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '482' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 32 ). "#EC NOTEXT
@@ -33771,9 +33918,10 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Associa' iv_abap_fieldname = 'ASSOCIA' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'ConfSenha' iv_abap_fieldname = 'CONF_SENHA' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '483' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_boolean( ).
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 32 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
 lo_property->set_sortable( abap_false ).
@@ -33783,7 +33931,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Bloqueado' iv_abap_fieldname = 'BLOQUEADO' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Associa' iv_abap_fieldname = 'ASSOCIA' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '484' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
@@ -33795,8 +33943,20 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'AtualizarSenha' iv_abap_fieldname = 'ATUALIZAR_SENHA' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Bloqueado' iv_abap_fieldname = 'BLOQUEADO' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '485' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_boolean( ).
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'AtualizarSenha' iv_abap_fieldname = 'ATUALIZAR_SENHA' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '486' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -33857,7 +34017,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_variant' 
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'VarKey' iv_abap_fieldname = 'VAR_KEY' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '686' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '687' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 200 ). "#EC NOTEXT
@@ -33871,7 +34031,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'VarId' iv_abap_fieldname = 'VAR_ID' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '687' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '688' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -33883,7 +34043,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'VarName' iv_abap_fieldname = 'VAR_NAME' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '688' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '689' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 50 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -33896,18 +34056,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'VarGlobal' iv_abap_fieldname = 'VAR_GLOBAL' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '689' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_boolean( ).
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_true ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'VarDef' iv_abap_fieldname = 'VAR_DEF' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '690' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
@@ -33919,7 +34067,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'VarOverwrite' iv_abap_fieldname = 'VAR_OVERWRITE' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'VarDef' iv_abap_fieldname = 'VAR_DEF' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '691' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
@@ -33931,7 +34079,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'VarTile' iv_abap_fieldname = 'VAR_TILE' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'VarOverwrite' iv_abap_fieldname = 'VAR_OVERWRITE' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '692' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
@@ -33943,10 +34091,9 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'VarApp' iv_abap_fieldname = 'VAR_APP' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'VarTile' iv_abap_fieldname = 'VAR_TILE' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '693' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 50 ). "#EC NOTEXT
+lo_property->set_type_edm_boolean( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
 lo_property->set_sortable( abap_false ).
@@ -33956,7 +34103,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'VarUsuario' iv_abap_fieldname = 'VAR_USUARIO' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'VarApp' iv_abap_fieldname = 'VAR_APP' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '694' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 50 ). "#EC NOTEXT
@@ -33969,8 +34116,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'VarJson' iv_abap_fieldname = 'VAR_JSON' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'VarUsuario' iv_abap_fieldname = 'VAR_USUARIO' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '695' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 50 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'VarJson' iv_abap_fieldname = 'VAR_JSON' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '696' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -34031,7 +34191,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'out_variant_v
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '698' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '699' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -34045,7 +34205,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Variant' iv_abap_fieldname = 'VARIANT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '699' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '700' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 14 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -34058,7 +34218,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Selname' iv_abap_fieldname = 'SELNAME' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '700' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '701' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -34071,19 +34231,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Kind' iv_abap_fieldname = 'KIND' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '701' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_true ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Sign' iv_abap_fieldname = 'SIGN' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '702' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -34096,8 +34243,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Option' iv_abap_fieldname = 'OPTION' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Sign' iv_abap_fieldname = 'SIGN' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '703' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Option' iv_abap_fieldname = 'OPTION' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '704' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 2 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -34110,7 +34270,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Low' iv_abap_fieldname = 'LOW' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '704' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '705' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 45 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -34123,7 +34283,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'High' iv_abap_fieldname = 'HIGH' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '705' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '706' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 45 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -34429,7 +34589,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'root_out_cata
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '922' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '923' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -34855,7 +35015,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'root_out_docu
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '921' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '922' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -35209,7 +35369,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'root_out_list
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '923' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '924' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -36173,7 +36333,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'root_out_pont
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '920' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '921' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -36235,7 +36395,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'root_out_prog
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '512' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '513' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -36249,7 +36409,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Ernam' iv_abap_fieldname = 'ERNAM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '513' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '514' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36262,7 +36422,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Usuperfil' iv_abap_fieldname = 'USUPERFIL' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '514' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '515' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36275,7 +36435,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'GstrpIni' iv_abap_fieldname = 'GSTRP_INI' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '515' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '516' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_datetime( ).
 lo_property->set_precison( iv_precision = 7 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36288,7 +36448,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Vlsch' iv_abap_fieldname = 'VLSCH' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '516' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '517' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 7 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36301,7 +36461,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'DatopeIni' iv_abap_fieldname = 'DATOPE_INI' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '517' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '518' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_datetime( ).
 lo_property->set_precison( iv_precision = 7 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36314,7 +36474,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Vornr' iv_abap_fieldname = 'VORNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '518' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '519' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36327,7 +36487,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'GstrpFim' iv_abap_fieldname = 'GSTRP_FIM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '519' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '520' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_datetime( ).
 lo_property->set_precison( iv_precision = 7 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36340,7 +36500,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Guid' iv_abap_fieldname = 'GUID' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '520' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '521' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 32 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36353,7 +36513,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'DatopeFim' iv_abap_fieldname = 'DATOPE_FIM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '521' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '522' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_datetime( ).
 lo_property->set_precison( iv_precision = 7 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36366,7 +36526,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Werks' iv_abap_fieldname = 'WERKS' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '522' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '523' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36379,7 +36539,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Aufnr' iv_abap_fieldname = 'AUFNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '523' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '524' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36392,7 +36552,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Auart' iv_abap_fieldname = 'AUART' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '524' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '525' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36405,7 +36565,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Qmnum' iv_abap_fieldname = 'QMNUM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '525' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '526' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36418,7 +36578,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Priok' iv_abap_fieldname = 'PRIOK' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '526' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '527' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36431,7 +36591,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Tplnr' iv_abap_fieldname = 'TPLNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '527' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '528' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36444,7 +36604,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Equnr' iv_abap_fieldname = 'EQUNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '528' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '529' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 18 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36457,7 +36617,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Iwerk' iv_abap_fieldname = 'IWERK' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '529' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '530' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36470,19 +36630,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Ingrp' iv_abap_fieldname = 'INGPR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '530' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 3 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_true ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Ilart' iv_abap_fieldname = 'ILART' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '531' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 3 ). "#EC NOTEXT
@@ -36495,8 +36642,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Gewrk' iv_abap_fieldname = 'GEWRK' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Ilart' iv_abap_fieldname = 'ILART' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '532' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 3 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Gewrk' iv_abap_fieldname = 'GEWRK' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '533' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36509,19 +36669,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Gstrp' iv_abap_fieldname = 'GSTRP' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '533' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 20 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_true ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Datope' iv_abap_fieldname = 'DATOPE' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '534' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 20 ). "#EC NOTEXT
@@ -36534,8 +36681,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Usuapp' iv_abap_fieldname = 'USUAPP' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Datope' iv_abap_fieldname = 'DATOPE' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '535' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 20 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Usuapp' iv_abap_fieldname = 'USUAPP' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '536' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36548,19 +36708,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'FTree' iv_abap_fieldname = 'F_TREE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '536' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_true ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'MatAt' iv_abap_fieldname = 'MAT_AT' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '537' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -36573,7 +36720,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Oper' iv_abap_fieldname = 'OPER' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'MatAt' iv_abap_fieldname = 'MAT_AT' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '538' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -36586,7 +36733,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Ordens' iv_abap_fieldname = 'ORDENS' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Oper' iv_abap_fieldname = 'OPER' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '539' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -36599,8 +36746,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'QuantidadeRegistros' iv_abap_fieldname = 'QUANTIDADE_REGISTROS' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Ordens' iv_abap_fieldname = 'ORDENS' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '540' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'QuantidadeRegistros' iv_abap_fieldname = 'QUANTIDADE_REGISTROS' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '541' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_int32( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -36661,7 +36821,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'root_out_prog
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Chave' iv_abap_fieldname = 'CHAVE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '665' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '666' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -36675,7 +36835,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Guid' iv_abap_fieldname = 'GUID' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '666' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '667' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 32 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36688,7 +36848,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Werks' iv_abap_fieldname = 'WERKS' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '667' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '668' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36701,7 +36861,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Aufnr' iv_abap_fieldname = 'AUFNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '668' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '669' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36714,7 +36874,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Auart' iv_abap_fieldname = 'AUART' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '669' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '670' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36727,7 +36887,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Qmnum' iv_abap_fieldname = 'QMNUM' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '670' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '671' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36740,7 +36900,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Priok' iv_abap_fieldname = 'PRIOK' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '671' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '672' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36753,7 +36913,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Tplnr' iv_abap_fieldname = 'TPLNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '672' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '673' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36766,7 +36926,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Equnr' iv_abap_fieldname = 'EQUNR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '673' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '674' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 18 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36779,7 +36939,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Iwerk' iv_abap_fieldname = 'IWERK' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '674' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '675' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36792,19 +36952,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Ingpr' iv_abap_fieldname = 'INGPR' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '675' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 3 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_true ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Ilart' iv_abap_fieldname = 'ILART' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '676' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 3 ). "#EC NOTEXT
@@ -36817,8 +36964,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Gewrk' iv_abap_fieldname = 'GEWRK' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Ilart' iv_abap_fieldname = 'ILART' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '677' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 3 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Gewrk' iv_abap_fieldname = 'GEWRK' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '678' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 8 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36831,19 +36991,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Gstrp' iv_abap_fieldname = 'GSTRP' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '678' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 20 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_true ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Datope' iv_abap_fieldname = 'DATOPE' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '679' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 20 ). "#EC NOTEXT
@@ -36856,8 +37003,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Usuapp' iv_abap_fieldname = 'USUAPP' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Datope' iv_abap_fieldname = 'DATOPE' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '680' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 20 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Usuapp' iv_abap_fieldname = 'USUAPP' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '681' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -36870,19 +37030,6 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'FTree' iv_abap_fieldname = 'F_TREE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '681' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
-lo_property->set_creatable( abap_false ).
-lo_property->set_updatable( abap_false ).
-lo_property->set_sortable( abap_false ).
-lo_property->set_nullable( abap_true ).
-lo_property->set_filterable( abap_false ).
-lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
-      EXPORTING
-        iv_key      = 'unicode'
-        iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'MatAt' iv_abap_fieldname = 'MAT_AT' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '682' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -36895,7 +37042,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Oper' iv_abap_fieldname = 'OPER' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'MatAt' iv_abap_fieldname = 'MAT_AT' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '683' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -36908,7 +37055,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'Ordens' iv_abap_fieldname = 'ORDENS' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Oper' iv_abap_fieldname = 'OPER' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '684' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
@@ -36921,8 +37068,21 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
       EXPORTING
         iv_key      = 'unicode'
         iv_value    = 'false' ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'QuantidadeRegistros' iv_abap_fieldname = 'QUANTIDADE_REGISTROS' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'Ordens' iv_abap_fieldname = 'ORDENS' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '685' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 1 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
+      EXPORTING
+        iv_key      = 'unicode'
+        iv_value    = 'false' ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'QuantidadeRegistros' iv_abap_fieldname = 'QUANTIDADE_REGISTROS' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '686' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_int32( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -37044,7 +37204,7 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'root_out_vari
 ***********************************************************************************************************************************
 
 lo_property = lo_entity_type->create_property( iv_property_name = 'Guid' iv_abap_fieldname = 'GUID' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '696' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '697' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_is_key( ).
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 32 ). "#EC NOTEXT
@@ -37058,7 +37218,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_key      = 'unicode'
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Variant' iv_abap_fieldname = 'VARIANT' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '697' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '698' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 14 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -37102,7 +37262,7 @@ lo_entity_set->set_filter_required( abap_false ).
 *&---------------------------------------------------------------------*
 
 
-  CONSTANTS: lc_gen_date_time TYPE timestamp VALUE '20260409202618'.                  "#EC NOTEXT
+  CONSTANTS: lc_gen_date_time TYPE timestamp VALUE '20260923193130'.                  "#EC NOTEXT
   rv_last_modified = super->get_last_modified( ).
   IF rv_last_modified LT lc_gen_date_time.
     rv_last_modified = lc_gen_date_time.
@@ -40526,118 +40686,125 @@ APPEND ls_text_element TO rt_text_elements.
 
 
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Guid'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'NaoAlocarOp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '474'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'UnidadeTempo'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Guid'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '475'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Matricula'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'UnidadeTempo'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '476'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Objid'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Matricula'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '477'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Sincroniza'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Objid'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '478'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Encerra'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Sincroniza'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '479'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'LimiteConf'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Encerra'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '480'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Senha'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'LimiteConf'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '481'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'ConfSenha'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Senha'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '482'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Associa'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'ConfSenha'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '483'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Bloqueado'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Associa'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '484'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'AtualizarSenha'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Bloqueado'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '485'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'AtualizarSenha'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'out_usuario_completo'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '486'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
 
 
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Guid'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'out_config_perfil_completo'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '486'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'Perfil'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_config_perfil_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '487'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Configuracao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Perfil'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_config_perfil_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '488'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'DescConfiguracao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Configuracao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_config_perfil_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '489'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'DescConfiguracao'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'out_config_perfil_completo'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '490'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 
 
@@ -40646,21 +40813,21 @@ ls_text_element-artifact_name          = 'Guid'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_autorizacao_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '490'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '491'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Autorizacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_autorizacao_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '491'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '492'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'DescAutorizacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_autorizacao_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '492'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '493'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 
 
@@ -40669,133 +40836,133 @@ ls_text_element-artifact_name          = 'ApontManual'.                 "#EC NOT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_config_sistema_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '493'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '494'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Latitude'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_config_sistema_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '494'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '495'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Longitude'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_config_sistema_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '495'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '496'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Tracking'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_config_sistema_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '496'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '497'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Cesto'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_config_sistema_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '497'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '498'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'VersaoApp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_config_sistema_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '498'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '499'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'ChaveModelo'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_config_sistema_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '499'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '500'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Guid'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_config_sistema_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '500'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '501'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'TipoAtividade'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_config_sistema_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '501'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '502'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'MotIntTrab'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_config_sistema_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '502'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '503'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'UsuarioSap'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_config_sistema_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '503'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '504'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'AnexoOrdem'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_config_sistema_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '504'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '505'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'AnexoLocl'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_config_sistema_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '505'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '506'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'AnexoEqui'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_config_sistema_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '506'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '507'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'AtribuirOper'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_config_sistema_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '507'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '508'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'DespachoOrdem'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_config_sistema_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '508'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '509'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'DespachoOper'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_config_sistema_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '509'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '510'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'CalcTrabReal'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_config_sistema_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '510'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '511'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Confirmacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_config_sistema_completo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '511'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '512'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 
 
@@ -40804,203 +40971,203 @@ ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '512'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '513'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Ernam'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '513'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '514'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Usuperfil'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '514'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '515'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'GstrpIni'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '515'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '516'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Vlsch'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '516'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '517'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'DatopeIni'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '517'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '518'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Vornr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '518'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '519'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'GstrpFim'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '519'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '520'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Guid'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '520'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '521'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'DatopeFim'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '521'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '522'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Werks'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '522'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '523'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Aufnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '523'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '524'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Auart'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '524'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '525'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Qmnum'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '525'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '526'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Priok'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '526'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '527'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Tplnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '527'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '528'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Equnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '528'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '529'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Iwerk'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '529'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '530'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Ingrp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '530'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '531'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Ilart'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '531'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '532'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Gewrk'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '532'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '533'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Gstrp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '533'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '534'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Datope'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '534'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '535'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Usuapp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '535'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '536'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'FTree'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '536'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '537'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'MatAt'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '537'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '538'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Oper'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '538'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '539'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Ordens'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '539'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '540'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'QuantidadeRegistros'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_ordens'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '540'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '541'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 
 
@@ -41009,7 +41176,7 @@ ls_text_element-artifact_name          = 'Abckz'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '541'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '543'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Arbeh'.                 "#EC NOTEXT
@@ -41023,595 +41190,595 @@ ls_text_element-artifact_name          = 'Abctx'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '543'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '544'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Anlnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '544'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '545'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Anlun'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '545'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'Aplzl'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '546'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Arbei'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Aplzl'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '547'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Arbid'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Arbei'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '548'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Arbpl'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Arbid'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '549'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Artpr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Arbpl'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '550'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Auart'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Artpr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '551'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Aufnr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Auart'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '552'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Aufpl'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Aufnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '553'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Aufpl'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '554'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'CodigoAssociacaoOrdem'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '555'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'DataAssociacao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'CodigoAssociacaoOrdem'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '556'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'DataAssociacaoStr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'DataAssociacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '557'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'DataHoraAssociacao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'DataAssociacaoStr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '558'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'DataOperFimStr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'DataHoraAssociacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '559'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'DataOperIniStr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'DataOperFimStr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '560'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'DescricaoAssociacaoOrdem'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'DataOperIniStr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '561'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Eqfnr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'DescricaoAssociacaoOrdem'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '562'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Eqktx'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Eqfnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '563'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Equnr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Eqktx'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '564'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Fsavd'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Equnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '565'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Fsedd'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Fsavd'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '566'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Gewrk'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Fsedd'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '567'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Gltrp'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Gewrk'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '568'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'GltrpStr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Gltrp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '569'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Gstrp'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'GltrpStr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '570'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'GstrpStr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Gstrp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '571'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'HoraAssociacao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'GstrpStr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '572'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'HorasTrabReal'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'HoraAssociacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '573'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'HorasTrabRealUsr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'HorasTrabReal'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '574'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'HouseNum1'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'HorasTrabRealUsr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '575'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Idat1'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'HouseNum1'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '576'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Idat1Str'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Idat1'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '577'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Ilart'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Idat1Str'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '578'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Ilatx'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Ilart'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '579'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Ingpr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Ilatx'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '580'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Innam'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Ingpr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '581'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Ismnw'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Innam'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '582'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Iwerk'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Ismnw'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '583'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Ktext'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Iwerk'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '584'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Kunnr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Ktext'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '585'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Ltxa1'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Kunnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '586'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Maintitem'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Ltxa1'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '587'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Matricula'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Maintitem'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '588'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'MnWkctrDescricao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Matricula'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '589'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'MnWkctrPlant'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'MnWkctrDescricao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '590'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Name1'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'MnWkctrPlant'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '591'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Name2'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Name1'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '592'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'NameCp'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Name2'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '593'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Objnr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'NameCp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '594'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'ObjnrOperSub'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Objnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '595'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Ort01'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'ObjnrOperSub'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '596'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Ort02'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Ort01'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '597'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Pernr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Ort02'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '598'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Pltxt'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Pernr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '599'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Priok'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Pltxt'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '600'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Priokx'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Priok'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '601'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Pstlz'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Priokx'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '602'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Qmnum'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Pstlz'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '603'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Qmtxt'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Qmnum'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '604'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'QtdOperacoes'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Qmtxt'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '605'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'QtdUsuarios'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'QtdOperacoes'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '606'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Regio'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'QtdUsuarios'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '607'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'SemaforoCor'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Regio'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '608'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'SemaforoDescricao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'SemaforoCor'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '609'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Sname'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'SemaforoDescricao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '610'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'StatusSis'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Sname'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '611'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'StatusUsu'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'StatusSis'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '612'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Stort'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'StatusUsu'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '613'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Stortdesc'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Stort'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '614'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Stras'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Stortdesc'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '615'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Suboper'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Stras'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '616'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Sumnr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Suboper'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '617'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Telf1'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Sumnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '618'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'TextoBreveOrdem'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Telf1'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '619'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'TextoLongoOperacao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'TextoBreveOrdem'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '620'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'TextoLongoOrdem'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'TextoLongoOperacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '621'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Tidnr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'TextoLongoOrdem'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '622'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Tplnr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Tidnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '623'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Usuarioapp'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Tplnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '624'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Vornr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Usuarioapp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '625'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Warpl'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Vornr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '626'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Wptxt'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Warpl'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '627'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'Wptxt'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'out_programacao_lista_oper'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '628'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 
 
@@ -41620,259 +41787,259 @@ ls_text_element-artifact_name          = 'Arbei'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '628'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '629'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Aplzl'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '629'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '630'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Arbid'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '630'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '631'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Arbpl'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '631'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '632'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Artpr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '632'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'Auart'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '633'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Aufnr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Auart'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '634'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Aufpl'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Aufnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '635'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Aufpl'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '636'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'DataAssociacao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '637'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Eqktx'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'DataAssociacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '638'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Equnr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Eqktx'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '639'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Gewrk'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Equnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '640'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Gltrp'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Gewrk'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '641'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Gstrp'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Gltrp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '642'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'HoraAssociacao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Gstrp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '643'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Idat1'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'HoraAssociacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '644'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Ingpr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Idat1'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '645'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Innam'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Ingpr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '646'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Iwerk'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Innam'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '647'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Ktext'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Iwerk'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '648'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Ltxa1'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Ktext'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '649'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Nome'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Ltxa1'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '650'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Objnr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Nome'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '651'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'ObjnrOperSub'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Objnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '652'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Pernr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'ObjnrOperSub'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '653'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Pltxt'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Pernr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '654'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Priok'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Pltxt'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '655'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Priokx'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Priok'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '656'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Qmnum'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Priokx'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '657'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'StatusSis'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Qmnum'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '658'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'StatusUsu'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'StatusSis'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '659'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Suboper'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'StatusUsu'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '660'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Sumnr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Suboper'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '661'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Tplnr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Sumnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '662'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Usuario'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Tplnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '663'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Vornr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Usuario'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '664'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'Vornr'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'out_programacao_usuarios'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '665'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 
 
@@ -41881,147 +42048,147 @@ ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '665'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '666'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Guid'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '666'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '667'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Werks'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '667'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '668'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Aufnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '668'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '669'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Auart'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '669'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '670'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Qmnum'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '670'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '671'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Priok'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '671'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '672'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Tplnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '672'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '673'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Equnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '673'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '674'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Iwerk'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '674'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '675'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Ingpr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '675'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '676'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Ilart'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '676'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '677'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Gewrk'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '677'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '678'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Gstrp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '678'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '679'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Datope'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '679'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '680'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Usuapp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '680'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '681'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'FTree'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '681'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '682'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'MatAt'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '682'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '683'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Oper'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '683'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '684'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Ordens'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '684'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '685'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'QuantidadeRegistros'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_programacao_usuarios'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '685'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '686'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 
 
@@ -42030,70 +42197,70 @@ ls_text_element-artifact_name          = 'VarKey'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_variant'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '686'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '687'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'VarId'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_variant'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '687'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '688'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'VarName'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_variant'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '688'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '689'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'VarGlobal'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_variant'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '689'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '690'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'VarDef'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_variant'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '690'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '691'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'VarOverwrite'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_variant'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '691'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '692'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'VarTile'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_variant'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '692'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '693'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'VarApp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_variant'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '693'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '694'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'VarUsuario'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_variant'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '694'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '695'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'VarJson'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_variant'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '695'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '696'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 
 
@@ -42102,225 +42269,225 @@ ls_text_element-artifact_name          = 'Guid'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_variant_values'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '696'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '697'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Variant'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'root_out_variant_values'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '697'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '698'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 
 
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'out_variant_values'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '698'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'Variant'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_variant_values'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '699'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Selname'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Variant'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_variant_values'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '700'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Kind'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Selname'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_variant_values'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '701'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Sign'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Kind'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_variant_values'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '702'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Option'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Sign'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_variant_values'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '703'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Low'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Option'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_variant_values'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '704'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'High'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Low'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_variant_values'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '705'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'High'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'out_variant_values'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '706'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
 
 
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'out_layout_cab'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '706'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'Padrao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_layout_cab'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '707'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Tabela'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Padrao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_layout_cab'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '708'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Id'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Tabela'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_layout_cab'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '709'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Usuario'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Id'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_layout_cab'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '710'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Descricao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Usuario'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_layout_cab'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '711'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'DataCriacao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Descricao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_layout_cab'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '712'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'HoraCriacao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'DataCriacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_layout_cab'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '713'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'UsuarioCriacao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'HoraCriacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_layout_cab'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '714'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'DataAlteracao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'UsuarioCriacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_layout_cab'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '715'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'HoraAlteracao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'DataAlteracao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_layout_cab'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '716'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'UsuarioAlteracao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'HoraAlteracao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_layout_cab'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '717'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'UsuarioAlteracao'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'out_layout_cab'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '718'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
 
 
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'out_layout_item'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '718'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'IdLayout'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_layout_item'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '719'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Id'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'IdLayout'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_layout_item'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '720'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Order'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Id'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_layout_item'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '721'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Text'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Order'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_layout_item'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '722'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Visible'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Text'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_layout_item'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '723'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'Visible'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'out_layout_item'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '724'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
 
 
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'out_filtro'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '724'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'Key'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_filtro'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '725'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Label'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Key'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_filtro'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '726'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'Label'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'out_filtro'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '727'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 
 
@@ -42329,393 +42496,393 @@ ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_filtro_values'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '727'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '728'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Key'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_filtro_values'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '728'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '729'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 
 
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'out_chave_modelo'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '729'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'Vlsch'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_chave_modelo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '730'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'TextoBreve'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Vlsch'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_chave_modelo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '731'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'TextoLongo'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'TextoBreve'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_chave_modelo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '732'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'TextoLongo'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'out_chave_modelo'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '733'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
 
 
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '733'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'WorkActivity'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '734'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Orderid'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'WorkActivity'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '735'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'WorkActual'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Orderid'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '736'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Activity'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'WorkActual'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '737'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'SubActivity'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Activity'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '738'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'ControlKey'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'SubActivity'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '739'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'WorkCntr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'ControlKey'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '740'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Plant'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'WorkCntr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '741'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Name1'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Plant'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '742'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Description'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Name1'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '743'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'NumberOfCapacities'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Description'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '744'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Acttype'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'NumberOfCapacities'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '745'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'PersNo'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Acttype'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '746'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Sname'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'PersNo'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '747'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'UnWork'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Sname'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '748'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'ConfNo'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'UnWork'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '749'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'EarlSchedStartDate'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'ConfNo'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '750'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'EarlSchedStartDateConv'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'EarlSchedStartDate'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '751'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'EarlSchedStartTime'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'EarlSchedStartDateConv'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '752'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'LateSchedStartDate'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'EarlSchedStartTime'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '753'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'LateSchedStartDateConv'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'LateSchedStartDate'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '754'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'LateSchedStartTime'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'LateSchedStartDateConv'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '755'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'SystemStatusText'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'LateSchedStartTime'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '756'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'TextoLongo'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'SystemStatusText'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '757'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'CalcTrabReal'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'TextoLongo'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '758'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'StandardTextKey'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'CalcTrabReal'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '759'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'StandardTextKey'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'out_programacao_operacoes_detail'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '760'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
 
 
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Aufnr'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'out_programacao_associar'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '760'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'Suboper'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '761'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'DataAssociacao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Suboper'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '762'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'UsuarioApp'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'DataAssociacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '763'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'MotivoAssociacao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'UsuarioApp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '764'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'MotivoAssociacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '765'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'MotivoDesassociacao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '766'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'HoraAssociacao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'MotivoDesassociacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '767'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Matricula'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'HoraAssociacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '768'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'DescricaoAssociacao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Matricula'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '769'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Vornr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'DescricaoAssociacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '770'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'StatusSis'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Vornr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '771'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Nome'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'StatusSis'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '772'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'UsuarioOrigem'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Nome'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '773'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'StatusUsu'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'UsuarioOrigem'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '774'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'UsuarioDestino'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'StatusUsu'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '775'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'UsuarioDestino'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'out_programacao_associar'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '776'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
 
 
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'out_programacao_desassociar'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '776'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'MotivoDesassociacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_desassociar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '777'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Aufnr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'MotivoDesassociacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_desassociar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '778'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Vornr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Aufnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_desassociar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '779'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'UsuarioOrigem'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Vornr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_desassociar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '780'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'UsuarioDestino'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'UsuarioOrigem'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_desassociar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '781'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'UsuarioDestino'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'out_programacao_desassociar'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '782'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 
 
@@ -42724,21 +42891,21 @@ ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_motivos_desassociar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '782'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '783'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Codigo'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_motivos_desassociar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '783'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '784'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Descricao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_motivos_desassociar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '784'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '785'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 
 
@@ -42747,149 +42914,149 @@ ls_text_element-artifact_name          = 'Arbpl'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '785'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '786'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Usuario'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '786'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '787'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Perfil'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '787'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'Nome'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'out_usuario_associar'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '788'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Matricula'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Nome'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '789'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Objid'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Matricula'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '790'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Sincroniza'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Objid'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '791'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Encerra'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Sincroniza'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '792'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'LimiteConf'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Encerra'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '793'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Senha'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'LimiteConf'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '794'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'ConfSenha'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Senha'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '795'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Associa'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'ConfSenha'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '796'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Bloqueado'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Associa'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '797'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'AtualizarSenha'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Bloqueado'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '798'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'MaterialSaldo'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'AtualizarSenha'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '799'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'DiasRetroativos'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'MaterialSaldo'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '800'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'DiasProgressivos'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'DiasRetroativos'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '801'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'DiasProgressivos'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_usuario_associar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '802'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'out_usuario_associar'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '803'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
 
 
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'out_programacao_liberar'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '803'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'Objnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_liberar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '804'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Aufnr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Objnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_liberar'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '805'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'Aufnr'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'out_programacao_liberar'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '806'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 
 
@@ -42898,112 +43065,112 @@ ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_transferir'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '806'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '807'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'DataAssociacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_transferir'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '807'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'UsuarioApp'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'out_programacao_transferir'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '808'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'StatusSis'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'UsuarioApp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_transferir'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '809'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'HoraAssociacao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'StatusSis'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_transferir'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '810'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Matricula'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'HoraAssociacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_transferir'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '811'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Aufnr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Matricula'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_transferir'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '812'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Nome'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Aufnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_transferir'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '813'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'StatusUsu'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Nome'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_transferir'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '814'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'MotivoAssociacao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'StatusUsu'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_transferir'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '815'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Vornr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'MotivoAssociacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_transferir'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '816'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'DescricaoAssociacao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Vornr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_transferir'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '817'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Suboper'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'DescricaoAssociacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_transferir'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '818'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'UsuarioOrigem'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Suboper'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_transferir'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '819'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'UsuarioDestino'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'UsuarioOrigem'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_transferir'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '820'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'MotivoDesassociacao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'UsuarioDestino'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_programacao_transferir'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '821'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'MotivoDesassociacao'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'out_programacao_transferir'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '822'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 
 
@@ -43012,84 +43179,84 @@ ls_text_element-artifact_name          = 'Aufnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_perfil_usuario'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '822'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '823'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Iwerk'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_perfil_usuario'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '823'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '824'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Ktext'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_perfil_usuario'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '824'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '825'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Equipment'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_perfil_usuario'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '825'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '826'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'UsuarioApp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_perfil_usuario'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '826'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '827'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Equipmentdescription'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_perfil_usuario'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '827'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '828'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Auart'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_perfil_usuario'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '828'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '829'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Functloc'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_perfil_usuario'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '829'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '830'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Functlocdescription'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_perfil_usuario'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '830'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '831'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Workcntr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_perfil_usuario'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '831'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '832'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Workcntrplant'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_perfil_usuario'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '832'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '833'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Workcntrdescription'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_perfil_usuario'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '833'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '834'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 
 
@@ -43098,619 +43265,610 @@ ls_text_element-artifact_name          = 'Qmnum'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_nota_perfil_usuario'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '834'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '835'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'UsuarioApp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_nota_perfil_usuario'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '835'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '836'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 
 
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'out_centro_planejamento'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '836'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'Iwerk'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_centro_planejamento'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '837'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Name1'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Iwerk'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_centro_planejamento'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '838'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'Name1'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'out_centro_planejamento'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '839'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
 
 
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'out_prioridade'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '839'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'Priok'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_prioridade'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '840'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Priokx'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Priok'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_prioridade'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '841'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Descricao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Priokx'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_prioridade'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '842'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'Descricao'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'out_prioridade'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '843'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
 
 
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'out_status_associacao_ordem'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '843'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'CodigoAssociacaoOrdem'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_status_associacao_ordem'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '844'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'DescricaoAssociacaoOrdem'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'CodigoAssociacaoOrdem'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_status_associacao_ordem'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '845'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'DescricaoAssociacaoOrdem'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'out_status_associacao_ordem'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '846'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
 
 
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '846'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'TaskText'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '847'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Status'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'TaskText'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '848'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'TaskQkatart'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Status'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '849'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'TaskCodegrp'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'TaskQkatart'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '850'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'ParteObjetoDescricao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'TaskCodegrp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '851'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'TaskDescription'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'ParteObjetoDescricao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '852'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'ParteObjetoCodeGroup'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'TaskDescription'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '853'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'TaskCode'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'ParteObjetoCodeGroup'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '854'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Qmart'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'TaskCode'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '855'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'NotifNo'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Qmart'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '856'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'ParteObjetoCode'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'NotifNo'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '857'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'ParteObjetoText'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'ParteObjetoCode'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '858'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Qmtxt'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'ParteObjetoText'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '859'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'OrderType'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Qmtxt'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '860'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'SintomaDanoDescricao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'OrderType'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '861'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Orderid'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'SintomaDanoDescricao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '862'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'SintomaDanoCodeGroup'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Orderid'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '863'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'ShortText'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'SintomaDanoCodeGroup'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '864'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'SintomaDanoCode'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'ShortText'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '865'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'FunctLoc'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'SintomaDanoCode'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '866'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'SintomaDanoText'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'FunctLoc'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '867'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'CausaDescricao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'SintomaDanoText'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '868'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Pltxt'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'CausaDescricao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '869'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'CausaCodeGroup'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Pltxt'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '870'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Equipment'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'CausaCodeGroup'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '871'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'CausaCode'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Equipment'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '872'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Eqktx'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'CausaCode'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '873'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'CausaText'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Eqktx'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '874'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'RbnrEquipment'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'CausaText'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '875'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'RbnrFunctLoc'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'RbnrEquipment'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '876'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'UsuarioApp'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'RbnrFunctLoc'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '877'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'ParteObjetoQkatart'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'UsuarioApp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '878'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'SintomaDanoQkatart'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'ParteObjetoQkatart'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '879'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'TextoItem'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'SintomaDanoQkatart'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '880'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'CausaQkatart'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'TextoItem'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '881'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'TextoCausa'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'CausaQkatart'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '882'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'TextoCausa'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'in_ordem_catalogo'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '883'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
 
 
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '883'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'TaskText'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '884'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Qmart'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'TaskText'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '885'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'TaskCodegrp'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Qmart'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '886'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Notifno'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'TaskCodegrp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '887'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'TaskCode'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Notifno'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '888'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Qmtxt'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'TaskCode'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '889'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'TaskQkatart'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Qmtxt'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '890'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Ordertype'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'TaskQkatart'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '891'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'TaskDescription'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Ordertype'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '892'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Orderid'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'TaskDescription'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '893'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Shorttext'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Orderid'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '894'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Functloc'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Shorttext'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '895'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Pltxt'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Functloc'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '896'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Equipment'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Pltxt'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '897'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Eqktx'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Equipment'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '898'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Rbnrequipment'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Eqktx'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '899'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Rbnrfunctloc'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Rbnrequipment'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '900'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Parteobjetodescricao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Rbnrfunctloc'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '901'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Parteobjetocodegroup'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Parteobjetodescricao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '902'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Parteobjetoqkatart'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Parteobjetocodegroup'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '903'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Parteobjetocode'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Parteobjetoqkatart'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '904'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Parteobjetotext'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Parteobjetocode'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '905'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Sintomadanodescricao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Parteobjetotext'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '906'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Sintomadanocodegroup'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Sintomadanodescricao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '907'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Sintomadanoqkatart'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Sintomadanocodegroup'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '908'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Sintomadanocode'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Sintomadanoqkatart'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '909'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Sintomadanotext'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Sintomadanocode'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '910'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Textoitem'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Sintomadanotext'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '911'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Causadescricao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Textoitem'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '912'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Causacodegroup'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Causadescricao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '913'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Causaqkatart'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Causacodegroup'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '914'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Causacode'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Causaqkatart'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '915'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Causatext'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Causacode'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '916'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Textocausa'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Causatext'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '917'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'UsuarioApp'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Textocausa'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '918'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Status'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'UsuarioApp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '919'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
-
-
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Status'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'root_out_ponto_medicao'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'out_ordem_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '920'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
@@ -43719,7 +43877,7 @@ APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'root_out_documento_medicao'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'root_out_ponto_medicao'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '921'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
@@ -43728,7 +43886,7 @@ APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'root_out_catalogo'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'root_out_documento_medicao'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '922'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
@@ -43737,9 +43895,18 @@ APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'root_out_lista_tecnica'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'root_out_catalogo'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '923'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
+
+
+clear ls_text_element.
+ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'root_out_lista_tecnica'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '924'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 
 
@@ -43748,296 +43915,296 @@ ls_text_element-artifact_name          = 'Descr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_lista_tecnica_local_instal'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '924'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'out_lista_tecnica_local_instal'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '925'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Maktx'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_lista_tecnica_local_instal'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '926'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Tplnr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Maktx'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_lista_tecnica_local_instal'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '927'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Stlnr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Tplnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_lista_tecnica_local_instal'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '928'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Idnrk'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Stlnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_lista_tecnica_local_instal'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '929'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Postp'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Idnrk'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_lista_tecnica_local_instal'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '930'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Posnr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Postp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_lista_tecnica_local_instal'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '931'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Meins'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Posnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_lista_tecnica_local_instal'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '932'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Menge'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Meins'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_lista_tecnica_local_instal'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '933'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'Menge'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'out_lista_tecnica_local_instal'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '934'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
 
 
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '934'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'Description'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '935'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'TipoOrdem'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Description'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '936'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Equipment'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'TipoOrdem'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '937'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'EquipmentDescription'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Equipment'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '938'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'FunctLoc'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'EquipmentDescription'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '939'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'FunctLocDescription'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'FunctLoc'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '940'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Guid'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'FunctLocDescription'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '941'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Orderid'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Guid'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '942'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'TextoLongo'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Orderid'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '943'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'ReservNo'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'TextoLongo'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '944'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'ResItem'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'ReservNo'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '945'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Material'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'ResItem'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '946'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Maktx'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Material'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '947'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Plant'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Maktx'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '948'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Name1'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Plant'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '949'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'StgeLoc'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Name1'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '950'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Lgobe'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'StgeLoc'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '951'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Activity'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Lgobe'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '952'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'SubActivity'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Activity'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '953'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'ItemCat'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'SubActivity'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '954'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'RequirementQuantity'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'ItemCat'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '955'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'RequirementQuantityUnit'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'RequirementQuantity'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '956'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'CommitedQuan'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'RequirementQuantityUnit'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '957'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'WithdQuan'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'CommitedQuan'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '958'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Labst'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'WithdQuan'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '959'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'UsuarioApp'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Labst'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '960'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'StgeLocDescription'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'UsuarioApp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '961'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'ReservaItem'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'StgeLocDescription'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '962'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Uuidordem'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'ReservaItem'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '963'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Uuidoperacao'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Uuidordem'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '964'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Status'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Uuidoperacao'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '965'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'Status'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'in_reserva'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '966'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 
 
@@ -44046,14 +44213,14 @@ ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_retorno_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '966'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '967'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'TypeDesc'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'in_retorno_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '967'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '968'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 
 
@@ -44062,222 +44229,215 @@ ls_text_element-artifact_name          = 'Rsnum'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_log_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '968'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '969'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'VornrDescription'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_log_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '969'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '970'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'TextLong'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_log_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '970'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '971'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'EquipmentDescription'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_log_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '971'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '972'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Rspos'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_log_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '972'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '973'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'FunctlocDescription'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_log_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '973'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '974'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Aufnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_log_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '974'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '975'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'MatnrDescription'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_log_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '975'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '976'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Vornr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_log_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '976'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '977'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Matnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_log_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '977'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '978'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Datum'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_log_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '978'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '979'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Uzeit'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_log_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '979'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '980'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'UsuarioApp'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_log_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '980'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '981'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Equipament'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_log_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '981'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '982'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'Functloc'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_log_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '982'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '983'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'RequirementQuantity'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_log_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '983'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '984'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
 ls_text_element-artifact_name          = 'RequirementQuantityUnit'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_log_reserva'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '984'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-
-
-clear ls_text_element.
-ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'out_lista_tarefa'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '985'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
+
+
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Nrseq'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'out_lista_tarefa'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '986'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'Usuario'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'out_lista_tarefa'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '987'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'Txt'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Ktext'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_lista_tarefa'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '988'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Perfil'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Chave'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'out_lista_tarefa'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '986'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'Nrseq'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'out_lista_tarefa'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '987'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'Usuario'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_lista_tarefa'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '989'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Plnty'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Txt'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_lista_tarefa'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '990'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Plnnr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Perfil'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_lista_tarefa'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '991'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Plnal'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Plnty'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_lista_tarefa'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '992'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Zaehl'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Plnnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_lista_tarefa'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '993'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Ktext'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Plnal'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_lista_tarefa'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '994'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Statu'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Zaehl'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_lista_tarefa'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '995'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Loekz'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Statu'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_lista_tarefa'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '996'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Werks'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Loekz'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_lista_tarefa'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '997'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Equnr'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Werks'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_lista_tarefa'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '998'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 clear ls_text_element.
-ls_text_element-artifact_name          = 'Eqktx'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'Equnr'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'out_lista_tarefa'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT

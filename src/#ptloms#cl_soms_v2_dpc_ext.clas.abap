@@ -19,15 +19,29 @@ public section.
     redefinition .
 protected section.
 
+  methods ANALISECONSUMOIA_CREATE_ENTITY
+    redefinition .
   methods ASSOCIACAOSET_GET_ENTITYSET
     redefinition .
   methods ASSOCIARSET_GET_ENTITYSET
+    redefinition .
+  methods AUTORIZACAOUSUAR_GET_ENTITYSET
     redefinition .
   methods CENTROCUSTOSET_GET_ENTITYSET
     redefinition .
   methods CHECKLISTANALISE_CREATE_ENTITY
     redefinition .
+  methods CHECKLISTLISTAOP_GET_ENTITYSET
+    redefinition .
+  methods CHECKLISTPERGUNT_GET_ENTITYSET
+    redefinition .
   methods CHECKLISTRESPOST_GET_ENTITYSET
+    redefinition .
+  methods CHECKLISTVINCULO_GET_ENTITYSET
+    redefinition .
+  methods CONFIGPERFILUSUA_GET_ENTITYSET
+    redefinition .
+  methods CONTEXTOUSUARIOV_GET_ENTITY
     redefinition .
   methods DADOSUSERTRACKIN_GET_ENTITYSET
     redefinition .
@@ -37,6 +51,8 @@ protected section.
     redefinition .
   methods HISTORICOASSINAT_GET_ENTITYSET
     redefinition .
+  methods HISTORICOATEND01_CREATE_ENTITY
+    redefinition .
   methods HISTORICOATENDIM_GET_ENTITYSET
     redefinition .
   methods HISTORICOUSERTRA_GET_ENTITYSET
@@ -45,21 +61,31 @@ protected section.
     redefinition .
   methods LISTAUSUARIOSET_GET_ENTITYSET
     redefinition .
+  methods LOGINOMSV2SET_CREATE_ENTITY
+    redefinition .
+  methods LOGINSAPV2SET_CREATE_ENTITY
+    redefinition .
   methods MOTIVODESASSOCIA_GET_ENTITYSET
     redefinition .
   methods NOTAORDEMCLIENTE_GET_ENTITYSET
     redefinition .
   methods NOTAORDEMEQUIPAM_GET_ENTITYSET
     redefinition .
+  methods OPERACAODETALHES_GET_ENTITYSET
+    redefinition .
   methods OPERACAOSIMPLIFI_GET_ENTITYSET
     redefinition .
   methods PERFILCENTROSET_GET_ENTITYSET
+    redefinition .
+  methods PROGRAMACAOANALI_CREATE_ENTITY
+    redefinition .
+  methods RELATORIOANALITI_GET_ENTITYSET
     redefinition .
   methods TIMELINECOMPLETA_GET_ENTITYSET
     redefinition .
   methods TIMELINEFIORISET_GET_ENTITYSET
     redefinition .
-  methods RELATORIOANALITI_GET_ENTITYSET
+  methods CONFIGSISTEMAUSU_GET_ENTITYSET
     redefinition .
 private section.
 ENDCLASS.
@@ -412,14 +438,15 @@ CLASS /PTLOMS/CL_SOMS_V2_DPC_EXT IMPLEMENTATION.
           IF  lt_temp[]  IS NOT INITIAL.
             LOOP AT lt_temp INTO ls_temp.
 
-              CALL FUNCTION 'CONVERSION_EXIT_ALPHA_OUTPUT'
-                EXPORTING
-                  input  = ls_temp-aufnr
-                IMPORTING
-                  output = ls_temp-aufnr.
+*              CALL FUNCTION 'CONVERSION_EXIT_ALPHA_OUTPUT'
+*                EXPORTING
+*                  input  = ls_temp-aufnr
+*                IMPORTING
+*                  output = ls_temp-aufnr.
 
               READ TABLE ls_associar-associarset INTO es_associar WITH KEY aufnr = ls_temp-aufnr
-                                                                           vornr = ls_temp-vornr.
+                                                                           vornr = ls_temp-vornr
+                                                                           uname = ls_temp-uname.
               IF  sy-subrc    EQ 0.
                 MOVE ls_temp-tiporetorno TO es_associar-tiporetorno.
                 MOVE ls_temp-retorno[]   TO es_associar-retornoset[].
@@ -462,6 +489,7 @@ CLASS /PTLOMS/CL_SOMS_V2_DPC_EXT IMPLEMENTATION.
           ENDLOOP.
 
           CALL FUNCTION '/PTLOMS/MF121'
+            DESTINATION lv_rfcdest
             EXPORTING
               i_detalhe = i_detoper
             IMPORTING
@@ -994,16 +1022,16 @@ CLASS /PTLOMS/CL_SOMS_V2_DPC_EXT IMPLEMENTATION.
       WHEN 'ListaChecklistPayload'.
 
         DATA: BEGIN OF i_lista_checklistrespostas.
-                INCLUDE   TYPE /ptloms/cl_soms_v2_mpc=>ts_listachecklistrespostas.
-                DATA:  checklistquestoesset TYPE TABLE OF /ptloms/cl_soms_v2_mpc=>ts_checklistquestoes,
+                INCLUDE TYPE /ptloms/cl_soms_v2_mpc=>ts_listachecklistrespostas.
+                DATA: checklistquestoesset TYPE TABLE OF /ptloms/cl_soms_v2_mpc=>ts_checklistquestoes,
                 retornoset           TYPE TABLE OF /ptloms/et060,
               END OF i_lista_checklistrespostas.
 
         TYPES: ty_lista_checklistrespostas LIKE TABLE OF i_lista_checklistrespostas.
 
         DATA: BEGIN OF i_lista_checklistpayload.
-                INCLUDE   TYPE /ptloms/cl_soms_v2_mpc=>ts_listachecklistpayload.
-                DATA:  listachecklistrespostasset TYPE ty_lista_checklistrespostas, "/ptloms/cl_soms_v2_mpc=>tt_listachecklistrespostas,
+                INCLUDE TYPE /ptloms/cl_soms_v2_mpc=>ts_listachecklistpayload.
+                DATA: listachecklistrespostasset TYPE ty_lista_checklistrespostas,
               END OF i_lista_checklistpayload.
 
         DATA: ls_lista_checklistrespostas    LIKE i_lista_checklistrespostas,
@@ -1016,23 +1044,93 @@ CLASS /PTLOMS/CL_SOMS_V2_DPC_EXT IMPLEMENTATION.
               lt_checklistrespostas_out2     TYPE /ptloms/ct088,
               ls_checklistrespostas_out      TYPE /ptloms/et090.
 
-        FIELD-SYMBOLS <fs_lista_checklistrespostas> LIKE i_lista_checklistrespostas.
+        FIELD-SYMBOLS:
+          <fs_lista_checklistrespostas> LIKE i_lista_checklistrespostas.
 
-*       Leitura dos dados de Entrada
+*--------------------------------------------------------------------*
+* Leitura dos dados de entrada
+*--------------------------------------------------------------------*
         io_data_provider->read_entry_data(
           IMPORTING
             es_data = ls_lista_checklistpayload
-            ).
+        ).
 
-        LOOP AT ls_lista_checklistpayload-listachecklistrespostasset INTO ls_lista_checklistrespostas_in.
-          LOOP AT ls_lista_checklistrespostas_in-checklistquestoesset INTO ls_lista_checklistquestoesset.
-            MOVE-CORRESPONDING ls_lista_checklistquestoesset TO ls_checklistrespostas_in.
-            APPEND ls_checklistrespostas_in TO lt_checklistrespostas_in.
+*--------------------------------------------------------------------*
+* Monta estrutura de respostas para envio ao backend
+*
+* No V2, os dados de identificação do vínculo estão no cabeçalho
+* ListaChecklistRespostasSet.
+*
+* Cada questão enviada para a MF136 deve carregar também:
+* - Ordem
+* - Operação
+* - Usuário
+* - Aplicação
+* - Formulário
+* - Tipo de vínculo
+* - Descrição/ID do vínculo
+* - Tipo de uso
+*--------------------------------------------------------------------*
+        CLEAR lt_checklistrespostas_in.
+
+        LOOP AT ls_lista_checklistpayload-listachecklistrespostasset
+          INTO ls_lista_checklistrespostas_in.
+
+          LOOP AT ls_lista_checklistrespostas_in-checklistquestoesset
+            INTO ls_lista_checklistquestoesset.
+
             CLEAR ls_checklistrespostas_in.
+
+*           Dados da questão
+            MOVE-CORRESPONDING ls_lista_checklistquestoesset
+              TO ls_checklistrespostas_in.
+
+*           Dados da operação
+            ls_checklistrespostas_in-ordem =
+              ls_lista_checklistrespostas_in-orderid.
+
+            ls_checklistrespostas_in-operacao =
+              ls_lista_checklistrespostas_in-activity.
+
+*           Dados do usuário
+            ls_checklistrespostas_in-usuario =
+              ls_lista_checklistrespostas_in-usuario.
+
+*           Identificação do formulário
+            ls_checklistrespostas_in-aplicacao =
+              ls_lista_checklistrespostas_in-aplicacao.
+
+            ls_checklistrespostas_in-formulario =
+              ls_lista_checklistrespostas_in-formulario.
+
+*           Identificação do vínculo
+*
+*           Gateway:
+*             TIPO    = TP_VINCULO
+*             TIPO_ID = DESCR_VINCULO
+*
+            ls_checklistrespostas_in-tp_vinculo =
+              ls_lista_checklistrespostas_in-tipo.
+
+            ls_checklistrespostas_in-descr_vinculo =
+              ls_lista_checklistrespostas_in-tipo_id.
+
+*           Tipo de utilização do checklist
+            ls_checklistrespostas_in-tipo_uso =
+              ls_lista_checklistrespostas_in-tipo_uso.
+
+            APPEND ls_checklistrespostas_in
+              TO lt_checklistrespostas_in.
+
           ENDLOOP.
+
         ENDLOOP.
 
-        CLEAR lt_checklistretorno_out.
+*--------------------------------------------------------------------*
+* Envia respostas ao backend
+*--------------------------------------------------------------------*
+        CLEAR: lt_checklistretorno_out,
+               lt_checklistrespostas_out.
 
         CALL FUNCTION '/PTLOMS/MF136'
           DESTINATION lv_rfcdest
@@ -1042,30 +1140,78 @@ CLASS /PTLOMS/CL_SOMS_V2_DPC_EXT IMPLEMENTATION.
             e_respostas = lt_checklistrespostas_out
             e_retorno   = lt_checklistretorno_out.
 
-        LOOP AT ls_lista_checklistpayload-listachecklistrespostasset ASSIGNING <fs_lista_checklistrespostas>.
-
-          LOOP AT lt_checklistrespostas_out INTO ls_checklistrespostas_out
-            WHERE ordem = <fs_lista_checklistrespostas>-orderid
-              AND operacao = <fs_lista_checklistrespostas>-activity
-              AND usuario = <fs_lista_checklistrespostas>-usuario
-              AND tp_vinculo = <fs_lista_checklistrespostas>-tipo.
-            APPEND ls_checklistrespostas_out TO lt_checklistrespostas_out2.
-          ENDLOOP.
-
-          CLEAR <fs_lista_checklistrespostas>-checklistquestoesset.
-          <fs_lista_checklistrespostas>-checklistquestoesset = lt_checklistrespostas_out2.
-          <fs_lista_checklistrespostas>-retornoset = lt_checklistretorno_out.
-
-          READ TABLE lt_checklistretorno_out INTO ls_checklistretorno_out INDEX 1.
-          IF ls_checklistretorno_out-type = 'S'.
-            <fs_lista_checklistrespostas>-status = 'SUCESSO'.
-          ELSE.
-            <fs_lista_checklistrespostas>-status = 'ERRO'.
-          ENDIF.
+*--------------------------------------------------------------------*
+* Monta retorno do Deep Entity
+*--------------------------------------------------------------------*
+        LOOP AT ls_lista_checklistpayload-listachecklistrespostasset
+          ASSIGNING <fs_lista_checklistrespostas>.
 
           CLEAR lt_checklistrespostas_out2.
+
+*--------------------------------------------------------------------*
+* Recupera somente as questões pertencentes ao checklist/vínculo
+* que está sendo processado.
+*--------------------------------------------------------------------*
+          LOOP AT lt_checklistrespostas_out
+            INTO ls_checklistrespostas_out
+            WHERE ordem         = <fs_lista_checklistrespostas>-orderid
+              AND operacao      = <fs_lista_checklistrespostas>-activity
+              AND usuario       = <fs_lista_checklistrespostas>-usuario
+              AND formulario    = <fs_lista_checklistrespostas>-formulario
+              AND tp_vinculo    = <fs_lista_checklistrespostas>-tipo
+              AND descr_vinculo = <fs_lista_checklistrespostas>-tipo_id
+              AND tipo_uso      = <fs_lista_checklistrespostas>-tipo_uso.
+
+            APPEND ls_checklistrespostas_out
+              TO lt_checklistrespostas_out2.
+
+          ENDLOOP.
+
+*--------------------------------------------------------------------*
+* Devolve as questões processadas
+*--------------------------------------------------------------------*
+          CLEAR <fs_lista_checklistrespostas>-checklistquestoesset.
+
+          <fs_lista_checklistrespostas>-checklistquestoesset =
+            lt_checklistrespostas_out2.
+
+*--------------------------------------------------------------------*
+* Mantém, por enquanto, o comportamento atual do RetornoSet.
+*
+* Esta parte será revisada após analisarmos a MF136, pois atualmente
+* E_RETORNO é global para todo o lote.
+*--------------------------------------------------------------------*
+          <fs_lista_checklistrespostas>-retornoset =
+            lt_checklistretorno_out.
+
+*--------------------------------------------------------------------*
+* Mantém temporariamente a lógica atual de STATUS.
+*--------------------------------------------------------------------*
+          CLEAR ls_checklistretorno_out.
+
+          READ TABLE lt_checklistretorno_out
+            INTO ls_checklistretorno_out
+            INDEX 1.
+
+          IF sy-subrc = 0.
+
+            IF ls_checklistretorno_out-type = 'S'.
+              <fs_lista_checklistrespostas>-status = 'SUCESSO'.
+            ELSE.
+              <fs_lista_checklistrespostas>-status = 'ERRO'.
+            ENDIF.
+
+          ELSE.
+
+            <fs_lista_checklistrespostas>-status = 'ERRO'.
+
+          ENDIF.
+
         ENDLOOP.
 
+*--------------------------------------------------------------------*
+* Retorno
+*--------------------------------------------------------------------*
         copy_data_to_ref(
           EXPORTING
             is_data = ls_lista_checklistpayload
@@ -1323,7 +1469,6 @@ CLASS /PTLOMS/CL_SOMS_V2_DPC_EXT IMPLEMENTATION.
 
       "(>>>>> Função para validar configuração RFC <<<<<)
       CALL FUNCTION '/PTLOMS/MF108'
-        DESTINATION lv_rfcdest
         IMPORTING
           e_rfc              = lv_rfcdest
         EXCEPTIONS
@@ -1485,6 +1630,99 @@ CLASS /PTLOMS/CL_SOMS_V2_DPC_EXT IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD analiseconsumoia_create_entity.
+
+    DATA:
+      ls_input    TYPE /ptloms/cl_soms_v2_mpc=>ts_analiseconsumoia,
+      ls_result   TYPE /ptloms/et205,
+
+      lv_rfcdest  TYPE bdbapidst,
+      lv_msgv1    TYPE c LENGTH 50,
+      lv_msgv2    TYPE c LENGTH 50,
+      lv_subrc    TYPE sy-subrc,
+      lv_mensagem TYPE bapi_msg.
+
+    CLEAR:
+      ls_input,
+      ls_result.
+
+    " 1. Lê dados enviados pelo SAPUI5
+    io_data_provider->read_entry_data(
+      IMPORTING
+        es_data = ls_input ).
+
+    " 2. Busca destino RFC configurado
+    SELECT SINGLE rfcdest
+      FROM /ptloms/tb036
+      INTO lv_rfcdest.
+
+    IF sy-subrc NE 0.
+      MESSAGE e003(/ptloms/msg) INTO lv_mensagem.
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          message = lv_mensagem.
+    ENDIF.
+
+    " 3. Valida conexão RFC
+    CALL FUNCTION 'CAT_CHECK_RFC_DESTINATION'
+      EXPORTING
+        rfcdestination = lv_rfcdest
+      IMPORTING
+        msgv1          = lv_msgv1
+        msgv2          = lv_msgv2
+        rfc_subrc      = lv_subrc.
+
+    IF lv_subrc NE 0.
+      CONCATENATE 'Falha na conexão RFC:' lv_rfcdest
+        INTO lv_mensagem
+        SEPARATED BY space.
+
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          message = lv_mensagem.
+    ENDIF.
+
+    " 4. Valida entrada mínima
+    IF ls_input-ano IS INITIAL.
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          message = 'Ano não informado.'.
+    ENDIF.
+
+    IF ls_input-mes IS INITIAL.
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          message = 'Mês não informado.'.
+    ENDIF.
+
+    " 5. Chama função orquestradora
+    CALL FUNCTION '/PTLOMS/MF159'
+      DESTINATION lv_rfcdest
+      EXPORTING
+        iv_ano                = ls_input-ano
+        iv_mes                = ls_input-mes
+        iv_usuario            = ls_input-usuario
+      IMPORTING
+        rs_result             = ls_result
+      EXCEPTIONS
+        communication_failure = 1
+        system_failure        = 2
+        OTHERS                = 3.
+
+    IF sy-subrc NE 0.
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          message = 'Erro na execução da RFC /PTLOMS/MF155.'.
+    ENDIF.
+
+    " 6. Mapeia retorno para entidade OData
+    MOVE-CORRESPONDING ls_result TO ls_input.
+
+    er_entity = ls_input.
+
+  ENDMETHOD.
+
+
   METHOD associacaoset_get_entityset.
 
     DATA: lv_rfcdest     TYPE bdbapidst,
@@ -1502,6 +1740,19 @@ CLASS /PTLOMS/CL_SOMS_V2_DPC_EXT IMPLEMENTATION.
 
     DATA: lt_associacoes_desassociar TYPE STANDARD TABLE OF /ptloms/cl_soms_v2_mpc=>ts_associacao,
           ls_associacoes_desassociar LIKE LINE OF lt_associacoes_desassociar.
+
+    " 2. Busca destino RFC configurado
+    SELECT SINGLE rfcdest
+      FROM /ptloms/tb036
+      INTO lv_rfcdest.
+
+    IF sy-subrc NE 0.
+      MESSAGE e003(/ptloms/msg) INTO lv_mensagem.
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          message = lv_mensagem.
+    ENDIF.
+
 
 * Valida Configuração RFC (Verifica se possui usuário fixo)
     CALL FUNCTION 'RFC_READ_R3_DESTINATION'
@@ -1582,6 +1833,7 @@ CLASS /PTLOMS/CL_SOMS_V2_DPC_EXT IMPLEMENTATION.
 *(>>>>> Valida Configuração RFC (Verifica se possui usuário fixo) <<<<<)
 * Busca Conexão
     SELECT SINGLE rfcdest FROM /ptloms/tb036 INTO lv_rfcdest.
+
     IF sy-subrc EQ 0.
       CALL FUNCTION 'RFC_READ_R3_DESTINATION'
         EXPORTING
@@ -1615,7 +1867,6 @@ CLASS /PTLOMS/CL_SOMS_V2_DPC_EXT IMPLEMENTATION.
 
 *(>>>>> Função para validar configuração RFC <<<<<)
       CALL FUNCTION '/PTLOMS/MF108'
-        DESTINATION lv_rfcdest
         IMPORTING
           e_rfc              = lv_rfcdest
         EXCEPTIONS
@@ -1674,45 +1925,444 @@ CLASS /PTLOMS/CL_SOMS_V2_DPC_EXT IMPLEMENTATION.
   ENDMETHOD.
 
 
+METHOD autorizacaousuar_get_entityset.
+
+  DATA:
+    lv_usuario     TYPE /ptloms/ed108,
+    lv_rfcdest     TYPE bdbapidst,
+    lv_msgv1       TYPE c LENGTH 50,
+    lv_msgv2       TYPE c LENGTH 50,
+    lv_subrc       TYPE sy-subrc,
+    lv_mensagem    TYPE bapi_msg,
+
+    lt_autorizacao TYPE /ptloms/ct076,
+    ls_autorizacao LIKE LINE OF lt_autorizacao,
+    ls_result      TYPE /ptloms/et213,
+
+    ls_filter      TYPE /iwbep/s_mgw_select_option,
+    ls_select      TYPE /iwbep/s_cod_select_option,
+
+    ls_entity      LIKE LINE OF et_entityset.
+
+*---------------------------------------------------------------------*
+* Inicialização
+*---------------------------------------------------------------------*
+  CLEAR:
+    lv_usuario,
+    lv_rfcdest,
+    lv_msgv1,
+    lv_msgv2,
+    lv_subrc,
+    lv_mensagem,
+    ls_autorizacao,
+    ls_result,
+    ls_filter,
+    ls_select,
+    ls_entity.
+
+  REFRESH:
+    et_entityset,
+    lt_autorizacao.
+
+*---------------------------------------------------------------------*
+* 1. Recuperar filtro USUARIO
+*---------------------------------------------------------------------*
+  READ TABLE it_filter_select_options
+    INTO ls_filter
+    WITH KEY property = 'Usuario'.
+
+  IF sy-subrc NE 0.
+
+    lv_mensagem =
+      'Informe o usuário para recuperação das autorizações.'.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+  READ TABLE ls_filter-select_options
+    INTO ls_select
+    INDEX 1.
+
+  IF sy-subrc NE 0
+     OR ls_select-low IS INITIAL.
+
+    lv_mensagem =
+      'Informe o usuário para recuperação das autorizações.'.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+  lv_usuario = ls_select-low.
+
+  TRANSLATE lv_usuario TO UPPER CASE.
+
+*---------------------------------------------------------------------*
+* 2. Recuperar destino RFC
+*---------------------------------------------------------------------*
+  SELECT SINGLE rfcdest
+    FROM /ptloms/tb036
+    INTO lv_rfcdest.
+
+  IF sy-subrc NE 0.
+
+    lv_mensagem =
+      'Não foi cadastrada RFC para acesso ao backend.'.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 3. Validar conexão RFC
+*---------------------------------------------------------------------*
+  CALL FUNCTION 'CAT_CHECK_RFC_DESTINATION'
+    EXPORTING
+      rfcdestination = lv_rfcdest
+    IMPORTING
+      msgv1          = lv_msgv1
+      msgv2          = lv_msgv2
+      rfc_subrc      = lv_subrc.
+
+  IF lv_subrc NE 0.
+
+    IF lv_subrc EQ 3.
+
+      CONCATENATE
+        'Usuário sem autorização para RFC'
+        lv_rfcdest
+        INTO lv_mensagem
+        SEPARATED BY space.
+
+    ELSE.
+
+      CONCATENATE
+        'RFC'
+        lv_rfcdest
+        'não existe ou está indisponível'
+        INTO lv_mensagem
+        SEPARATED BY space.
+
+    ENDIF.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 4. Chamar backend
+*---------------------------------------------------------------------*
+  CLEAR lv_mensagem.
+
+  CALL FUNCTION '/PTLOMS/MF171'
+    DESTINATION lv_rfcdest
+    EXPORTING
+      iv_usuario            = lv_usuario
+    IMPORTING
+      et_autorizacao        = lt_autorizacao
+      es_result             = ls_result
+    EXCEPTIONS
+      communication_failure = 1 MESSAGE lv_mensagem
+      system_failure        = 2 MESSAGE lv_mensagem
+      OTHERS                = 3.
+
+*---------------------------------------------------------------------*
+* 5. Tratar erro técnico RFC
+*---------------------------------------------------------------------*
+  IF sy-subrc NE 0.
+
+    IF lv_mensagem IS INITIAL.
+
+      CASE sy-subrc.
+
+        WHEN 1.
+          lv_mensagem =
+            'Falha de comunicação ao executar /PTLOMS/MF171.'.
+
+        WHEN 2.
+          lv_mensagem =
+            'Falha no sistema backend ao executar /PTLOMS/MF171.'.
+
+        WHEN OTHERS.
+          lv_mensagem =
+            'Erro na execução da RFC /PTLOMS/MF171.'.
+
+      ENDCASE.
+
+    ENDIF.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 6. Tratar erro funcional
+*---------------------------------------------------------------------*
+  IF ls_result-valid IS INITIAL.
+
+    lv_mensagem = ls_result-message.
+
+    IF lv_mensagem IS INITIAL.
+
+      lv_mensagem =
+        'Não foi possível recuperar as autorizações do usuário.'.
+
+    ENDIF.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 7. Montar retorno OData
+*---------------------------------------------------------------------*
+  LOOP AT lt_autorizacao
+    INTO ls_autorizacao.
+
+    CLEAR ls_entity.
+
+    MOVE-CORRESPONDING
+      ls_autorizacao
+      TO ls_entity.
+
+    APPEND ls_entity
+      TO et_entityset.
+
+  ENDLOOP.
+
+ENDMETHOD.
+
+
 METHOD centrocustoset_get_entityset.
 
-  DATA: lr_kostl TYPE RANGE OF csks-kostl,
-        lr_kokrs TYPE RANGE OF cskt-kokrs,
-        lr_ktext TYPE RANGE OF cskt-ktext.
+  DATA:
+    lv_rfcdest     TYPE bdbapidst,
+    lv_same_user   TYPE rfcdisplay-rfcsameusr,
+    lv_usuario_sap TYPE flag,
+    lv_mensagem    TYPE bapi_msg,
+    lv_search      TYPE string,
+    lv_filter      TYPE string,
+    lv_ini         TYPE i,
+    lv_fim         TYPE i.
 
-  LOOP AT it_filter_select_options ASSIGNING FIELD-SYMBOL(<ls_filter>).
+  DATA:
+    lt_kostl        TYPE /iwbep/t_cod_select_options,
+    lt_kokrs        TYPE /iwbep/t_cod_select_options,
+    lt_ktext        TYPE /iwbep/t_cod_select_options,
+    ls_filter       LIKE LINE OF it_filter_select_options,
+    lv_top          TYPE int4,
+    lv_skip         TYPE int4,
+    lt_centro_custo TYPE /ptloms/ct174,
+    ls_centro_custo LIKE LINE OF lt_centro_custo,
+    ls_entityset    LIKE LINE OF et_entityset.
 
-    CASE to_upper( <ls_filter>-property ).
+
+*---------------------------------------------------------------------*
+* Busca destino RFC
+*---------------------------------------------------------------------*
+  SELECT SINGLE rfcdest
+    FROM /ptloms/tb036
+    INTO lv_rfcdest.
+
+  IF sy-subrc NE 0.
+
+    MESSAGE e003(/ptloms/msg)
+      INTO lv_mensagem.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        message = lv_mensagem.
+
+  ENDIF.
+
+
+*---------------------------------------------------------------------*
+* Valida configuração RFC
+*---------------------------------------------------------------------*
+  CALL FUNCTION 'RFC_READ_R3_DESTINATION'
+    EXPORTING
+      destination             = lv_rfcdest
+    IMPORTING
+      same_user               = lv_same_user
+    EXCEPTIONS
+      authority_not_available = 1
+      destination_not_exist   = 2
+      information_failure     = 3
+      internal_failure        = 4
+      OTHERS                  = 5.
+
+
+*---------------------------------------------------------------------*
+* Verifica se é usuário SAP
+*---------------------------------------------------------------------*
+  CALL FUNCTION '/PTLOMS/MF049'
+    DESTINATION lv_rfcdest
+    IMPORTING
+      ex_usuario_sap = lv_usuario_sap.
+
+
+  IF ( lv_usuario_sap IS NOT INITIAL AND
+       lv_same_user   IS INITIAL ) OR
+     ( lv_usuario_sap IS INITIAL AND
+       lv_same_user   IS NOT INITIAL ).
+
+    lv_mensagem =
+      'RFC incompatível com modo de usuário selecionado. Rever configuração SM59'(004).
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+
+*---------------------------------------------------------------------*
+* Filtros convencionais
+*---------------------------------------------------------------------*
+  LOOP AT it_filter_select_options
+    INTO ls_filter.
+
+    TRANSLATE ls_filter-property
+      TO UPPER CASE.
+
+    CASE ls_filter-property.
 
       WHEN 'KOSTL'.
-        lr_kostl = CORRESPONDING #( <ls_filter>-select_options ).
+        lt_kostl =
+          ls_filter-select_options.
 
       WHEN 'KOKRS'.
-        lr_kokrs = CORRESPONDING #( <ls_filter>-select_options ).
+        lt_kokrs =
+          ls_filter-select_options.
 
       WHEN 'KTEXT'.
-        lr_ktext = CORRESPONDING #( <ls_filter>-select_options ).
+        lt_ktext =
+          ls_filter-select_options.
 
     ENDCASE.
 
   ENDLOOP.
 
-  SELECT csks~kostl,
-         csks~kokrs,
-         cskt~ktext
-    FROM csks AS csks
-    LEFT OUTER JOIN cskt AS cskt
-      ON cskt~kokrs  = csks~kokrs
-     AND cskt~kostl  = csks~kostl
-     AND cskt~spras  = @sy-langu
-   WHERE csks~datbi >= @sy-datum
-     AND csks~kostl IN @lr_kostl
-     AND csks~kokrs IN @lr_kokrs
-     AND cskt~ktext IN @lr_ktext
-   ORDER BY csks~kostl
-    INTO CORRESPONDING FIELDS OF TABLE @et_entityset
-    UP TO @is_paging-top ROWS
-    OFFSET @is_paging-skip.
+
+*---------------------------------------------------------------------*
+* Extrai valor da pesquisa global
+*
+* Exemplo:
+* substringof('fin',Kostl)
+* or substringof('fin',Ktext)
+* or substringof('fin',Kokrs)
+*---------------------------------------------------------------------*
+  CLEAR:
+    lv_search,
+    lv_filter,
+    lv_ini,
+    lv_fim.
+
+  lv_filter = iv_filter_string.
+
+  IF lv_filter IS NOT INITIAL.
+
+    FIND FIRST OCCURRENCE OF ''''
+      IN lv_filter
+      MATCH OFFSET lv_ini.
+
+    IF sy-subrc = 0.
+
+      lv_ini = lv_ini + 1.
+
+      FIND FIRST OCCURRENCE OF ''''
+        IN lv_filter+lv_ini
+        MATCH OFFSET lv_fim.
+
+      IF sy-subrc = 0.
+
+        lv_search =
+          lv_filter+lv_ini(lv_fim).
+
+      ENDIF.
+
+    ENDIF.
+
+  ENDIF.
+
+
+*---------------------------------------------------------------------*
+* Paginação
+*---------------------------------------------------------------------*
+  lv_top  = is_paging-top.
+  lv_skip = is_paging-skip.
+
+
+*---------------------------------------------------------------------*
+* RFC
+*---------------------------------------------------------------------*
+  CALL FUNCTION '/PTLOMS/MF160'
+    DESTINATION lv_rfcdest
+    EXPORTING
+      ir_kostl              = lt_kostl
+      ir_kokrs              = lt_kokrs
+      ir_ktext              = lt_ktext
+      iv_search             = lv_search
+      iv_top                = lv_top
+      iv_skip               = lv_skip
+    IMPORTING
+      et_centro_custo       = lt_centro_custo
+    EXCEPTIONS
+      system_failure        = 1
+      communication_failure = 2
+      OTHERS                = 3.
+
+
+*---------------------------------------------------------------------*
+* Converte resultado
+*---------------------------------------------------------------------*
+  LOOP AT lt_centro_custo
+    INTO ls_centro_custo.
+
+    CLEAR ls_entityset.
+
+    MOVE-CORRESPONDING
+      ls_centro_custo
+      TO ls_entityset.
+
+    APPEND ls_entityset
+      TO et_entityset.
+
+  ENDLOOP.
 
 ENDMETHOD.
 
@@ -1782,6 +2432,7 @@ METHOD checklistanalise_create_entity.
     EXPORTING
       iv_prompt_usuario     = ls_input-prompt_usuario
       iv_json_dados         = ls_input-json_dados
+      iv_usuario            = ls_input-usuario
     IMPORTING
       rs_result             = ls_result
     EXCEPTIONS
@@ -1799,6 +2450,218 @@ METHOD checklistanalise_create_entity.
   MOVE-CORRESPONDING ls_result TO ls_input.
 
   er_entity = ls_input.
+
+ENDMETHOD.
+
+
+METHOD checklistlistaop_get_entityset.
+
+  DATA: lt_opcoes    TYPE /ptloms/ct087,
+        ls_opcao     TYPE /ptloms/et089,
+        ls_entity    LIKE LINE OF et_entityset,
+
+        " Variáveis de controle RFC
+        lv_rfcdest   TYPE bdbapidst,
+        lv_msgv1(50) TYPE c,
+        lv_msgv2(50) TYPE c,
+        lv_subrc     TYPE sy-subrc,
+        lv_mensagem  TYPE bapi_msg.
+
+  CLEAR et_entityset[].
+
+
+*---------------------------------------------------------------------*
+* 1. BUSCA DESTINO RFC CONFIGURADO
+*---------------------------------------------------------------------*
+  SELECT SINGLE rfcdest
+    FROM /ptloms/tb036
+    INTO lv_rfcdest.
+
+  IF sy-subrc NE 0.
+
+    MESSAGE e003(/ptloms/msg)
+      INTO lv_mensagem.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        message = lv_mensagem.
+
+  ENDIF.
+
+
+*---------------------------------------------------------------------*
+* 2. VALIDAÇÃO DA CONEXÃO RFC
+*---------------------------------------------------------------------*
+  CALL FUNCTION 'CAT_CHECK_RFC_DESTINATION'
+    EXPORTING
+      rfcdestination = lv_rfcdest
+    IMPORTING
+      msgv1          = lv_msgv1
+      msgv2          = lv_msgv2
+      rfc_subrc      = lv_subrc.
+
+  IF lv_subrc NE 0.
+
+    CONCATENATE
+      'Falha na conexão RFC:'
+      lv_rfcdest
+      INTO lv_mensagem
+      SEPARATED BY space.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        message = lv_mensagem.
+
+  ENDIF.
+
+
+*---------------------------------------------------------------------*
+* 3. RECUPERA LISTA DE OPÇÕES DO CHECKLIST
+*---------------------------------------------------------------------*
+  CALL FUNCTION '/PTLOMS/MF164'
+    DESTINATION lv_rfcdest
+    IMPORTING
+      et_opcoes             = lt_opcoes
+    EXCEPTIONS
+      communication_failure = 1
+      system_failure        = 2
+      OTHERS                = 3.
+
+  IF sy-subrc NE 0.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        message = 'Erro na execução da RFC /PTLOMS/MF164'.
+
+  ENDIF.
+
+
+*---------------------------------------------------------------------*
+* 4. MAPEAMENTO RFC -> ENTIDADE ODATA
+*---------------------------------------------------------------------*
+  LOOP AT lt_opcoes INTO ls_opcao.
+
+    CLEAR ls_entity.
+
+    ls_entity-chave          = ls_opcao-chave.
+    ls_entity-tipolistaopcao = ls_opcao-tipolistaopcao.
+    ls_entity-sequencial     = ls_opcao-sequencial.
+    ls_entity-descricao      = ls_opcao-descricao.
+
+    APPEND ls_entity TO et_entityset.
+
+  ENDLOOP.
+
+ENDMETHOD.
+
+
+METHOD checklistpergunt_get_entityset.
+
+  DATA: lt_perguntas TYPE /ptloms/ct155,
+        ls_pergunta  TYPE /ptloms/et088,
+        ls_entity    LIKE LINE OF et_entityset,
+
+        " Variáveis de controle RFC
+        lv_rfcdest   TYPE bdbapidst,
+        lv_msgv1(50) TYPE c,
+        lv_msgv2(50) TYPE c,
+        lv_subrc     TYPE sy-subrc,
+        lv_mensagem  TYPE bapi_msg.
+
+  CLEAR et_entityset[].
+
+
+*---------------------------------------------------------------------*
+* 1. BUSCA DESTINO RFC CONFIGURADO
+*---------------------------------------------------------------------*
+  SELECT SINGLE rfcdest
+    FROM /ptloms/tb036
+    INTO lv_rfcdest.
+
+  IF sy-subrc NE 0.
+
+    MESSAGE e003(/ptloms/msg)
+      INTO lv_mensagem.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        message = lv_mensagem.
+
+  ENDIF.
+
+
+*---------------------------------------------------------------------*
+* 2. VALIDAÇÃO DA CONEXÃO RFC
+*---------------------------------------------------------------------*
+  CALL FUNCTION 'CAT_CHECK_RFC_DESTINATION'
+    EXPORTING
+      rfcdestination = lv_rfcdest
+    IMPORTING
+      msgv1          = lv_msgv1
+      msgv2          = lv_msgv2
+      rfc_subrc      = lv_subrc.
+
+  IF lv_subrc NE 0.
+
+    CONCATENATE
+      'Falha na conexão RFC:'
+      lv_rfcdest
+      INTO lv_mensagem
+      SEPARATED BY space.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        message = lv_mensagem.
+
+  ENDIF.
+
+
+*---------------------------------------------------------------------*
+* 3. RECUPERA PERGUNTAS DO CHECKLIST
+*---------------------------------------------------------------------*
+  CALL FUNCTION '/PTLOMS/MF165'
+    DESTINATION lv_rfcdest
+    IMPORTING
+      et_perguntas          = lt_perguntas
+    EXCEPTIONS
+      communication_failure = 1
+      system_failure        = 2
+      OTHERS                = 3.
+
+  IF sy-subrc NE 0.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        message = 'Erro na execução da RFC /PTLOMS/MF165'.
+
+  ENDIF.
+
+
+*---------------------------------------------------------------------*
+* 4. MAPEAMENTO RFC -> ENTIDADE ODATA
+*---------------------------------------------------------------------*
+  LOOP AT lt_perguntas INTO ls_pergunta.
+
+    CLEAR ls_entity.
+
+* Dados de definição da pergunta
+    ls_entity-chave            = ls_pergunta-chave.
+    ls_entity-aplicacao        = ls_pergunta-aplicacao.
+    ls_entity-formulario       = ls_pergunta-formulario.
+    ls_entity-sequencial       = ls_pergunta-sequencial.
+    ls_entity-ordenacao1       = ls_pergunta-ordenacao1.
+    ls_entity-ordenacao2       = ls_pergunta-ordenacao2.
+    ls_entity-descricao        = ls_pergunta-descricao.
+    ls_entity-resposta         = ls_pergunta-resposta.
+    ls_entity-opcao            = ls_pergunta-opcao.
+    ls_entity-grupo            = ls_pergunta-grupo.
+    ls_entity-descr_grupo      = ls_pergunta-descr_grupo.
+    ls_entity-obrigatorio      = ls_pergunta-obrigatorio.
+    ls_entity-inf_complementar = ls_pergunta-inf_complementar.
+
+    APPEND ls_entity TO et_entityset.
+
+  ENDLOOP.
 
 ENDMETHOD.
 
@@ -1829,6 +2692,7 @@ METHOD checklistrespost_get_entityset.
 
   CLEAR et_entityset.
 
+
   "====================================================================
   " 1. Busca destino RFC configurado
   "====================================================================
@@ -1837,15 +2701,18 @@ METHOD checklistrespost_get_entityset.
     INTO lv_rfcdest.
 
   IF sy-subrc NE 0.
+
     MESSAGE e003(/ptloms/msg) INTO lv_mensagem.
 
     RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
       EXPORTING
         message = lv_mensagem.
+
   ENDIF.
 
+
   "====================================================================
-  " 2. Validação da conexão RFC
+  " 2. Validacao da conexao RFC
   "====================================================================
   CALL FUNCTION 'CAT_CHECK_RFC_DESTINATION'
     EXPORTING
@@ -1856,6 +2723,7 @@ METHOD checklistrespost_get_entityset.
       rfc_subrc      = lv_subrc.
 
   IF lv_subrc NE 0.
+
     CONCATENATE 'Falha na conexão RFC:' lv_rfcdest
       INTO lv_mensagem
       SEPARATED BY space.
@@ -1863,16 +2731,22 @@ METHOD checklistrespost_get_entityset.
     RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
       EXPORTING
         message = lv_mensagem.
+
   ENDIF.
+
 
   "====================================================================
   " 3. Captura de filtros OData
   "====================================================================
   LOOP AT it_filter_select_options INTO wa_filter.
 
-    READ TABLE wa_filter-select_options INTO wa_select_option INDEX 1.
+    CLEAR wa_select_option.
 
-    IF sy-subrc = 0.
+    READ TABLE wa_filter-select_options
+      INTO wa_select_option
+      INDEX 1.
+
+    IF sy-subrc EQ 0.
 
       CASE wa_filter-property.
 
@@ -1897,10 +2771,12 @@ METHOD checklistrespost_get_entityset.
 
   ENDLOOP.
 
+
   "====================================================================
   " 4. Chamada RFC
   "====================================================================
-  CALL FUNCTION '/PTLOMS/MF153' DESTINATION lv_rfcdest
+  CALL FUNCTION '/PTLOMS/MF153'
+    DESTINATION lv_rfcdest
     EXPORTING
       iv_ordem              = lv_ordem
       iv_usuario            = lv_usuario
@@ -1915,10 +2791,13 @@ METHOD checklistrespost_get_entityset.
       OTHERS                = 3.
 
   IF sy-subrc NE 0.
+
     RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
       EXPORTING
         message = 'Erro na execução da RFC remota /PTLOMS/MF153'.
+
   ENDIF.
+
 
   "====================================================================
   " 5. Mapeamento para OData
@@ -1929,6 +2808,10 @@ METHOD checklistrespost_get_entityset.
            lv_erdat_char,
            lv_aedat_char.
 
+
+    "------------------------------------------------------------------
+    " Chave artificial do EntitySet
+    "------------------------------------------------------------------
     CONCATENATE ls_dados-guid_associacao
                 ls_dados-sequencial
                 ls_dados-ordem
@@ -1936,37 +2819,81 @@ METHOD checklistrespost_get_entityset.
            INTO ls_entity-chave
       SEPARATED BY '-'.
 
-    ls_entity-guid_associacao  = ls_dados-guid_associacao.
-    ls_entity-sequencial       = ls_dados-sequencial.
-    ls_entity-aplicacao        = ls_dados-aplicacao.
+
+    "------------------------------------------------------------------
+    " Identificacao
+    "------------------------------------------------------------------
+    ls_entity-guid_associacao = ls_dados-guid_associacao.
+    ls_entity-sequencial      = ls_dados-sequencial.
+    ls_entity-aplicacao       = ls_dados-aplicacao.
+
+
+    "------------------------------------------------------------------
+    " Vinculo
+    "------------------------------------------------------------------
     ls_entity-descr_vinculo    = ls_dados-descr_vinculo.
-    ls_entity-operacao         = ls_dados-operacao.
-    ls_entity-ordem            = ls_dados-ordem.
     ls_entity-tp_vinculo       = ls_dados-tp_vinculo.
-    ls_entity-usuario          = ls_dados-usuario.
-    ls_entity-ordenacao1       = ls_dados-ordenacao1.
-    ls_entity-ordenacao2       = ls_dados-ordenacao2.
-    ls_entity-descr_grupo      = ls_dados-descr_grupo.
-    ls_entity-descricao        = ls_dados-descricao.
-    ls_entity-formulario       = ls_dados-formulario.
-    ls_entity-grupo            = ls_dados-grupo.
-    ls_entity-obrigatorio      = ls_dados-obrigatorio.
-    ls_entity-opcao            = ls_dados-opcao.
-    ls_entity-resposta         = ls_dados-resposta.
+    ls_entity-descr_tp_vinculo = ls_dados-descr_tp_vinculo.
+
+
+    "------------------------------------------------------------------
+    " Tipo de Uso
+    "------------------------------------------------------------------
+    ls_entity-tipo_uso       = ls_dados-tipo_uso.
+    ls_entity-descr_tipo_uso = ls_dados-descr_tipo_uso.
+
+
+    "------------------------------------------------------------------
+    " Ordem / Operacao / Usuario
+    "------------------------------------------------------------------
+    ls_entity-operacao = ls_dados-operacao.
+    ls_entity-ordem    = ls_dados-ordem.
+    ls_entity-usuario  = ls_dados-usuario.
+
+
+    "------------------------------------------------------------------
+    " Estrutura do formulario
+    "------------------------------------------------------------------
+    ls_entity-ordenacao1  = ls_dados-ordenacao1.
+    ls_entity-ordenacao2  = ls_dados-ordenacao2.
+    ls_entity-descr_grupo = ls_dados-descr_grupo.
+    ls_entity-descricao   = ls_dados-descricao.
+    ls_entity-formulario  = ls_dados-formulario.
+    ls_entity-grupo       = ls_dados-grupo.
+    ls_entity-obrigatorio = ls_dados-obrigatorio.
+    ls_entity-opcao       = ls_dados-opcao.
+
+
+    "------------------------------------------------------------------
+    " Tipo de Resposta / Resposta
+    "------------------------------------------------------------------
+    ls_entity-resposta       = ls_dados-resposta.
+    ls_entity-descr_resposta = ls_dados-descr_resposta.
+
     ls_entity-resposta_logica  = ls_dados-resposta_logica.
     ls_entity-resposta_usuario = ls_dados-resposta_usuario.
+
+
+    "------------------------------------------------------------------
+    " Status / Informacoes complementares
+    "------------------------------------------------------------------
     ls_entity-status           = ls_dados-status.
     ls_entity-inf_complementar = ls_dados-inf_complementar.
-    ls_entity-ernam            = ls_dados-ernam.
-    ls_entity-erzeit           = ls_dados-erzeit.
-    ls_entity-aenam            = ls_dados-aenam.
-    ls_entity-aezeit           = ls_dados-aezeit.
 
-    "---------------------------------------------------------------
-    " Proteção para campos Edm.DateTime
-    " Gateway exige data interna DATS válida: YYYYMMDD
-    " Se vier truncado, por exemplo 202605, não deve ser enviado.
-    "---------------------------------------------------------------
+
+    "------------------------------------------------------------------
+    " Auditoria
+    "------------------------------------------------------------------
+    ls_entity-ernam  = ls_dados-ernam.
+    ls_entity-erzeit = ls_dados-erzeit.
+    ls_entity-aenam  = ls_dados-aenam.
+    ls_entity-aezeit = ls_dados-aezeit.
+
+
+    "------------------------------------------------------------------
+    " Protecao para ERDAT - Edm.DateTime
+    " Gateway exige data interna DATS valida: YYYYMMDD
+    "------------------------------------------------------------------
     lv_erdat_char = ls_dados-erdat.
 
     IF lv_erdat_char IS NOT INITIAL
@@ -1976,9 +2903,15 @@ METHOD checklistrespost_get_entityset.
       ls_entity-erdat = lv_erdat_char.
 
     ELSE.
+
       CLEAR ls_entity-erdat.
+
     ENDIF.
 
+
+    "------------------------------------------------------------------
+    " Protecao para AEDAT - Edm.DateTime
+    "------------------------------------------------------------------
     lv_aedat_char = ls_dados-aedat.
 
     IF lv_aedat_char IS NOT INITIAL
@@ -1988,27 +2921,826 @@ METHOD checklistrespost_get_entityset.
       ls_entity-aedat = lv_aedat_char.
 
     ELSE.
+
       CLEAR ls_entity-aedat.
+
     ENDIF.
 
-    "Campos técnicos usados somente como filtro
+
+    "------------------------------------------------------------------
+    " Campos tecnicos usados somente como filtro
+    "------------------------------------------------------------------
     IF lv_erdat_ini IS NOT INITIAL
        AND lv_erdat_ini NE '00000000'.
+
       ls_entity-iv_erdat_ini = lv_erdat_ini.
+
     ELSE.
+
       CLEAR ls_entity-iv_erdat_ini.
+
     ENDIF.
+
 
     IF lv_erdat_fim IS NOT INITIAL
        AND lv_erdat_fim NE '00000000'.
+
       ls_entity-iv_erdat_fim = lv_erdat_fim.
+
     ELSE.
+
       CLEAR ls_entity-iv_erdat_fim.
+
     ENDIF.
+
 
     APPEND ls_entity TO et_entityset.
 
   ENDLOOP.
+
+ENDMETHOD.
+
+
+METHOD checklistvinculo_get_entityset.
+
+  DATA: lt_vinculos TYPE /ptloms/ct175,
+        ls_vinculo  TYPE /ptloms/et208,
+        ls_entity   LIKE LINE OF et_entityset,
+
+        " Variáveis de controle RFC
+        lv_rfcdest  TYPE bdbapidst,
+        lv_msgv1(50) TYPE c,
+        lv_msgv2(50) TYPE c,
+        lv_subrc    TYPE sy-subrc,
+        lv_mensagem TYPE bapi_msg.
+
+  CLEAR et_entityset[].
+
+
+*---------------------------------------------------------------------*
+* 1. BUSCA DESTINO RFC CONFIGURADO
+*---------------------------------------------------------------------*
+  SELECT SINGLE rfcdest
+    FROM /ptloms/tb036
+    INTO lv_rfcdest.
+
+  IF sy-subrc NE 0.
+
+    MESSAGE e003(/ptloms/msg)
+      INTO lv_mensagem.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        message = lv_mensagem.
+
+  ENDIF.
+
+
+*---------------------------------------------------------------------*
+* 2. VALIDAÇÃO DA CONEXÃO RFC
+*---------------------------------------------------------------------*
+  CALL FUNCTION 'CAT_CHECK_RFC_DESTINATION'
+    EXPORTING
+      rfcdestination = lv_rfcdest
+    IMPORTING
+      msgv1          = lv_msgv1
+      msgv2          = lv_msgv2
+      rfc_subrc      = lv_subrc.
+
+  IF lv_subrc NE 0.
+
+    CONCATENATE
+      'Falha na conexão RFC:'
+      lv_rfcdest
+      INTO lv_mensagem
+      SEPARATED BY space.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        message = lv_mensagem.
+
+  ENDIF.
+
+
+*---------------------------------------------------------------------*
+* 3. RECUPERA VÍNCULOS DE CHECKLIST
+*---------------------------------------------------------------------*
+  CALL FUNCTION '/PTLOMS/MF163'
+    DESTINATION lv_rfcdest
+    IMPORTING
+      et_vinculos           = lt_vinculos
+    EXCEPTIONS
+      communication_failure = 1
+      system_failure        = 2
+      OTHERS                = 3.
+
+  IF sy-subrc NE 0.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        message = 'Erro na execução da RFC /PTLOMS/MF163'.
+
+  ENDIF.
+
+
+*---------------------------------------------------------------------*
+* 4. MAPEAMENTO RFC -> ENTIDADE ODATA
+*---------------------------------------------------------------------*
+  LOOP AT lt_vinculos INTO ls_vinculo.
+
+    CLEAR ls_entity.
+
+    ls_entity-chave         = ls_vinculo-chave.
+    ls_entity-aplicacao     = ls_vinculo-aplicacao.
+    ls_entity-formulario    = ls_vinculo-formulario.
+    ls_entity-tp_vinculo    = ls_vinculo-tp_vinculo.
+    ls_entity-descr_vinculo = ls_vinculo-descr_vinculo.
+    ls_entity-tipo_uso      = ls_vinculo-tipo_uso.
+    ls_entity-identificacao = ls_vinculo-identificacao.
+
+    APPEND ls_entity TO et_entityset.
+
+  ENDLOOP.
+
+ENDMETHOD.
+
+
+METHOD configperfilusua_get_entityset.
+
+  DATA:
+    lv_usuario       TYPE /ptloms/ed108,
+    lv_rfcdest       TYPE bdbapidst,
+    lv_msgv1         TYPE c LENGTH 50,
+    lv_msgv2         TYPE c LENGTH 50,
+    lv_subrc         TYPE sy-subrc,
+    lv_mensagem      TYPE bapi_msg,
+
+    lt_config_perfil TYPE /ptloms/ct078,
+    ls_config_perfil LIKE LINE OF lt_config_perfil,
+    ls_result        TYPE /ptloms/et213,
+
+    ls_filter        TYPE /iwbep/s_mgw_select_option,
+    ls_select        TYPE /iwbep/s_cod_select_option,
+
+    ls_entity        LIKE LINE OF et_entityset.
+
+*---------------------------------------------------------------------*
+* Inicialização
+*---------------------------------------------------------------------*
+  CLEAR:
+    lv_usuario,
+    lv_rfcdest,
+    lv_msgv1,
+    lv_msgv2,
+    lv_subrc,
+    lv_mensagem,
+    ls_config_perfil,
+    ls_result,
+    ls_filter,
+    ls_select,
+    ls_entity.
+
+  REFRESH:
+    et_entityset,
+    lt_config_perfil.
+
+*---------------------------------------------------------------------*
+* 1. Recuperar filtro USUARIO
+*---------------------------------------------------------------------*
+  READ TABLE it_filter_select_options
+    INTO ls_filter
+    WITH KEY property = 'Usuario'.
+
+  IF sy-subrc NE 0.
+
+    lv_mensagem =
+      'Informe o usuário para recuperação das configurações do perfil.'.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+  READ TABLE ls_filter-select_options
+    INTO ls_select
+    INDEX 1.
+
+  IF sy-subrc NE 0
+     OR ls_select-low IS INITIAL.
+
+    lv_mensagem =
+      'Informe o usuário para recuperação das configurações do perfil.'.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+  lv_usuario = ls_select-low.
+
+  TRANSLATE lv_usuario TO UPPER CASE.
+
+*---------------------------------------------------------------------*
+* 2. Recuperar destino RFC
+*---------------------------------------------------------------------*
+  SELECT SINGLE rfcdest
+    FROM /ptloms/tb036
+    INTO lv_rfcdest.
+
+  IF sy-subrc NE 0.
+
+    lv_mensagem =
+      'Não foi cadastrada RFC para acesso ao backend.'.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 3. Validar conexão RFC
+*---------------------------------------------------------------------*
+  CALL FUNCTION 'CAT_CHECK_RFC_DESTINATION'
+    EXPORTING
+      rfcdestination = lv_rfcdest
+    IMPORTING
+      msgv1          = lv_msgv1
+      msgv2          = lv_msgv2
+      rfc_subrc      = lv_subrc.
+
+  IF lv_subrc NE 0.
+
+    IF lv_subrc EQ 3.
+
+      CONCATENATE
+        'Usuário sem autorização para RFC'
+        lv_rfcdest
+        INTO lv_mensagem
+        SEPARATED BY space.
+
+    ELSE.
+
+      CONCATENATE
+        'RFC'
+        lv_rfcdest
+        'não existe ou está indisponível'
+        INTO lv_mensagem
+        SEPARATED BY space.
+
+    ENDIF.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 4. Chamar backend
+*---------------------------------------------------------------------*
+  CLEAR lv_mensagem.
+
+  CALL FUNCTION '/PTLOMS/MF172'
+    DESTINATION lv_rfcdest
+    EXPORTING
+      iv_usuario            = lv_usuario
+    IMPORTING
+      et_config_perfil      = lt_config_perfil
+      es_result             = ls_result
+    EXCEPTIONS
+      communication_failure = 1 MESSAGE lv_mensagem
+      system_failure        = 2 MESSAGE lv_mensagem
+      OTHERS                = 3.
+
+*---------------------------------------------------------------------*
+* 5. Tratar erro técnico RFC
+*---------------------------------------------------------------------*
+  IF sy-subrc NE 0.
+
+    IF lv_mensagem IS INITIAL.
+
+      CASE sy-subrc.
+
+        WHEN 1.
+          lv_mensagem =
+            'Falha de comunicação ao executar /PTLOMS/MF172.'.
+
+        WHEN 2.
+          lv_mensagem =
+            'Falha no sistema backend ao executar /PTLOMS/MF172.'.
+
+        WHEN OTHERS.
+          lv_mensagem =
+            'Erro na execução da RFC /PTLOMS/MF172.'.
+
+      ENDCASE.
+
+    ENDIF.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 6. Tratar erro funcional
+*---------------------------------------------------------------------*
+  IF ls_result-valid IS INITIAL.
+
+    lv_mensagem = ls_result-message.
+
+    IF lv_mensagem IS INITIAL.
+
+      lv_mensagem =
+        'Não foi possível recuperar as configurações do perfil.'.
+
+    ENDIF.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 7. Montar retorno OData
+*---------------------------------------------------------------------*
+  LOOP AT lt_config_perfil
+    INTO ls_config_perfil.
+
+    CLEAR ls_entity.
+
+    ls_entity-usuario =
+      lv_usuario.
+
+    MOVE-CORRESPONDING
+      ls_config_perfil
+      TO ls_entity.
+
+    APPEND ls_entity
+      TO et_entityset.
+
+  ENDLOOP.
+
+ENDMETHOD.
+
+
+METHOD configsistemausu_get_entityset.
+
+  DATA:
+    lv_usuario        TYPE /ptloms/ed108,
+    lv_rfcdest        TYPE bdbapidst,
+    lv_msgv1          TYPE c LENGTH 50,
+    lv_msgv2          TYPE c LENGTH 50,
+    lv_subrc          TYPE sy-subrc,
+    lv_mensagem       TYPE bapi_msg,
+
+    lt_config_sistema TYPE /ptloms/ct074,
+    ls_config_sistema LIKE LINE OF lt_config_sistema,
+    ls_result         TYPE /ptloms/et213,
+
+    ls_filter         TYPE /iwbep/s_mgw_select_option,
+    ls_select         TYPE /iwbep/s_cod_select_option,
+
+    ls_entity         LIKE LINE OF et_entityset.
+
+*---------------------------------------------------------------------*
+* Inicialização
+*---------------------------------------------------------------------*
+  CLEAR:
+    lv_usuario,
+    lv_rfcdest,
+    lv_msgv1,
+    lv_msgv2,
+    lv_subrc,
+    lv_mensagem,
+    ls_config_sistema,
+    ls_result,
+    ls_filter,
+    ls_select,
+    ls_entity.
+
+  REFRESH:
+    et_entityset,
+    lt_config_sistema.
+
+*---------------------------------------------------------------------*
+* 1. Recuperar filtro USUARIO
+*---------------------------------------------------------------------*
+  READ TABLE it_filter_select_options
+    INTO ls_filter
+    WITH KEY property = 'Usuario'.
+
+  IF sy-subrc NE 0.
+
+    lv_mensagem =
+      'Informe o usuário para recuperação das configurações do sistema.'.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+  READ TABLE ls_filter-select_options
+    INTO ls_select
+    INDEX 1.
+
+  IF sy-subrc NE 0
+     OR ls_select-low IS INITIAL.
+
+    lv_mensagem =
+      'Informe o usuário para recuperação das configurações do sistema.'.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+  lv_usuario = ls_select-low.
+
+  TRANSLATE lv_usuario TO UPPER CASE.
+
+*---------------------------------------------------------------------*
+* 2. Recuperar destino RFC
+*---------------------------------------------------------------------*
+  SELECT SINGLE rfcdest
+    FROM /ptloms/tb036
+    INTO lv_rfcdest.
+
+  IF sy-subrc NE 0.
+
+    lv_mensagem =
+      'Não foi cadastrada RFC para acesso ao backend.'.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 3. Validar conexão RFC
+*---------------------------------------------------------------------*
+  CALL FUNCTION 'CAT_CHECK_RFC_DESTINATION'
+    EXPORTING
+      rfcdestination = lv_rfcdest
+    IMPORTING
+      msgv1          = lv_msgv1
+      msgv2          = lv_msgv2
+      rfc_subrc      = lv_subrc.
+
+  IF lv_subrc NE 0.
+
+    IF lv_subrc EQ 3.
+
+      CONCATENATE
+        'Usuário sem autorização para RFC'
+        lv_rfcdest
+        INTO lv_mensagem
+        SEPARATED BY space.
+
+    ELSE.
+
+      CONCATENATE
+        'RFC'
+        lv_rfcdest
+        'não existe ou está indisponível'
+        INTO lv_mensagem
+        SEPARATED BY space.
+
+    ENDIF.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 4. Chamar backend
+*---------------------------------------------------------------------*
+  CLEAR lv_mensagem.
+
+  CALL FUNCTION '/PTLOMS/MF173'
+    DESTINATION lv_rfcdest
+    EXPORTING
+      iv_usuario            = lv_usuario
+    IMPORTING
+      et_config_sistema     = lt_config_sistema
+      es_result             = ls_result
+    EXCEPTIONS
+      communication_failure = 1 MESSAGE lv_mensagem
+      system_failure        = 2 MESSAGE lv_mensagem
+      OTHERS                = 3.
+
+*---------------------------------------------------------------------*
+* 5. Tratar erro técnico RFC
+*---------------------------------------------------------------------*
+  IF sy-subrc NE 0.
+
+    IF lv_mensagem IS INITIAL.
+
+      CASE sy-subrc.
+
+        WHEN 1.
+          lv_mensagem =
+            'Falha de comunicação ao executar /PTLOMS/MF173.'.
+
+        WHEN 2.
+          lv_mensagem =
+            'Falha no sistema backend ao executar /PTLOMS/MF173.'.
+
+        WHEN OTHERS.
+          lv_mensagem =
+            'Erro na execução da RFC /PTLOMS/MF173.'.
+
+      ENDCASE.
+
+    ENDIF.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 6. Tratar erro funcional
+*---------------------------------------------------------------------*
+  IF ls_result-valid IS INITIAL.
+
+    lv_mensagem = ls_result-message.
+
+    IF lv_mensagem IS INITIAL.
+
+      lv_mensagem =
+        'Não foi possível recuperar as configurações do sistema.'.
+
+    ENDIF.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 7. Montar retorno OData
+*---------------------------------------------------------------------*
+  LOOP AT lt_config_sistema
+    INTO ls_config_sistema.
+
+    CLEAR ls_entity.
+
+    ls_entity-usuario =
+      lv_usuario.
+
+    MOVE-CORRESPONDING
+      ls_config_sistema
+      TO ls_entity.
+
+    APPEND ls_entity
+      TO et_entityset.
+
+  ENDLOOP.
+
+ENDMETHOD.
+
+
+METHOD contextousuariov_get_entity.
+
+  DATA:
+    lv_usuario  TYPE /ptloms/ed108,
+    lv_rfcdest  TYPE bdbapidst,
+    lv_msgv1    TYPE c LENGTH 50,
+    lv_msgv2    TYPE c LENGTH 50,
+    lv_subrc    TYPE sy-subrc,
+    lv_mensagem TYPE bapi_msg,
+
+    ls_usuario  TYPE /ptloms/et212,
+    ls_result   TYPE /ptloms/et213,
+
+    ls_key      TYPE /iwbep/s_mgw_name_value_pair.
+
+*---------------------------------------------------------------------*
+* Inicialização
+*---------------------------------------------------------------------*
+  CLEAR:
+    er_entity,
+    lv_usuario,
+    lv_rfcdest,
+    lv_msgv1,
+    lv_msgv2,
+    lv_subrc,
+    lv_mensagem,
+    ls_usuario,
+    ls_result,
+    ls_key.
+
+*---------------------------------------------------------------------*
+* 1. Recuperar chave USUARIO
+*---------------------------------------------------------------------*
+  READ TABLE it_key_tab
+    INTO ls_key
+    WITH KEY name = 'Usuario'.
+
+  IF sy-subrc NE 0
+     OR ls_key-value IS INITIAL.
+
+    lv_mensagem =
+      'Usuário não informado para recuperação do contexto.'.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+  lv_usuario = ls_key-value.
+
+  TRANSLATE lv_usuario TO UPPER CASE.
+
+*---------------------------------------------------------------------*
+* 2. Recuperar destino RFC
+*---------------------------------------------------------------------*
+  SELECT SINGLE rfcdest
+    FROM /ptloms/tb036
+    INTO lv_rfcdest.
+
+  IF sy-subrc NE 0.
+
+    lv_mensagem =
+      'Não foi cadastrada RFC para acesso ao backend.'.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 3. Validar conexão RFC
+*---------------------------------------------------------------------*
+  CALL FUNCTION 'CAT_CHECK_RFC_DESTINATION'
+    EXPORTING
+      rfcdestination = lv_rfcdest
+    IMPORTING
+      msgv1          = lv_msgv1
+      msgv2          = lv_msgv2
+      rfc_subrc      = lv_subrc.
+
+  IF lv_subrc NE 0.
+
+    IF lv_subrc EQ 3.
+
+      CONCATENATE
+        'Usuário sem autorização para RFC'
+        lv_rfcdest
+        INTO lv_mensagem
+        SEPARATED BY space.
+
+    ELSE.
+
+      CONCATENATE
+        'RFC'
+        lv_rfcdest
+        'não existe ou está indisponível'
+        INTO lv_mensagem
+        SEPARATED BY space.
+
+    ENDIF.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 4. Chamar backend
+*---------------------------------------------------------------------*
+  CLEAR lv_mensagem.
+
+  CALL FUNCTION '/PTLOMS/MF169'
+    DESTINATION lv_rfcdest
+    EXPORTING
+      iv_usuario            = lv_usuario
+    IMPORTING
+      es_usuario            = ls_usuario
+      es_result             = ls_result
+    EXCEPTIONS
+      communication_failure = 1 MESSAGE lv_mensagem
+      system_failure        = 2 MESSAGE lv_mensagem
+      OTHERS                = 3.
+
+*---------------------------------------------------------------------*
+* 5. Tratar erro técnico RFC
+*---------------------------------------------------------------------*
+  IF sy-subrc NE 0.
+
+    IF lv_mensagem IS INITIAL.
+
+      CASE sy-subrc.
+
+        WHEN 1.
+          lv_mensagem =
+            'Falha de comunicação ao executar /PTLOMS/MF169.'.
+
+        WHEN 2.
+          lv_mensagem =
+            'Falha no sistema backend ao executar /PTLOMS/MF169.'.
+
+        WHEN OTHERS.
+          lv_mensagem =
+            'Erro na execução da RFC /PTLOMS/MF169.'.
+
+      ENDCASE.
+
+    ENDIF.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 6. Montar retorno OData
+*---------------------------------------------------------------------*
+  MOVE-CORRESPONDING
+    ls_usuario
+    TO er_entity.
+
+  er_entity-valid =
+    ls_result-valid.
+
+  er_entity-reason_code =
+    ls_result-reason_code.
+
+  er_entity-message =
+    ls_result-message.
+
+*---------------------------------------------------------------------*
+* Em erro funcional, ET212 pode vir vazia.
+* Mantém a chave solicitada na resposta.
+*---------------------------------------------------------------------*
+  IF er_entity-usuario IS INITIAL.
+    er_entity-usuario = lv_usuario.
+  ENDIF.
 
 ENDMETHOD.
 
@@ -2031,6 +3763,19 @@ ENDMETHOD.
 
     DATA: lt_dados_rastreamento TYPE STANDARD TABLE OF /ptloms/cl_soms_v2_mpc=>ts_dadosusertracking,
           ls_dados_rastreamento LIKE LINE OF lt_dados_rastreamento.
+
+    " 2. Busca destino RFC configurado
+    SELECT SINGLE rfcdest
+      FROM /ptloms/tb036
+      INTO lv_rfcdest.
+
+    IF sy-subrc NE 0.
+      MESSAGE e003(/ptloms/msg) INTO lv_mensagem.
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          message = lv_mensagem.
+    ENDIF.
+
 
 * Valida Configuração RFC (Verifica se possui usuário fixo)
     CALL FUNCTION 'RFC_READ_R3_DESTINATION'
@@ -2160,7 +3905,6 @@ ENDMETHOD.
 
 *(>>>>> Função para validar configuração RFC <<<<<)
       CALL FUNCTION '/PTLOMS/MF108'
-        DESTINATION lv_rfcdest
         IMPORTING
           e_rfc              = lv_rfcdest
         EXCEPTIONS
@@ -2373,6 +4117,19 @@ ENDMETHOD.
     DATA: lt_historico_assinaturas TYPE STANDARD TABLE OF /ptloms/cl_soms_v2_mpc=>ts_historicoassinaturas,
           ls_historico_assinaturas LIKE LINE OF lt_historico_assinaturas.
 
+    " 2. Busca destino RFC configurado
+    SELECT SINGLE rfcdest
+      FROM /ptloms/tb036
+      INTO lv_rfcdest.
+
+    IF sy-subrc NE 0.
+      MESSAGE e003(/ptloms/msg) INTO lv_mensagem.
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          message = lv_mensagem.
+    ENDIF.
+
+
 * Valida Configuração RFC (Verifica se possui usuário fixo)
     CALL FUNCTION 'RFC_READ_R3_DESTINATION'
       EXPORTING
@@ -2462,12 +4219,112 @@ ENDMETHOD.
   ENDMETHOD.
 
 
+  METHOD historicoatend01_create_entity.
+
+    DATA:
+      ls_input    TYPE /ptloms/cl_soms_v2_mpc=>ts_checklistanalise,
+      ls_result   TYPE /ptloms/et203,
+
+      lv_rfcdest  TYPE bdbapidst,
+      lv_msgv1    TYPE c LENGTH 50,
+      lv_msgv2    TYPE c LENGTH 50,
+      lv_subrc    TYPE sy-subrc,
+      lv_mensagem TYPE bapi_msg.
+
+    CLEAR:
+      ls_input,
+      ls_result.
+
+    " 1. Lê dados enviados pelo SAPUI5
+    io_data_provider->read_entry_data(
+      IMPORTING
+        es_data = ls_input ).
+
+    " 2. Busca destino RFC configurado
+    SELECT SINGLE rfcdest
+      FROM /ptloms/tb036
+      INTO lv_rfcdest.
+
+    IF sy-subrc NE 0.
+      MESSAGE e003(/ptloms/msg) INTO lv_mensagem.
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          message = lv_mensagem.
+    ENDIF.
+
+    " 3. Valida conexão RFC
+    CALL FUNCTION 'CAT_CHECK_RFC_DESTINATION'
+      EXPORTING
+        rfcdestination = lv_rfcdest
+      IMPORTING
+        msgv1          = lv_msgv1
+        msgv2          = lv_msgv2
+        rfc_subrc      = lv_subrc.
+
+    IF lv_subrc NE 0.
+      CONCATENATE 'Falha na conexão RFC:' lv_rfcdest
+        INTO lv_mensagem
+        SEPARATED BY space.
+
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          message = lv_mensagem.
+    ENDIF.
+
+    " 4. Valida entrada mínima
+    IF ls_input-json_dados IS INITIAL.
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          message = 'JSON de dados não informado.'.
+    ENDIF.
+
+    " 5. Chama função orquestradora
+    CALL FUNCTION '/PTLOMS/MF157'
+      DESTINATION lv_rfcdest
+      EXPORTING
+        iv_prompt_usuario     = ls_input-prompt_usuario
+        iv_json_dados         = ls_input-json_dados
+        iv_usuario            = ls_input-usuario
+      IMPORTING
+        rs_result             = ls_result
+      EXCEPTIONS
+        communication_failure = 1
+        system_failure        = 2
+        OTHERS                = 3.
+
+    IF sy-subrc NE 0.
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          message = 'Erro na execução da RFC /PTLOMS/MF155.'.
+    ENDIF.
+
+    " 6. Mapeia retorno para entidade OData
+    MOVE-CORRESPONDING ls_result TO ls_input.
+
+    er_entity = ls_input.
+
+  ENDMETHOD.
+
+
   METHOD historicoatendim_get_entityset.
 
     DATA: lv_rfcdest     TYPE bdbapidst,
           lv_same_user   TYPE rfcdisplay-rfcsameusr,
           lv_usuario_sap TYPE flag,
           lv_mensagem    TYPE bapi_msg.
+
+    " 2. Busca destino RFC configurado
+    SELECT SINGLE rfcdest
+      FROM /ptloms/tb036
+      INTO lv_rfcdest.
+
+    IF sy-subrc NE 0.
+      MESSAGE e003(/ptloms/msg) INTO lv_mensagem.
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          message = lv_mensagem.
+    ENDIF.
+
 
 * Valida Configuração RFC (Verifica se possui usuário fixo)
     CALL FUNCTION 'RFC_READ_R3_DESTINATION'
@@ -2513,7 +4370,7 @@ ENDMETHOD.
       READ TABLE it_filter_select_options INTO ls_filter WITH KEY property = 'Aufnr'.
       IF sy-subrc = 0.
         LOOP AT ls_filter-select_options ASSIGNING FIELD-SYMBOL(<aufnr>).
-          clear lv_aufnr.
+          CLEAR lv_aufnr.
           IF <aufnr>-low IS NOT INITIAL.
             lv_aufnr = <aufnr>-low.
             <aufnr>-low = |{ lv_aufnr ALPHA = IN }|.
@@ -2571,6 +4428,19 @@ ENDMETHOD.
 
     DATA: lt_historico_trackings TYPE STANDARD TABLE OF /ptloms/cl_soms_v2_mpc=>ts_historicousertracking,
           ls_historico_trackings LIKE LINE OF lt_historico_trackings.
+
+    " 2. Busca destino RFC configurado
+    SELECT SINGLE rfcdest
+      FROM /ptloms/tb036
+      INTO lv_rfcdest.
+
+    IF sy-subrc NE 0.
+      MESSAGE e003(/ptloms/msg) INTO lv_mensagem.
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          message = lv_mensagem.
+    ENDIF.
+
 
 * Valida Configuração RFC (Verifica se possui usuário fixo)
     CALL FUNCTION 'RFC_READ_R3_DESTINATION'
@@ -2955,6 +4825,506 @@ ENDMETHOD.
     et_entityset = CORRESPONDING /ptloms/cl_soms_v2_mpc=>tt_listausuario( t_dados_usuario ).
 
   ENDMETHOD.
+
+
+METHOD loginomsv2set_create_entity.
+
+*---------------------------------------------------------------------*
+* Login OMS V2
+*
+* Gateway:
+* - recebe payload OData;
+* - monta informações do cliente;
+* - chama /PTLOMS/MF167 no backend;
+* - devolve resultado do login.
+*
+* Nenhuma regra de autenticação é executada no Gateway.
+*---------------------------------------------------------------------*
+
+  DATA:
+    ls_input       TYPE /ptloms/cl_soms_v2_mpc=>ts_loginomsv2,
+    ls_client_info TYPE /ptloms/et211,
+    ls_result      TYPE /ptloms/et210,
+
+    lv_rfcdest     TYPE bdbapidst,
+    lv_msgv1       TYPE c LENGTH 50,
+    lv_msgv2       TYPE c LENGTH 50,
+    lv_subrc       TYPE sy-subrc,
+    lv_mensagem    TYPE bapi_msg.
+
+*---------------------------------------------------------------------*
+* Inicialização
+*---------------------------------------------------------------------*
+  CLEAR:
+    ls_input,
+    ls_client_info,
+    ls_result,
+    lv_rfcdest,
+    lv_msgv1,
+    lv_msgv2,
+    lv_subrc,
+    lv_mensagem.
+
+*---------------------------------------------------------------------*
+* 1. Ler payload recebido pelo OData
+*---------------------------------------------------------------------*
+  io_data_provider->read_entry_data(
+    IMPORTING
+      es_data = ls_input ).
+
+*---------------------------------------------------------------------*
+* 2. Recuperar destino RFC configurado para o backend
+*---------------------------------------------------------------------*
+  SELECT SINGLE rfcdest
+    FROM /ptloms/tb036
+    INTO lv_rfcdest.
+
+  IF sy-subrc NE 0.
+
+    lv_mensagem =
+      'Não foi cadastrada RFC para acesso ao backend.'.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 3. Validar disponibilidade da RFC
+*---------------------------------------------------------------------*
+  CALL FUNCTION 'CAT_CHECK_RFC_DESTINATION'
+    EXPORTING
+      rfcdestination = lv_rfcdest
+    IMPORTING
+      msgv1          = lv_msgv1
+      msgv2          = lv_msgv2
+      rfc_subrc      = lv_subrc.
+
+  IF lv_subrc NE 0.
+
+    IF lv_subrc EQ 3.
+
+      CONCATENATE
+        'Usuário sem autorização para RFC'
+        lv_rfcdest
+        INTO lv_mensagem
+        SEPARATED BY space.
+
+    ELSE.
+
+      CONCATENATE
+        'RFC'
+        lv_rfcdest
+        'não existe ou está indisponível'
+        INTO lv_mensagem
+        SEPARATED BY space.
+
+    ENDIF.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 4. Montar informações do cliente
+*
+* Os nomes da entidade foram gerados a partir da /PTLOMS/ET215
+* mantendo os ABAP Field Names utilizados pelos DTOs do backend.
+*---------------------------------------------------------------------*
+  MOVE-CORRESPONDING
+    ls_input
+    TO ls_client_info.
+
+*---------------------------------------------------------------------*
+* Login OMS online
+*
+* Caso o frontend não envie LOGIN_TYPE, podemos definir explicitamente
+* OMS para garantir consistência do evento de auditoria.
+*---------------------------------------------------------------------*
+  IF ls_client_info-login_type IS INITIAL.
+    ls_client_info-login_type = 'OMS'.
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 5. Executar Login OMS V2 no backend
+*---------------------------------------------------------------------*
+  CALL FUNCTION '/PTLOMS/MF167'
+    DESTINATION lv_rfcdest
+    EXPORTING
+      iv_usuario            = ls_input-usuario
+      iv_senha              = ls_input-senha
+      is_client_info        = ls_client_info
+    IMPORTING
+      es_result             = ls_result
+    EXCEPTIONS
+      communication_failure = 1
+      system_failure        = 2
+      OTHERS                = 3.
+
+*---------------------------------------------------------------------*
+* 6. Tratar falha técnica RFC
+*---------------------------------------------------------------------*
+  IF sy-subrc NE 0.
+
+    CASE sy-subrc.
+
+      WHEN 1.
+
+        CONCATENATE
+          'Falha de comunicação ao executar'
+          '/PTLOMS/MF167'
+          INTO lv_mensagem
+          SEPARATED BY space.
+
+      WHEN 2.
+
+        CONCATENATE
+          'Falha no sistema backend ao executar'
+          '/PTLOMS/MF167'
+          INTO lv_mensagem
+          SEPARATED BY space.
+
+      WHEN OTHERS.
+
+        CONCATENATE
+          'Erro na execução da RFC'
+          '/PTLOMS/MF167'
+          INTO lv_mensagem
+          SEPARATED BY space.
+
+    ENDCASE.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  = /iwbep/cx_mgw_busi_exception=>business_error
+        message = lv_mensagem.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 7. Mapear retorno do backend
+*---------------------------------------------------------------------*
+  ls_input-valid =
+    ls_result-valid.
+
+  ls_input-user_name =
+    ls_result-user_name.
+
+  ls_input-user_type =
+    ls_result-user_type.
+
+  ls_input-reason_code =
+    ls_result-reason_code.
+
+  ls_input-message =
+    ls_result-message.
+
+  ls_input-password_change_required =
+    ls_result-password_change_required.
+
+  ls_input-license_valid_to =
+    ls_result-license_valid_to.
+
+  ls_input-days_remaining =
+    ls_result-days_remaining.
+
+  ls_input-audit_id =
+    ls_result-audit_id.
+
+*---------------------------------------------------------------------*
+* 8. Segurança
+*
+* SENHA existe na entidade exclusivamente como dado de entrada.
+* Nunca devolver a credencial no payload de resposta.
+*---------------------------------------------------------------------*
+  CLEAR ls_input-senha.
+
+*---------------------------------------------------------------------*
+* 9. Retorno OData
+*---------------------------------------------------------------------*
+  er_entity =
+    ls_input.
+
+ENDMETHOD.
+
+
+METHOD loginsapv2set_create_entity.
+
+*---------------------------------------------------------------------*
+* Login SAP V2
+*
+* Gateway:
+* - recebe informações do cliente;
+* - valida configuração RFC;
+* - garante SAME_USER;
+* - chama /PTLOMS/MF168 no backend;
+* - devolve resultado do login.
+*
+* Nenhuma senha SAP transita pelo OMS.
+*---------------------------------------------------------------------*
+
+  DATA:
+    ls_input       TYPE /ptloms/cl_soms_v2_mpc=>ts_loginsapv2,
+    ls_client_info TYPE /ptloms/et211,
+    ls_result      TYPE /ptloms/et210,
+
+    lv_rfcdest     TYPE bdbapidst,
+    lv_same_user   TYPE rfcdisplay-rfcsameusr,
+    lv_msgv1       TYPE c LENGTH 50,
+    lv_msgv2       TYPE c LENGTH 50,
+    lv_subrc       TYPE sy-subrc,
+    lv_mensagem    TYPE bapi_msg.
+
+*---------------------------------------------------------------------*
+* Inicialização
+*---------------------------------------------------------------------*
+  CLEAR:
+    ls_input,
+    ls_client_info,
+    ls_result,
+    lv_rfcdest,
+    lv_same_user,
+    lv_msgv1,
+    lv_msgv2,
+    lv_subrc,
+    lv_mensagem.
+
+*---------------------------------------------------------------------*
+* 1. Ler payload OData
+*---------------------------------------------------------------------*
+  io_data_provider->read_entry_data(
+    IMPORTING
+      es_data = ls_input ).
+
+*---------------------------------------------------------------------*
+* 2. Recuperar destino RFC configurado
+*---------------------------------------------------------------------*
+  SELECT SINGLE rfcdest
+    FROM /ptloms/tb036
+    INTO lv_rfcdest.
+
+  IF sy-subrc NE 0.
+
+    lv_mensagem =
+      'Não foi cadastrada RFC para acesso ao backend.'.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 3. Validar disponibilidade da RFC
+*---------------------------------------------------------------------*
+  CALL FUNCTION 'CAT_CHECK_RFC_DESTINATION'
+    EXPORTING
+      rfcdestination = lv_rfcdest
+    IMPORTING
+      msgv1          = lv_msgv1
+      msgv2          = lv_msgv2
+      rfc_subrc      = lv_subrc.
+
+  IF lv_subrc NE 0.
+
+    IF lv_subrc EQ 3.
+
+      CONCATENATE
+        'Usuário sem autorização para RFC'
+        lv_rfcdest
+        INTO lv_mensagem
+        SEPARATED BY space.
+
+    ELSE.
+
+      CONCATENATE
+        'RFC'
+        lv_rfcdest
+        'não existe ou está indisponível'
+        INTO lv_mensagem
+        SEPARATED BY space.
+
+    ENDIF.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 4. Validar configuração SAME_USER
+*
+* O Login SAP V2 depende da propagação da identidade do usuário.
+* A /PTLOMS/MF168 utiliza SY-UNAME no backend.
+*---------------------------------------------------------------------*
+  CALL FUNCTION 'RFC_READ_R3_DESTINATION'
+    EXPORTING
+      destination             = lv_rfcdest
+    IMPORTING
+      same_user               = lv_same_user
+    EXCEPTIONS
+      authority_not_available = 1
+      destination_not_exist   = 2
+      information_failure     = 3
+      internal_failure        = 4
+      OTHERS                  = 5.
+
+  IF sy-subrc NE 0.
+
+    lv_mensagem =
+      'Não foi possível validar a configuração SAME_USER da RFC.'.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* SAME_USER é obrigatório no fluxo SAP.
+*---------------------------------------------------------------------*
+  IF lv_same_user IS INITIAL.
+
+    lv_mensagem =
+      'RFC incompatível com Login SAP. SAME_USER deve estar habilitado.'.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 5. Montar informações do cliente
+*---------------------------------------------------------------------*
+  MOVE-CORRESPONDING
+    ls_input
+    TO ls_client_info.
+
+*---------------------------------------------------------------------*
+* Garantir tipo de login SAP.
+*
+* Dependendo da origem, o frontend pode enviar:
+* - SAP_BROWSER
+* - SAP_CORDOVA
+*---------------------------------------------------------------------*
+  IF ls_client_info-login_type IS INITIAL.
+
+    ls_client_info-login_type =
+      'SAP_BROWSER'.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 6. Executar Login SAP V2 no backend
+*
+* Nenhum usuário ou senha SAP é enviado.
+* O backend identifica o usuário por SY-UNAME.
+*---------------------------------------------------------------------*
+  CALL FUNCTION '/PTLOMS/MF168'
+    DESTINATION lv_rfcdest
+    EXPORTING
+      is_client_info        = ls_client_info
+    IMPORTING
+      es_result             = ls_result
+    EXCEPTIONS
+      communication_failure = 1 MESSAGE lv_mensagem
+      system_failure        = 2 MESSAGE lv_mensagem
+      OTHERS                = 3.
+
+*---------------------------------------------------------------------*
+* 7. Tratar falha técnica RFC
+*---------------------------------------------------------------------*
+  IF sy-subrc NE 0.
+
+    IF lv_mensagem IS INITIAL.
+
+      CASE sy-subrc.
+
+        WHEN 1.
+          lv_mensagem =
+            'Falha de comunicação ao executar /PTLOMS/MF168.'.
+
+        WHEN 2.
+          lv_mensagem =
+            'Falha no sistema backend ao executar /PTLOMS/MF168.'.
+
+        WHEN OTHERS.
+          lv_mensagem =
+            'Erro na execução da RFC /PTLOMS/MF168.'.
+
+      ENDCASE.
+
+    ENDIF.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  =
+                  /iwbep/cx_mgw_busi_exception=>business_error
+        message =
+                  lv_mensagem.
+
+  ENDIF.
+
+*---------------------------------------------------------------------*
+* 8. Mapear retorno do backend
+*---------------------------------------------------------------------*
+  ls_input-valid =
+    ls_result-valid.
+
+  ls_input-user_name =
+    ls_result-user_name.
+
+  ls_input-user_type =
+    ls_result-user_type.
+
+  ls_input-reason_code =
+    ls_result-reason_code.
+
+  ls_input-message =
+    ls_result-message.
+
+  ls_input-password_change_required =
+    ls_result-password_change_required.
+
+  ls_input-license_valid_to =
+    ls_result-license_valid_to.
+
+  ls_input-days_remaining =
+    ls_result-days_remaining.
+
+  ls_input-audit_id =
+    ls_result-audit_id.
+
+*---------------------------------------------------------------------*
+* 9. Retorno OData
+*---------------------------------------------------------------------*
+  er_entity =
+    ls_input.
+
+ENDMETHOD.
 
 
   method MOTIVODESASSOCIA_GET_ENTITYSET.
@@ -3417,6 +5787,95 @@ METHOD notaordemequipam_get_entityset.
 ENDMETHOD.
 
 
+  METHOD operacaodetalhes_get_entityset.
+
+    DATA: lv_rfcdest              TYPE bdbapidst,
+          lv_subrc                TYPE sy-subrc,
+          lv_mensagem             TYPE bapi_msg,
+          lv_same_user            TYPE rfcdisplay-rfcsameusr,
+          lv_quantidade_registros TYPE int4,
+          lt_despacho             TYPE /ptloms/ct119,
+          lt_filtro               TYPE /ptloms/ct103,
+          lv_usuario_sap          TYPE flag.
+
+    DATA:
+      t_opersimplificada TYPE STANDARD TABLE OF /ptloms/cl_soms_v2_mpc=>ts_operacaosimplificada,
+      s_opersimplificada LIKE LINE OF t_opersimplificada.
+
+    " 2. Busca destino RFC configurado
+    SELECT SINGLE rfcdest
+      FROM /ptloms/tb036
+      INTO lv_rfcdest.
+
+    IF sy-subrc NE 0.
+      MESSAGE e003(/ptloms/msg) INTO lv_mensagem.
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          message = lv_mensagem.
+    ENDIF.
+
+
+* Valida Configuração RFC (Verifica se possui usuário fixo)
+    CALL FUNCTION 'RFC_READ_R3_DESTINATION'
+      EXPORTING
+        destination             = lv_rfcdest
+      IMPORTING
+        same_user               = lv_same_user
+      EXCEPTIONS
+        authority_not_available = 1
+        destination_not_exist   = 2
+        information_failure     = 3
+        internal_failure        = 4
+        OTHERS                  = 5.
+
+* Verifica se é Usuário SAP
+    CALL FUNCTION '/PTLOMS/MF049'
+      DESTINATION lv_rfcdest
+      IMPORTING
+        ex_usuario_sap = lv_usuario_sap.
+
+    IF ( lv_usuario_sap IS NOT INITIAL AND lv_same_user IS INITIAL ) OR "Se usuário SAP, então SAME_USER deve estar marcado
+       ( lv_usuario_sap IS INITIAL     AND lv_same_user IS NOT INITIAL ). "Se usuário não SAP, então SAME_USER deve estar vazio
+
+      lv_mensagem = 'RFC incompatível com modo de usuário selecionado. Rever configuração SM59'(004).
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          textid  = /iwbep/cx_mgw_busi_exception=>business_error
+          message = lv_mensagem.
+    ENDIF.
+
+    " Carrega filtros
+    IF it_filter_select_options[] IS NOT INITIAL.
+
+      READ TABLE it_filter_select_options INTO DATA(ls_aufnr_filter) WITH KEY property = 'Aufnr'.
+      IF sy-subrc = 0.
+        DATA(rt_aufnr_filter) = ls_aufnr_filter-select_options.
+      ENDIF.
+
+    ENDIF.
+
+
+    CLEAR lv_quantidade_registros.
+
+    CALL FUNCTION '/PTLOMS/MF162'
+      DESTINATION lv_rfcdest
+      EXPORTING
+        rt_aufnr    = rt_aufnr_filter
+      IMPORTING
+        it_despacho = lt_despacho
+        it_filtro   = lt_filtro.
+
+    LOOP AT lt_despacho INTO DATA(ls_despacho).
+      CLEAR s_opersimplificada.
+      MOVE-CORRESPONDING ls_despacho TO s_opersimplificada.
+      APPEND s_opersimplificada TO t_opersimplificada.
+    ENDLOOP.
+
+    et_entityset = CORRESPONDING /ptloms/cl_soms_v2_mpc=>tt_operacaosimplificada( t_opersimplificada ).
+
+  ENDMETHOD.
+
+
   METHOD operacaosimplifi_get_entityset.
 
     DATA: lv_rfcdest              TYPE bdbapidst,
@@ -3431,6 +5890,18 @@ ENDMETHOD.
     DATA:
       t_opersimplificada TYPE STANDARD TABLE OF /ptloms/cl_soms_v2_mpc=>ts_operacaosimplificada,
       s_opersimplificada LIKE LINE OF t_opersimplificada.
+
+    " 2. Busca destino RFC configurado
+    SELECT SINGLE rfcdest
+      FROM /ptloms/tb036
+      INTO lv_rfcdest.
+
+    IF sy-subrc NE 0.
+      MESSAGE e003(/ptloms/msg) INTO lv_mensagem.
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          message = lv_mensagem.
+    ENDIF.
 
 * Valida Configuração RFC (Verifica se possui usuário fixo)
     CALL FUNCTION 'RFC_READ_R3_DESTINATION'
@@ -3636,6 +6107,19 @@ ENDMETHOD.
     DATA: lt_perfilcentro TYPE STANDARD TABLE OF /ptloms/cl_soms_v2_mpc=>ts_perfilcentro,
           ls_perfilcentro LIKE LINE OF lt_perfilcentro.
 
+    " 2. Busca destino RFC configurado
+    SELECT SINGLE rfcdest
+      FROM /ptloms/tb036
+      INTO lv_rfcdest.
+
+    IF sy-subrc NE 0.
+      MESSAGE e003(/ptloms/msg) INTO lv_mensagem.
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          message = lv_mensagem.
+    ENDIF.
+
+
 * Valida Configuração RFC (Verifica se possui usuário fixo)
     CALL FUNCTION 'RFC_READ_R3_DESTINATION'
       EXPORTING
@@ -3693,74 +6177,119 @@ ENDMETHOD.
   ENDMETHOD.
 
 
+  METHOD programacaoanali_create_entity.
+
+    DATA:
+      ls_input    TYPE /ptloms/cl_soms_v2_mpc=>ts_programacaoanaliticoanalise,
+      ls_result   TYPE /ptloms/et203,
+
+      lv_rfcdest  TYPE bdbapidst,
+      lv_msgv1    TYPE c LENGTH 50,
+      lv_msgv2    TYPE c LENGTH 50,
+      lv_subrc    TYPE sy-subrc,
+      lv_mensagem TYPE bapi_msg.
+
+    CLEAR:
+      ls_input,
+      ls_result.
+
+    " 1. Lê dados enviados pelo SAPUI5
+    io_data_provider->read_entry_data(
+      IMPORTING
+        es_data = ls_input ).
+
+    " 2. Busca destino RFC configurado
+    SELECT SINGLE rfcdest
+      FROM /ptloms/tb036
+      INTO lv_rfcdest.
+
+    IF sy-subrc NE 0.
+      MESSAGE e003(/ptloms/msg) INTO lv_mensagem.
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          message = lv_mensagem.
+    ENDIF.
+
+    " 3. Valida conexão RFC
+    CALL FUNCTION 'CAT_CHECK_RFC_DESTINATION'
+      EXPORTING
+        rfcdestination = lv_rfcdest
+      IMPORTING
+        msgv1          = lv_msgv1
+        msgv2          = lv_msgv2
+        rfc_subrc      = lv_subrc.
+
+    IF lv_subrc NE 0.
+      CONCATENATE 'Falha na conexão RFC:' lv_rfcdest
+        INTO lv_mensagem
+        SEPARATED BY space.
+
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          message = lv_mensagem.
+    ENDIF.
+
+    " 4. Valida entrada mínima
+    IF ls_input-json_dados IS INITIAL.
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          message = 'JSON de dados não informado.'.
+    ENDIF.
+
+    " 5. Chama função orquestradora
+    CALL FUNCTION '/PTLOMS/MF158'
+      DESTINATION lv_rfcdest
+      EXPORTING
+        iv_prompt_usuario     = ls_input-prompt_usuario
+        iv_json_dados         = ls_input-json_dados
+        iv_usuario            = ls_input-usuario
+      IMPORTING
+        rs_result             = ls_result
+      EXCEPTIONS
+        communication_failure = 1
+        system_failure        = 2
+        OTHERS                = 3.
+
+    IF sy-subrc NE 0.
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          message = 'Erro na execução da RFC /PTLOMS/MF155.'.
+    ENDIF.
+
+    " 6. Mapeia retorno para entidade OData
+    MOVE-CORRESPONDING ls_result TO ls_input.
+
+    er_entity = ls_input.
+
+  ENDMETHOD.
+
+
   METHOD relatorioanaliti_get_entityset.
-**TRY.
-*CALL METHOD SUPER->RELATORIOANALITI_GET_ENTITYSET
-*  EXPORTING
-*    IV_ENTITY_NAME           =
-*    IV_ENTITY_SET_NAME       =
-*    IV_SOURCE_NAME           =
-*    IT_FILTER_SELECT_OPTIONS =
-*    IS_PAGING                =
-*    IT_KEY_TAB               =
-*    IT_NAVIGATION_PATH       =
-*    IT_ORDER                 =
-*    IV_FILTER_STRING         =
-*    IV_SEARCH_STRING         =
-**    io_tech_request_context  =
-**  IMPORTING
-**    et_entityset             =
-**    es_response_context      =
-*    .
-** CATCH /iwbep/cx_mgw_busi_exception .
-** CATCH /iwbep/cx_mgw_tech_exception .
-**ENDTRY.
-*****    SELECT DISTINCT
-*****           tb65~uname,
-*****           via~aufnr,
-*****           via~gstrs,
-*****           via~aufpl,
-*****           afvc~aplzl,
-*****           afvc~vornr,
-*****           afvv~arbei,
-*****           afvv~arbeh,
-*****           afru~ismne,
-*****           afru~ismnw
-*****      INTO TABLE @DATA(lt_base)
-*****      FROM viaufks AS via
-*****     INNER JOIN afvc
-*****        ON afvc~aufpl = via~aufpl
-*****     INNER JOIN /ptloms/tb065 AS tb65
-*****        ON tb65~aufnr = via~aufnr
-*****       AND tb65~vornr = afvc~vornr
-*****     INNER JOIN afvv
-*****        ON afvv~aufpl = afvc~aufpl
-*****       AND afvv~aplzl = afvc~aplzl
-*****     LEFT OUTER JOIN afru
-*****        ON afru~aufnr = via~aufnr
-*****       AND tb65~vornr = tb65~vornr
-*****       AND afru~stokz = ''
-*****     WHERE via~gstrs BETWEEN '20260601' AND '20260605'
-*****       AND afvc~loekz  = ''
-*****       AND afvv~arbeh <> ''
-*****     ORDER BY via~aufnr, afvc~vornr, tb65~uname.
-*****
-*****    LOOP AT lt_base ASSIGNING FIELD-SYMBOL(<base>).
-*****      APPEND INITIAL LINE TO et_entityset ASSIGNING FIELD-SYMBOL(<linha>).
-*****      <linha>-usuario     = <base>-uname.
-*****      <linha>-ordem       = <base>-aufnr.
-*****      <linha>-operacao    = <base>-vornr.
-*****      <linha>-data_inicio = sy-datum.
-*****      <linha>-total_plan  = <base>-arbei.
-*****    ENDLOOP.
-
-
     DATA: lv_rfcdest     TYPE bdbapidst,
           lv_same_user   TYPE rfcdisplay-rfcsameusr,
           lv_usuario_sap TYPE flag,
-          lv_mensagem    TYPE bapi_msg.
+          lv_mensagem    TYPE bapi_msg,
+          rt_data        TYPE /iwbep/t_cod_select_options,
+          rt_ordem       TYPE /iwbep/t_cod_select_options,
+          rt_usuario     TYPE /iwbep/t_cod_select_options,
+          lt_retorno     TYPE /ptloms/ct173,
+          ls_filter      TYPE /iwbep/s_mgw_select_option,
+          lv_aufnr       TYPE /ptloms/et204-ordem.
 
-* Valida Configuração RFC (Verifica se possui usuário fixo)
+    " 2. Busca destino RFC configurado
+    SELECT SINGLE rfcdest
+      FROM /ptloms/tb036
+      INTO lv_rfcdest.
+
+    IF sy-subrc NE 0.
+      MESSAGE e003(/ptloms/msg) INTO lv_mensagem.
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          message = lv_mensagem.
+    ENDIF.
+
+
+    "-- Valida Configuração RFC (Verifica se possui usuário fixo) --"
     CALL FUNCTION 'RFC_READ_R3_DESTINATION'
       EXPORTING
         destination             = lv_rfcdest
@@ -3773,7 +6302,7 @@ ENDMETHOD.
         internal_failure        = 4
         OTHERS                  = 5.
 
-* Verifica se é Usuário SAP
+    "-- Verifica se é Usuário SAP --"
     CALL FUNCTION '/PTLOMS/MF049'
       DESTINATION lv_rfcdest
       IMPORTING
@@ -3789,18 +6318,19 @@ ENDMETHOD.
           message = lv_mensagem.
     ENDIF.
 
-* Declarações especificas do serviço
-    DATA: rt_ordem   TYPE /iwbep/t_cod_select_options,
-          rt_data    TYPE /iwbep/t_cod_select_options,
-          lt_retorno TYPE /ptloms/ct173,
-          ls_filter  TYPE /iwbep/s_mgw_select_option,
-          lv_aufnr   TYPE /ptloms/et204-ordem.
-
-    " Carrega filtros
+    "-- Carrega filtros --"
     IF it_filter_select_options[] IS NOT INITIAL.
 
+      "-- DATA BASE DE INÍCIO --"
       CLEAR ls_filter.
-      READ TABLE it_filter_select_options INTO ls_filter WITH KEY property = 'Operacao'.
+      READ TABLE it_filter_select_options INTO ls_filter WITH KEY property = 'DataInicio'.
+      IF sy-subrc = 0.
+        rt_data = ls_filter-select_options.
+      ENDIF.
+
+      "-- ORDEM --"
+      CLEAR ls_filter.
+      READ TABLE it_filter_select_options INTO ls_filter WITH KEY property = 'Ordem'.
       IF sy-subrc = 0.
         LOOP AT ls_filter-select_options ASSIGNING FIELD-SYMBOL(<aufnr>).
           CLEAR lv_aufnr.
@@ -3816,11 +6346,13 @@ ENDMETHOD.
         rt_ordem = ls_filter-select_options.
       ENDIF.
 
+      "-- USUARIO - OPERADOR --"
       CLEAR ls_filter.
-      READ TABLE it_filter_select_options INTO ls_filter WITH KEY property = 'DataInicio'.
+      READ TABLE it_filter_select_options INTO ls_filter WITH KEY property = 'Usuario'.
       IF sy-subrc = 0.
-        rt_data = ls_filter-select_options.
+        rt_usuario = ls_filter-select_options.
       ENDIF.
+
 
     ENDIF.
 
@@ -3828,6 +6360,8 @@ ENDMETHOD.
       DESTINATION lv_rfcdest
       EXPORTING
         it_data    = rt_data
+        it_ordem   = rt_ordem
+        it_usuario = rt_usuario
       IMPORTING
         et_retorno = lt_retorno.
 

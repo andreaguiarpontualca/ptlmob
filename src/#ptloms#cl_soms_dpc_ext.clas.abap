@@ -37,6 +37,8 @@ protected section.
     redefinition .
   methods OUT_LAYOUT_ITEMS_GET_ENTITYSET
     redefinition .
+  methods OUT_LISTA_TAREFA_GET_ENTITYSET
+    redefinition .
   methods OUT_LISTA_TECN03_GET_ENTITYSET
     redefinition .
   methods OUT_LISTA_TECNIC_GET_ENTITYSET
@@ -81,7 +83,7 @@ protected section.
     redefinition .
   methods ROOT_OUT_VARIANT_GET_ENTITY
     redefinition .
-  methods OUT_LISTA_TAREFA_GET_ENTITYSET
+  methods ALTERAR_SENHA_OM_CREATE_ENTITY
     redefinition .
 private section.
 
@@ -1352,6 +1354,12 @@ CLASS /PTLOMS/CL_SOMS_DPC_EXT IMPLEMENTATION.
           lv_mensagem  TYPE bapi_msg,
           lv_same_user TYPE rfcdisplay-rfcsameusr.
 
+* Declarações para alteração de senha OMS V2
+    DATA: ls_alterar_senha TYPE /ptloms/cl_soms_mpc=>ts_alterar_senha_oms,
+          lv_senha_atual   TYPE char32,
+          lv_nova_senha    TYPE char32,
+          lv_conf_senha    TYPE char32.
+
     DATA: rt_usuarioapp TYPE /iwbep/t_cod_select_options,
           ls_usuarioapp LIKE LINE OF rt_usuarioapp.
 
@@ -1462,84 +1470,153 @@ CLASS /PTLOMS/CL_SOMS_DPC_EXT IMPLEMENTATION.
       WHEN 'out_usuario_completo'.
 
         io_data_provider->read_entry_data(
-       IMPORTING
-       es_data = ls_out_usuario ).
+          IMPORTING
+            es_data = ls_out_usuario ).
 
-        IF ls_out_usuario-usuario IS INITIAL.
+*--------------------------------------------------------------------*
+* Identifica/autentica conforme o modo configurado no ECC/S4
+*
+* Usuario SAP:
+*   - ja foi autenticado pelo ICF no Gateway
+*   - RFC deve estar configurada com SAME_USER
+*   - MF044 retorna o SY-UNAME efetivamente propagado ao ECC/S4
+*   - nao recebe nem valida senha SAP no OMS
+*   - SENHA da TB013 e utilizada como PIN para acesso offline
+*
+* Usuario OMS:
+*   - mantem usuario/senha proprios
+*--------------------------------------------------------------------*
+        IF lv_usuario_sap IS INITIAL.
 
-          lv_mensagem = 'Informar usuário'(016).
+          IF ls_out_usuario-usuario IS INITIAL.
 
-          RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+            lv_mensagem = 'Informar usuário'(016).
+
+            RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+              EXPORTING
+                textid  = /iwbep/cx_mgw_busi_exception=>business_error
+                message = lv_mensagem.
+
+          ENDIF.
+
+          IF ls_out_usuario-senha IS INITIAL.
+
+            lv_mensagem = 'Informar senha'(015).
+
+            RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+              EXPORTING
+                textid  = /iwbep/cx_mgw_busi_exception=>business_error
+                message = lv_mensagem.
+
+          ENDIF.
+
+          TRANSLATE ls_out_usuario-usuario TO UPPER CASE.
+
+          lv_encode = ls_out_usuario-senha.
+
+          CALL METHOD cl_http_utility=>if_http_utility~decode_base64
             EXPORTING
-              textid  = /iwbep/cx_mgw_busi_exception=>business_error
-              message = lv_mensagem.
+              encoded = lv_encode
+            RECEIVING
+              decoded = lv_decode.
+
+          ls_out_usuario-senha = lv_decode.
 
         ENDIF.
 
-        IF ls_out_usuario-senha IS INITIAL.
-
-          lv_mensagem = 'Informar senha'(015).
-
-          RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
-            EXPORTING
-              textid  = /iwbep/cx_mgw_busi_exception=>business_error
-              message = lv_mensagem.
-
-        ENDIF.
-
-        TRANSLATE ls_out_usuario-usuario TO UPPER CASE.
-
-        lv_encode = ls_out_usuario-senha.
-        CALL METHOD cl_http_utility=>if_http_utility~decode_base64    "Method for Decryption
-          EXPORTING
-            encoded = lv_encode
-          RECEIVING
-            decoded = lv_decode.
-        ls_out_usuario-senha = lv_decode.
-
-* Define Usuário
-        IF ls_out_usuario-usuario IS NOT INITIAL.
-          lv_usuario = ls_out_usuario-usuario.
-          TRANSLATE lv_usuario TO UPPER CASE.
-        ELSE.
-          lv_usuario = sy-uname.
-        ENDIF.
+*--------------------------------------------------------------------*
+* Define usuario efetivo no ECC/S4.
+*
+* Em modo SAP:
+*   MF044 ignora IM_USUARIO e retorna SY-UNAME da sessao propagada.
+*
+* Em modo OMS:
+*   MF044 retorna o usuario informado pela aplicacao.
+*--------------------------------------------------------------------*
+        CLEAR lv_usuario.
 
         CALL FUNCTION '/PTLOMS/MF044'
           DESTINATION lv_rfcdest
           EXPORTING
-            im_usuario = lv_usuario
+            im_usuario = ls_out_usuario-usuario
           IMPORTING
             ex_usuario = lv_usuario.
 
-*Validação removida a pedido da Andina. André Aguiar 27/03/2023
-        IF lv_usuario <> ls_out_usuario-usuario.
-          lv_mensagem = 'Senha/Usuário inválido'(005).
+        IF lv_usuario IS INITIAL.
+
+          lv_mensagem = 'Não foi possível identificar o usuário'.
 
           RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
             EXPORTING
               textid  = /iwbep/cx_mgw_busi_exception=>business_error
               message = lv_mensagem.
+
         ENDIF.
 
-*    lv_usuario = /ptloms/cl006=>busca_usuario( lv_usuario ).
+        TRANSLATE lv_usuario TO UPPER CASE.
 
-*        CALL FUNCTION '/PTLOMS/MF049'
+*--------------------------------------------------------------------*
+* Valida licenca do usuario
+*--------------------------------------------------------------------*
+*        DATA: es_licenca TYPE /ptloms/et207.
+*
+*        CALL FUNCTION '/ptloms/mf161'
 *          DESTINATION lv_rfcdest
+*          EXPORTING
+*            iv_user   = lv_usuario
 *          IMPORTING
-*            ex_usuario_sap = lv_usuario_sap.
+*            es_result = es_licenca.
+*
+*        IF es_licenca-valid IS INITIAL.
+*
+*          lv_mensagem = es_licenca-message.
+*
+*          RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+*            EXPORTING
+*              textid  = /iwbep/cx_mgw_busi_exception=>business_error
+*              message = lv_mensagem.
+*
+*        ENDIF.
 
-* Cria sessão para usuário Mobile (Ainda não foi autenticado)
-*    IF ls_usuarioapp_aux-low IS NOT INITIAL.
+*--------------------------------------------------------------------*
+* Validacao adicional somente para usuario OMS.
+*
+* No modo SAP a identidade ja foi determinada pela sessao SAP
+* propagada atraves da RFC SAME_USER.
+*--------------------------------------------------------------------*
         IF lv_usuario_sap IS INITIAL.
 
-*      lv_usuario = ls_usuarioapp_aux-low.
-*      TRANSLATE lv_usuario TO UPPER CASE.
+          IF lv_usuario <> ls_out_usuario-usuario.
+
+            lv_mensagem = 'Senha/Usuário inválido'(005).
+
+            RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+              EXPORTING
+                textid  = /iwbep/cx_mgw_busi_exception=>business_error
+                message = lv_mensagem.
+
+          ENDIF.
+
+        ENDIF.
+
+*--------------------------------------------------------------------*
+* Autenticacao propria do OMS.
+*
+* Usuario OMS:
+*   utiliza a senha OMS normalmente.
+*
+* Usuario SAP:
+*   nao passa por MF039.
+*   A autenticacao online ja ocorreu no SAP/ICF.
+*--------------------------------------------------------------------*
+        IF lv_usuario_sap IS INITIAL.
+
           lv_senha     = ls_out_usuario-senha.
           lv_confsenha = ls_out_usuario-conf_senha.
 
-* Verifica se há necessidade de alterar a senha
-          IF lv_senha IS NOT INITIAL AND lv_confsenha IS NOT INITIAL.
+* Verifica se ha necessidade de alterar a senha OMS
+          IF lv_senha IS NOT INITIAL
+             AND lv_confsenha IS NOT INITIAL.
 
             CALL FUNCTION '/PTLOMS/MF043'
               DESTINATION lv_rfcdest
@@ -1551,7 +1628,14 @@ CLASS /PTLOMS/CL_SOMS_DPC_EXT IMPLEMENTATION.
                 ex_senha_alterada = lv_senha_alterada.
 
             IF lv_senha_alterada IS INITIAL.
-              RETURN.
+
+              lv_mensagem = 'Não foi possível alterar a senha'(018).
+
+              RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+                EXPORTING
+                  textid  = /iwbep/cx_mgw_busi_exception=>business_error
+                  message = lv_mensagem.
+
             ENDIF.
 
           ENDIF.
@@ -1565,45 +1649,8 @@ CLASS /PTLOMS/CL_SOMS_DPC_EXT IMPLEMENTATION.
               ex_autenticado = lv_autenticado.
 
           IF lv_autenticado IS INITIAL.
-            lv_mensagem = 'Senha/Usuário inválido'(005).
 
-            RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
-              EXPORTING
-                textid  = /iwbep/cx_mgw_busi_exception=>business_error
-                message = lv_mensagem.
-          ENDIF.
-
-* Cria sessão para usuário SAP (Já foi autenticado)
-        ELSE.
-          " Conversão de campo 32 caracteres para 40 caracteres
-          DATA(lv_password) = ls_out_usuario-senha.
-
-          CALL FUNCTION 'SUSR_LOGIN_CHECK_RFC'
-            EXPORTING
-              bname                  = lv_usuario
-              password               = CONV xubcode( lv_password )
-            EXCEPTIONS
-              wait                   = 1
-              user_locked            = 2
-              user_not_active        = 3
-              password_expired       = 4
-              wrong_password         = 5
-              no_check_for_this_user = 6
-              internal_error         = 7.
-
-          CASE sy-subrc.
-            WHEN 0. lv_mensagem = 'Usuário/senha OK'(006).
-            WHEN 1. lv_mensagem = 'Tempo de espera após tentativas malsucedidas usuário está bloqueado'(007).
-            WHEN 2. lv_mensagem = 'O usuário não está ativo (período de validade)'(008).
-            WHEN 3. lv_mensagem = 'A senha deve ser alterada'(009).
-            WHEN 4. lv_mensagem = 'A senha está errada'(010).
-            WHEN 5. lv_mensagem = 'A senha está errada'(010).
-            WHEN 6. lv_mensagem = 'Número de logins com senha com falha excedido'(012).
-            WHEN 7. lv_mensagem = 'Erro interno'(013).
-            WHEN OTHERS.
-          ENDCASE.
-
-          IF sy-subrc IS NOT INITIAL.
+            lv_mensagem = 'Usuário ou senha inválidos'(005).
 
             RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
               EXPORTING
@@ -1614,12 +1661,19 @@ CLASS /PTLOMS/CL_SOMS_DPC_EXT IMPLEMENTATION.
 
         ENDIF.
 
+*--------------------------------------------------------------------*
+* Recupera cadastro funcional do usuario no OMS
+*--------------------------------------------------------------------*
         IF rt_usuarioapp[] IS INITIAL.
+
           CLEAR ls_usuario_app.
-          ls_usuario_app-sign = 'I'.
+
+          ls_usuario_app-sign   = 'I'.
           ls_usuario_app-option = 'EQ'.
-          ls_usuario_app-low = lv_usuario.
+          ls_usuario_app-low    = lv_usuario.
+
           APPEND ls_usuario_app TO rt_usuarioapp.
+
         ENDIF.
 
         CALL FUNCTION '/PTLOMS/MF034'
@@ -1629,21 +1683,50 @@ CLASS /PTLOMS/CL_SOMS_DPC_EXT IMPLEMENTATION.
           IMPORTING
             it_dados_usuario_app = lt_dados_usuario_app.
 
-        READ TABLE lt_dados_usuario_app INTO DATA(ls_dados_usuario_app) INDEX 1.
+        READ TABLE lt_dados_usuario_app
+          INTO DATA(ls_dados_usuario_app)
+          INDEX 1.
+
         IF sy-subrc EQ 0.
 
           IF ls_dados_usuario_app-bloqueado = 'X'.
+
             lv_mensagem = 'Usuário bloqueado'(014).
 
             RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
               EXPORTING
                 textid  = /iwbep/cx_mgw_busi_exception=>business_error
                 message = lv_mensagem.
+
           ENDIF.
 
-          MOVE-CORRESPONDING ls_dados_usuario_app TO ls_out_usuario.
+*--------------------------------------------------------------------*
+* Dados do usuario
+*
+* Usuario OMS:
+*   SENHA nunca deve ser devolvida ao aplicativo.
+*
+* Usuario SAP:
+*   SENHA da TB013 representa o PIN de acesso offline.
+*   Neste caso o valor deve ser enviado ao aplicativo para que seja
+*   persistido e posteriormente utilizado na autenticacao offline.
+*--------------------------------------------------------------------*
+          MOVE-CORRESPONDING ls_dados_usuario_app
+            TO ls_out_usuario.
+
           ls_out_usuario-guid = lv_guid.
-          CLEAR: ls_out_usuario-senha, ls_out_usuario-conf_senha.
+
+          IF lv_usuario_sap IS INITIAL.
+            CLEAR:
+              ls_out_usuario-senha,
+              ls_out_usuario-conf_senha.
+          ELSE.
+*           Para usuario SAP:
+*           ls_out_usuario-senha contem o PIN offline da TB013.
+*
+*           CONF_SENHA nao possui finalidade no login offline.
+            CLEAR ls_out_usuario-conf_senha.
+          ENDIF.
 
 * Autorização
           CALL FUNCTION '/PTLOMS/MF058'
@@ -1654,10 +1737,17 @@ CLASS /PTLOMS/CL_SOMS_DPC_EXT IMPLEMENTATION.
               it_autorizacao = lt_autorizacao.
 
           LOOP AT lt_autorizacao INTO DATA(ls_autorizacao_aux).
+
             CLEAR ls_autorizacao.
-            MOVE-CORRESPONDING ls_autorizacao_aux TO ls_autorizacao.
+
+            MOVE-CORRESPONDING ls_autorizacao_aux
+              TO ls_autorizacao.
+
             ls_autorizacao-guid = lv_guid.
-            APPEND ls_autorizacao TO ls_out_usuario-out_autorizacao_completoset.
+
+            APPEND ls_autorizacao
+              TO ls_out_usuario-out_autorizacao_completoset.
+
           ENDLOOP.
 
 * Configuração Perfil
@@ -1670,25 +1760,37 @@ CLASS /PTLOMS/CL_SOMS_DPC_EXT IMPLEMENTATION.
             IMPORTING
               it_configuracao = lt_configuracao.
 
-          LOOP AT lt_configuracao INTO DATA(ls_configuracao_aux).
+          LOOP AT lt_configuracao
+            INTO DATA(ls_configuracao_aux).
+
             CLEAR ls_configuracao.
-            MOVE-CORRESPONDING ls_configuracao_aux TO ls_configuracao.
-            APPEND ls_configuracao TO ls_out_usuario-out_config_perfil_completoset.
+
+            MOVE-CORRESPONDING ls_configuracao_aux
+              TO ls_configuracao.
+
+            APPEND ls_configuracao
+              TO ls_out_usuario-out_config_perfil_completoset.
+
             IF ls_configuracao_aux-configuracao = '04'.
               DATA(lv_04) = 'X'.
             ENDIF.
+
             IF ls_configuracao_aux-configuracao = '05'.
               DATA(lv_05) = 'X'.
             ENDIF.
+
             IF ls_configuracao_aux-configuracao = '06'.
               DATA(lv_06) = 'X'.
             ENDIF.
+
             IF ls_configuracao_aux-configuracao = '07'.
               DATA(lv_07) = 'X'.
             ENDIF.
+
             IF ls_configuracao_aux-configuracao = '08'.
               DATA(lv_08) = 'X'.
             ENDIF.
+
           ENDLOOP.
 
 * Configuração Sistema
@@ -1697,37 +1799,87 @@ CLASS /PTLOMS/CL_SOMS_DPC_EXT IMPLEMENTATION.
             IMPORTING
               it_configuracao_sistema = lt_configuracao_sistema.
 
-          LOOP AT lt_configuracao_sistema INTO DATA(ls_configuracao_sistema_aux).
+          LOOP AT lt_configuracao_sistema
+            INTO DATA(ls_configuracao_sistema_aux).
+
             CLEAR ls_configuracao_sistema.
-            MOVE-CORRESPONDING ls_configuracao_sistema_aux TO ls_configuracao_sistema.
+
+            MOVE-CORRESPONDING ls_configuracao_sistema_aux
+              TO ls_configuracao_sistema.
+
             ls_configuracao_sistema-guid = lv_guid.
+
             IF lv_04 = 'X'.
               ls_configuracao_sistema-despacho_ordem = 'X'.
             ENDIF.
+
             IF lv_05 = 'X'.
               ls_configuracao_sistema-despacho_oper = 'X'.
             ENDIF.
+
             IF lv_06 = 'X'.
               ls_configuracao_sistema-chave_modelo = 'X'.
             ENDIF.
+
             IF lv_07 = 'X'.
               ls_configuracao_sistema-apont_manual = 'X'.
             ENDIF.
+
             IF lv_08 = 'X'.
               ls_configuracao_sistema-tipo_atividade = 'X'.
             ENDIF.
-            APPEND ls_configuracao_sistema TO ls_out_usuario-out_config_sistema_completoset.
+
+            APPEND ls_configuracao_sistema
+              TO ls_out_usuario-out_config_sistema_completoset.
+
           ENDLOOP.
+
+        ELSE.
+
+*--------------------------------------------------------------------*
+* Usuario SAP/OMS identificado, mas sem cadastro funcional no OMS
+*--------------------------------------------------------------------*
+          CONCATENATE
+            'Usuário'
+            lv_usuario
+            'não está cadastrado para utilização do OMS'
+            INTO lv_mensagem
+            SEPARATED BY space.
+
+          RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+            EXPORTING
+              textid  = /iwbep/cx_mgw_busi_exception=>business_error
+              message = lv_mensagem.
+
         ENDIF.
 
-        ls_out_usuario-senha = lv_encode.
+*--------------------------------------------------------------------*
+* Protecao da credencial
+*
+* Usuario OMS:
+*   nunca devolve senha.
+*
+* Usuario SAP:
+*   SENHA contem o PIN offline proveniente da TB013.
+*--------------------------------------------------------------------*
+        IF lv_usuario_sap IS INITIAL.
+
+          CLEAR:
+            ls_out_usuario-senha,
+            ls_out_usuario-conf_senha.
+
+        ELSE.
+
+*         CONF_SENHA nao deve ser enviada.
+          CLEAR ls_out_usuario-conf_senha.
+
+        ENDIF.
 
         copy_data_to_ref(
-                          EXPORTING
-                          is_data = ls_out_usuario
-                          CHANGING
-                          cr_data = er_deep_entity
-                          ).
+          EXPORTING
+            is_data = ls_out_usuario
+          CHANGING
+            cr_data = er_deep_entity ).
 
         gv_usuario_app = ls_out_usuario-usuario.
 
@@ -2605,6 +2757,134 @@ EXPORTING
   is_data = ls_in_documento_medicao
 CHANGING
   cr_data = er_deep_entity ).
+
+      WHEN 'alterar_senha_oms'.
+
+        CLEAR: ls_alterar_senha,
+               lv_senha_atual,
+               lv_nova_senha,
+               lv_conf_senha,
+               lv_encode,
+               lv_decode,
+               lv_mensagem.
+
+        io_data_provider->read_entry_data(
+          IMPORTING
+            es_data = ls_alterar_senha ).
+
+* Valida usuário
+        IF ls_alterar_senha-usuario IS INITIAL.
+          lv_mensagem = 'Informe o usuário.'.
+          RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+            EXPORTING
+              textid  = /iwbep/cx_mgw_busi_exception=>business_error
+              message = lv_mensagem.
+        ENDIF.
+
+        TRANSLATE ls_alterar_senha-usuario TO UPPER CASE.
+
+* Valida campos obrigatórios antes do decode
+        IF ls_alterar_senha-senha_atual IS INITIAL.
+          lv_mensagem = 'Informe a senha atual.'.
+          RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+            EXPORTING
+              textid  = /iwbep/cx_mgw_busi_exception=>business_error
+              message = lv_mensagem.
+        ENDIF.
+
+        IF ls_alterar_senha-nova_senha IS INITIAL.
+          lv_mensagem = 'Informe a nova senha.'.
+          RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+            EXPORTING
+              textid  = /iwbep/cx_mgw_busi_exception=>business_error
+              message = lv_mensagem.
+        ENDIF.
+
+        IF ls_alterar_senha-conf_senha IS INITIAL.
+          lv_mensagem = 'Confirme a nova senha.'.
+          RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+            EXPORTING
+              textid  = /iwbep/cx_mgw_busi_exception=>business_error
+              message = lv_mensagem.
+        ENDIF.
+
+* Decode SENHA_ATUAL
+        CLEAR lv_decode.
+        lv_encode = ls_alterar_senha-senha_atual.
+        CALL METHOD cl_http_utility=>if_http_utility~decode_base64
+          EXPORTING
+            encoded = lv_encode
+          RECEIVING
+            decoded = lv_decode.
+        lv_senha_atual = lv_decode.
+
+* Decode NOVA_SENHA
+        CLEAR lv_decode.
+        lv_encode = ls_alterar_senha-nova_senha.
+        CALL METHOD cl_http_utility=>if_http_utility~decode_base64
+          EXPORTING
+            encoded = lv_encode
+          RECEIVING
+            decoded = lv_decode.
+        lv_nova_senha = lv_decode.
+
+* Decode CONF_SENHA
+        CLEAR lv_decode.
+        lv_encode = ls_alterar_senha-conf_senha.
+        CALL METHOD cl_http_utility=>if_http_utility~decode_base64
+          EXPORTING
+            encoded = lv_encode
+          RECEIVING
+            decoded = lv_decode.
+        lv_conf_senha = lv_decode.
+
+* Altera senha OMS no sistema de destino
+        CALL FUNCTION '/PTLOMS/MF166'
+          DESTINATION lv_rfcdest
+          EXPORTING
+            im_usuario        = ls_alterar_senha-usuario
+            im_senha_atual    = lv_senha_atual
+            im_nova_senha     = lv_nova_senha
+            im_conf_senha     = lv_conf_senha
+          IMPORTING
+            ex_senha_alterada = ls_alterar_senha-senha_alterada
+            ex_mensagem       = ls_alterar_senha-mensagem.
+
+        IF ls_alterar_senha-senha_alterada IS INITIAL.
+
+          lv_mensagem = ls_alterar_senha-mensagem.
+
+          IF lv_mensagem IS INITIAL.
+            lv_mensagem = 'Não foi possível alterar a senha.'.
+          ENDIF.
+
+          CLEAR: ls_alterar_senha-senha_atual,
+                 ls_alterar_senha-nova_senha,
+                 ls_alterar_senha-conf_senha,
+                 lv_senha_atual,
+                 lv_nova_senha,
+                 lv_conf_senha.
+
+          RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+            EXPORTING
+              textid  = /iwbep/cx_mgw_busi_exception=>business_error
+              message = lv_mensagem.
+
+        ENDIF.
+
+* Nunca devolver as senhas
+        CLEAR: ls_alterar_senha-senha_atual,
+               ls_alterar_senha-nova_senha,
+               ls_alterar_senha-conf_senha,
+               lv_senha_atual,
+               lv_nova_senha,
+               lv_conf_senha.
+
+        copy_data_to_ref(
+          EXPORTING
+            is_data = ls_alterar_senha
+          CHANGING
+            cr_data = er_deep_entity ).
 
 
       WHEN OTHERS.
@@ -6021,6 +6301,250 @@ CHANGING
   ENDMETHOD.
 
 
+METHOD alterar_senha_om_create_entity.
+
+  DATA: lv_senha_atual    TYPE char32,
+        lv_nova_senha     TYPE char32,
+        lv_conf_senha     TYPE char32,
+        lv_usuario        TYPE xubname,
+        lv_senha_alterada TYPE char1,
+        lv_mensagem       TYPE bapi_msg,
+        lv_rfcdest        TYPE bdbapidst,
+        lv_encoded        TYPE string.
+
+*--------------------------------------------------------------------*
+* Leitura dos dados recebidos
+*--------------------------------------------------------------------*
+  io_data_provider->read_entry_data(
+    IMPORTING
+      es_data = er_entity
+  ).
+
+*--------------------------------------------------------------------*
+* Validações obrigatórias
+*--------------------------------------------------------------------*
+  IF er_entity-usuario IS INITIAL.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  = /iwbep/cx_mgw_busi_exception=>business_error
+        message = 'Usuário não informado.'.
+
+  ENDIF.
+
+  IF er_entity-senha_atual IS INITIAL.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  = /iwbep/cx_mgw_busi_exception=>business_error
+        message = 'Senha atual não informada.'.
+
+  ENDIF.
+
+  IF er_entity-nova_senha IS INITIAL.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  = /iwbep/cx_mgw_busi_exception=>business_error
+        message = 'Nova senha não informada.'.
+
+  ENDIF.
+
+  IF er_entity-conf_senha IS INITIAL.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  = /iwbep/cx_mgw_busi_exception=>business_error
+        message = 'Confirmação da nova senha não informada.'.
+
+  ENDIF.
+
+*--------------------------------------------------------------------*
+* Normalização do usuário
+*--------------------------------------------------------------------*
+  lv_usuario = er_entity-usuario.
+
+  TRANSLATE lv_usuario TO UPPER CASE.
+
+*--------------------------------------------------------------------*
+* Decode da senha atual
+*--------------------------------------------------------------------*
+  CLEAR lv_encoded.
+
+  lv_encoded = CONV string( er_entity-senha_atual ).
+
+  lv_senha_atual =
+    cl_http_utility=>if_http_utility~decode_base64(
+      encoded = lv_encoded
+    ).
+
+*--------------------------------------------------------------------*
+* Decode da nova senha
+*--------------------------------------------------------------------*
+  CLEAR lv_encoded.
+
+  lv_encoded = CONV string( er_entity-nova_senha ).
+
+  lv_nova_senha =
+    cl_http_utility=>if_http_utility~decode_base64(
+      encoded = lv_encoded
+    ).
+
+*--------------------------------------------------------------------*
+* Decode da confirmação da nova senha
+*--------------------------------------------------------------------*
+  CLEAR lv_encoded.
+
+  lv_encoded = CONV string( er_entity-conf_senha ).
+
+  lv_conf_senha =
+    cl_http_utility=>if_http_utility~decode_base64(
+      encoded = lv_encoded
+    ).
+
+*--------------------------------------------------------------------*
+* Validações após o decode
+*--------------------------------------------------------------------*
+  IF lv_senha_atual IS INITIAL.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  = /iwbep/cx_mgw_busi_exception=>business_error
+        message = 'Senha atual não informada.'.
+
+  ENDIF.
+
+  IF lv_nova_senha IS INITIAL.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  = /iwbep/cx_mgw_busi_exception=>business_error
+        message = 'Nova senha não informada.'.
+
+  ENDIF.
+
+  IF lv_conf_senha IS INITIAL.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  = /iwbep/cx_mgw_busi_exception=>business_error
+        message = 'Confirmação da nova senha não informada.'.
+
+  ENDIF.
+
+*--------------------------------------------------------------------*
+* Validações adicionais
+*--------------------------------------------------------------------*
+  IF lv_nova_senha <> lv_conf_senha.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  = /iwbep/cx_mgw_busi_exception=>business_error
+        message = 'A nova senha e a confirmação não são iguais.'.
+
+  ENDIF.
+
+  IF lv_senha_atual = lv_nova_senha.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  = /iwbep/cx_mgw_busi_exception=>business_error
+        message = 'A nova senha deve ser diferente da senha atual.'.
+
+  ENDIF.
+
+*--------------------------------------------------------------------*
+* Determinação do destino RFC
+*--------------------------------------------------------------------*
+* IMPORTANTE:
+* Utilizar aqui a mesma lógica já existente no CREATE_DEEP_ENTITY
+* para determinar o destino RFC do ambiente OMS.
+*
+* lv_rfcdest = ...
+
+*--------------------------------------------------------------------*
+* Alteração da senha
+*--------------------------------------------------------------------*
+  CALL FUNCTION '/PTLOMS/MF166'
+    DESTINATION lv_rfcdest
+    EXPORTING
+      im_usuario            = lv_usuario
+      im_senha_atual        = lv_senha_atual
+      im_nova_senha         = lv_nova_senha
+      im_conf_senha         = lv_conf_senha
+    IMPORTING
+      ex_senha_alterada     = lv_senha_alterada
+      ex_mensagem           = lv_mensagem
+    EXCEPTIONS
+      system_failure        = 1
+      communication_failure = 2
+      OTHERS                = 3.
+
+  IF sy-subrc <> 0.
+
+    CLEAR:
+      lv_senha_atual,
+      lv_nova_senha,
+      lv_conf_senha,
+      lv_encoded,
+      er_entity-senha_atual,
+      er_entity-nova_senha,
+      er_entity-conf_senha.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  = /iwbep/cx_mgw_busi_exception=>business_error
+        message = 'Erro de comunicação ao alterar a senha.'.
+
+  ENDIF.
+
+*--------------------------------------------------------------------*
+* Validação do retorno da função
+*--------------------------------------------------------------------*
+  IF lv_senha_alterada IS INITIAL.
+
+    IF lv_mensagem IS INITIAL.
+      lv_mensagem = 'Não foi possível alterar a senha.'.
+    ENDIF.
+
+    CLEAR:
+      lv_senha_atual,
+      lv_nova_senha,
+      lv_conf_senha,
+      lv_encoded,
+      er_entity-senha_atual,
+      er_entity-nova_senha,
+      er_entity-conf_senha.
+
+    RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+      EXPORTING
+        textid  = /iwbep/cx_mgw_busi_exception=>business_error
+        message = lv_mensagem.
+
+  ENDIF.
+
+*--------------------------------------------------------------------*
+* Montagem do retorno
+*--------------------------------------------------------------------*
+  er_entity-usuario        = lv_usuario.
+  er_entity-senha_alterada = lv_senha_alterada.
+  er_entity-mensagem       = lv_mensagem.
+
+*--------------------------------------------------------------------*
+* Não devolver senhas para o frontend
+*--------------------------------------------------------------------*
+  CLEAR:
+    er_entity-senha_atual,
+    er_entity-nova_senha,
+    er_entity-conf_senha,
+    lv_senha_atual,
+    lv_nova_senha,
+    lv_conf_senha,
+    lv_encoded.
+
+ENDMETHOD.
+
+
   METHOD out_associacoess_get_entityset.
     DATA: lv_rfcdest     TYPE bdbapidst,
           t_associacoes  TYPE /ptloms/cl_soms_mpc=>tt_out_associacoes,
@@ -7043,16 +7567,6 @@ CHANGING
         it_filtro_tidnr           = lt_filtro_tidnr
         ex_quantidade_equipamento = lv_quantidade_equipamento.
 
-    LOOP AT lt_equipamento ASSIGNING FIELD-SYMBOL(<fs_equi>).
-      <fs_equi>-quantidade_equipamento = lv_quantidade_equipamento.
-      <fs_equi>-equnr = |{ <fs_equi>-equnr ALPHA = OUT }|.
-      CALL FUNCTION 'CONVERSION_EXIT_TPLNR_OUTPUT'
-        EXPORTING
-          input  = <fs_equi>-tplnr
-        IMPORTING
-          output = <fs_equi>-tplnr.
-
-    ENDLOOP.
 
     et_entityset = CORRESPONDING #( lt_equipamento ).
 
@@ -10036,27 +10550,22 @@ CHANGING
 
   METHOD out_variantset_get_entityset.
 
-    DATA: lv_rfcdest TYPE bdbapidst.
+    DATA: lv_rfcdest     TYPE bdbapidst,
+          t_variant      TYPE STANDARD TABLE OF /ptloms/cl_soms_mpc=>ts_out_variant,
+          lt_variant     TYPE /ptloms/ct081,
+          ls_variant     LIKE LINE OF t_variant,
 
-    DATA: t_variant TYPE STANDARD TABLE OF /ptloms/cl_soms_mpc=>ts_out_variant.
-
-    DATA: lt_variant TYPE /ptloms/ct081.
-
-    DATA: ls_variant LIKE LINE OF t_variant.
-
-    DATA: lv_usuario     TYPE xubname,
+          lv_usuario     TYPE xubname,
           lv_usuario_sap TYPE flag,
-          lv_same_user   TYPE rfcdisplay-rfcsameusr.
+          lv_same_user   TYPE rfcdisplay-rfcsameusr,
 
-    DATA: lv_msgv1(50) TYPE c,
-          lv_msgv2(50) TYPE c,
-          lv_subrc     TYPE sy-subrc,
-          lv_mensagem  TYPE bapi_msg.
+          lv_msgv1(50)   TYPE c,
+          lv_msgv2(50)   TYPE c,
+          lv_subrc       TYPE sy-subrc,
+          lv_mensagem    TYPE bapi_msg.
 
-* Busca Conexão
     SELECT SINGLE rfcdest FROM /ptloms/tb036 INTO lv_rfcdest.
     IF sy-subrc EQ 0.
-*Verifica se conexão está ativa
       CALL FUNCTION 'CAT_CHECK_RFC_DESTINATION'
         EXPORTING
           rfcdestination = lv_rfcdest
@@ -10066,10 +10575,8 @@ CHANGING
           rfc_subrc      = lv_subrc.
       IF lv_subrc NE 0.
         IF lv_subrc = 3.
-*          lv_mensagem = 'Usuário Sem Autorização par RFC'(001) && lv_rfcdest.
           CONCATENATE 'Usuário Sem Autorização par RFC'(001) lv_rfcdest INTO lv_mensagem SEPARATED BY space.
         ELSE.
-*          lv_mensagem = 'RFC' && lv_rfcdest && 'não existe ou indisponível'(002).
           CONCATENATE 'RFC' lv_rfcdest 'não existe ou indisponível'(002) INTO lv_mensagem SEPARATED BY space.
         ENDIF.
 
@@ -10086,7 +10593,6 @@ CHANGING
           message = lv_mensagem.
     ENDIF.
 
-* Valida Configuração RFC (Verifica se possui usuário fixo)
     CALL FUNCTION 'RFC_READ_R3_DESTINATION'
       EXPORTING
         destination             = lv_rfcdest
@@ -10099,7 +10605,6 @@ CHANGING
         internal_failure        = 4
         OTHERS                  = 5.
 
-* Verifica se é Usuário SAP
     CALL FUNCTION '/PTLOMS/MF049'
       DESTINATION lv_rfcdest
       IMPORTING
@@ -10115,19 +10620,27 @@ CHANGING
           message = lv_mensagem.
     ENDIF.
 
-* Cria Sessão para usuário
-    READ TABLE it_filter_select_options INTO DATA(ls_filter) WITH KEY property = 'VarUsuario'.
-
+    READ TABLE it_filter_select_options INTO DATA(ls_filter_usu) WITH KEY property = 'VarUsuario'.
     IF sy-subrc = 0.
+      DATA(rt_usuario) = ls_filter_usu-select_options.
+    ENDIF.
 
-      DATA(rt_variant) = ls_filter-select_options.
+    READ TABLE it_filter_select_options INTO DATA(ls_filter_id) WITH KEY property = 'VarId'.
+    IF sy-subrc = 0.
+      DATA(rt_var_id) = ls_filter_id-select_options.
+    ENDIF.
 
+    READ TABLE it_filter_select_options INTO DATA(ls_filter_app) WITH KEY property = 'VarApp'.
+    IF sy-subrc = 0.
+      DATA(rt_var_app) = ls_filter_app-select_options.
     ENDIF.
 
     CALL FUNCTION '/PTLOMS/MF063'
       DESTINATION lv_rfcdest
       EXPORTING
-        rt_variant = rt_variant
+        rt_usuario = rt_usuario
+        rt_var_id  = rt_var_id
+        rt_var_app = rt_var_app
       IMPORTING
         it_variant = lt_variant.
 
@@ -10141,14 +10654,12 @@ CHANGING
 
     DATA: ls_controle TYPE /ptloms/tb048.
 
-    " Controle de acessos
     ls_controle-entity_name     = iv_entity_name.
     ls_controle-metodo          = 'OUT_VARIANTSET_GET_ENTITYSET'.
     ls_controle-usuario_sistema = sy-uname.
     ls_controle-aplicacao       = 'OMS'.
     ls_controle-usuario_app     = gv_usuario_app.
 
-    " Controle de acessos
     /ptloms/cl010=>inserir( CHANGING ch_controle = ls_controle ).
 
   ENDMETHOD.
